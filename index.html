@@ -114,11 +114,10 @@
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: flex;
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       align-items: center;
-      justify-content: flex-start;
-      padding: 9rem 6vw 5rem 6vw;
+      padding: 9rem 6vw 5rem;
       gap: 4rem;
     }
 
@@ -187,7 +186,7 @@
 
     .hero-photo-frame {
       position: relative;
-      width: 220px;
+      width: 180px;
     }
 
     .hero-photo-frame::before {
@@ -434,7 +433,7 @@
       .hero-desc { margin: 0 auto 2rem; }
 
       .hero-photo-frame {
-        width: min(180px, 50vw);
+        width: min(240px, 60vw);
       }
 
       .edu-card {
