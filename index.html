@@ -114,14 +114,16 @@
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      text-align: center;
       padding: 9rem 6vw 5rem;
       gap: 2rem;
     }
 
-    .hero-text { }
+    .hero-text { max-width: 560px; }
 
     .hero-eyebrow {
       display: inline-block;
@@ -152,8 +154,8 @@
     .hero-desc {
       font-size: 0.95rem;
       color: var(--mid);
-      max-width: 400px;
-      margin-bottom: 2.2rem;
+      max-width: 480px;
+      margin: 0 auto 2.2rem;
       font-weight: 300;
     }
 
@@ -180,12 +182,13 @@
       justify-content: center;
       align-items: center;
       padding-top: 0;
+      order: -1;
       animation: fadeUp 0.9s 0.2s ease both;
     }
 
     .hero-photo-frame {
       position: relative;
-      width: min(280px, 32vw);
+      width: min(200px, 40vw);
     }
 
     .hero-photo-frame::before {
