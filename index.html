@@ -382,6 +382,121 @@
       line-height: 1.6;
     }
 
+    .project-card.clickable {
+      cursor: pointer;
+    }
+
+    .project-link {
+      display: inline-block;
+      margin-top: 0.9rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      color: var(--sage-dark);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+    }
+
+    .project-card.clickable:hover .project-link {
+      color: var(--charcoal);
+    }
+
+    /* ── EVIDENCE MODAL ── */
+    .evidence-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30,30,28,0.72);
+      z-index: 200;
+      padding: 4vh 5vw;
+      overflow-y: auto;
+    }
+
+    .evidence-overlay.active {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .evidence-modal {
+      background: var(--cream);
+      max-width: 900px;
+      width: 100%;
+      padding: 2.2rem 2.2rem 2.6rem;
+      position: relative;
+      margin: auto 0;
+    }
+
+    .evidence-close {
+      position: absolute;
+      top: 1.1rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      line-height: 1;
+      color: var(--mid);
+      cursor: pointer;
+      padding: 0.3rem;
+    }
+
+    .evidence-close:hover { color: var(--charcoal); }
+
+    .evidence-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      background: rgba(138,158,140,0.12);
+      padding: 0.18rem 0.55rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .evidence-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+
+    .evidence-desc {
+      font-size: 0.88rem;
+      color: var(--mid);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 1.8rem;
+      max-width: 60ch;
+    }
+
+    .evidence-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .evidence-gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+    }
+
+    .evidence-caption {
+      font-size: 0.72rem;
+      color: var(--light);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      margin-bottom: -0.6rem;
+    }
+
+    @media (max-width: 600px) {
+      .evidence-modal { padding: 1.6rem 1.2rem 2rem; }
+      .evidence-title { font-size: 1.5rem; }
+    }
+
     /* ── SKILLS ── */
     .skills-layout {
       display: grid;
@@ -637,10 +752,11 @@
       <div class="project-name">Personal Portfolio Website</div>
       <p class="project-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills.</p>
     </div>
-    <div class="project-card reveal">
+    <div class="project-card clickable reveal" onclick="openEvidence('marketing-threshold')">
       <span class="project-tag">GUI Application</span>
       <div class="project-name">Marketing Threshold System</div>
       <p class="project-desc">A Java-based desktop GUI application built in Apache NetBeans for analyzing and managing marketing threshold data with visual reporting.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card reveal">
       <span class="project-tag">Programming</span>
@@ -765,10 +881,56 @@
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
+<!-- PROJECT EVIDENCE MODAL -->
+<div class="evidence-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
+  <div class="evidence-modal">
+    <button class="evidence-close" onclick="closeEvidence()" aria-label="Close">&times;</button>
+
+    <div id="evidence-marketing-threshold" class="evidence-panel">
+      <span class="evidence-tag">GUI Application</span>
+      <div class="evidence-title">Marketing Threshold System</div>
+      <p class="evidence-desc">A Java-based desktop GUI application built in Apache NetBeans for analyzing and managing marketing threshold data with visual reporting. Below are screenshots of the customer registration, product stock-in/stock-out, and supplier management modules.</p>
+      <div class="evidence-gallery">
+        <div>
+          <img src="images/marketing-threshold-1.png" alt="Customer Registration System screen"/>
+          <div class="evidence-caption">Customer Registration System</div>
+        </div>
+        <div>
+          <img src="images/marketing-threshold-2.png" alt="Products Stock-In / Stock-Out screen"/>
+          <div class="evidence-caption">Products Stock-In / Stock-Out</div>
+        </div>
+        <div>
+          <img src="images/marketing-threshold-3.png" alt="Supplier Form screen"/>
+          <div class="evidence-caption">Supplier Form</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }
+
+  // Project evidence modal
+  function openEvidence(id) {
+    document.querySelectorAll('.evidence-panel').forEach(p => p.style.display = 'none');
+    const panel = document.getElementById('evidence-' + id);
+    if (panel) panel.style.display = 'block';
+    document.getElementById('evidenceOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeEvidence() {
+    document.getElementById('evidenceOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeEvidence();
+  });
 
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
