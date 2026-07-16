@@ -31,7 +31,12 @@
       overflow-x: hidden;
     }
 
-    /* ─ NAV ── */
+    /* Add this to prevent scrolling when modal is open */
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -110,7 +115,7 @@
       text-decoration: none;
     }
 
-    /* ── HERO ── */
+    /* ─ HERO ── */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -287,7 +292,6 @@
       box-shadow: 0 0 0 1.5px var(--sage-dark);
     }
 
-    /* swap background for even section */
     section:nth-child(even) .edu-card::before {
       border-color: var(--ivory);
     }
@@ -353,8 +357,14 @@
       transition: width 0.35s ease;
     }
 
-    .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
-    .project-card:hover::after { width: 100%; }
+    .project-card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 12px 32px rgba(0,0,0,0.07); 
+    }
+    
+    .project-card:hover::after { 
+      width: 100%; 
+    }
 
     .project-tag {
       display: inline-block;
@@ -396,7 +406,7 @@
       color: var(--charcoal);
     }
 
-    /* ── MODAL ── */
+    /* ── MODAL STYLES ── */
     .modal {
       display: none;
       position: fixed;
@@ -406,61 +416,86 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0,0,0,0.85);
+      background-color: rgba(0,0,0,0.9);
       backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal-content {
       background-color: var(--cream);
-      margin: 5% auto;
-      padding: 2rem;
+      margin: 3% auto;
+      padding: 2.5rem;
       border-radius: 8px;
       width: 90%;
       max-width: 1200px;
-      max-height: 90vh;
+      max-height: 94vh;
       overflow-y: auto;
       position: relative;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { 
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .close-modal {
       color: var(--charcoal);
-      float: right;
-      font-size: 2rem;
-      font-weight: bold;
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      font-size: 2.5rem;
+      font-weight: 300;
       cursor: pointer;
-      transition: color 0.2s;
-      position: sticky;
-      top: 0;
-      background: var(--cream);
-      padding: 0 0.5rem;
-      z-index: 10;
+      transition: all 0.2s;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--ivory);
     }
 
     .close-modal:hover,
     .close-modal:focus {
       color: var(--sage-dark);
+      background: var(--sage-light);
+      transform: rotate(90deg);
     }
 
     .modal-header {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       text-align: center;
+      padding-right: 3rem;
     }
 
     .modal-header h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
+      font-size: 2.5rem;
       color: var(--charcoal);
       margin-bottom: 0.5rem;
     }
 
     .modal-header p {
       color: var(--mid);
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .evidence-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 2rem;
       margin-top: 2rem;
     }
@@ -471,6 +506,12 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .evidence-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
 
     .evidence-item img {
@@ -480,15 +521,16 @@
     }
 
     .evidence-caption {
-      padding: 1rem;
+      padding: 1.2rem;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--charcoal);
       font-weight: 500;
       background: var(--ivory);
+      border-top: 1px solid var(--border);
     }
 
-    /* ─ SKILLS ── */
+    /* ── SKILLS ── */
     .skills-layout {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -638,9 +680,9 @@
       transform: translateY(0);
     }
 
-    /* ── RESPONSIVE ─ */
+    /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .projects-grid { grid-template-columns: repeat(4, 1fr); }
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
@@ -656,12 +698,12 @@
 
       .edu-timeline { padding-left: 1.5rem; }
 
-      .projects-grid { grid-template-columns: 1fr 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
 
-      .skills-layout { grid-template-columns: 1fr 1fr; }
+      .skills-layout { grid-template-columns: 1fr; }
 
       .modal-content {
-        margin: 10% auto;
+        margin: 5% auto;
         padding: 1.5rem;
         width: 95%;
       }
@@ -670,12 +712,20 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
+
+      .modal-header h2 {
+        font-size: 1.8rem;
+      }
     }
 
     @media (max-width: 480px) {
       section { padding: 4rem 5vw; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .skills-layout { grid-template-columns: 1fr; }
+      
+      .close-modal {
+        right: 1rem;
+        top: 1rem;
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -710,7 +760,7 @@
   </div>
   <div class="hero-photo-wrap">
     <div class="hero-photo-frame">
-      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAItAe4DASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAUGAwQCBwgBCf/EAFoQAAEDAwIDBQQEBwoJCQgDAAEAAgMEBRESIQYxQQcTIlFhFDJxgQgjQpEVUqGlscHjFhgkM2JmhNHh4hclNENncqTk8SY2RlNUkqKjw1ZkdIKDhZTCRGNz/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECAwQFBv/EACsRAQEAAgEEAQQABgMBAAAAAAABAhEDBBIhMUEFEyIyFBUjM1FSQmHB8P/aAAwDAQACEQMRAD8A9lIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICI......" alt="Bea Christina Cale"/>
+      <img src="your-photo.jpg" alt="Bea Christina Cale"/>
     </div>
   </div>
 </section>
@@ -754,12 +804,14 @@
       <div class="project-name">Personal Portfolio Website</div>
       <p class="project-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills.</p>
     </div>
-    <div class="project-card reveal" onclick="openModal('marketingModal')">
+    
+    <div class="project-card reveal" id="marketingCard">
       <span class="project-tag">GUI Application</span>
       <div class="project-name">Marketing Threshold System</div>
       <p class="project-desc">A Java-based desktop GUI application built in Apache NetBeans for analyzing and managing marketing threshold data with visual reporting.</p>
       <span class="view-proof">View Project Evidence →</span>
     </div>
+    
     <div class="project-card reveal">
       <span class="project-tag">Programming</span>
       <div class="project-name">Simple Calculator App</div>
@@ -796,7 +848,7 @@
 <!-- MODAL FOR MARKETING THRESHOLD SYSTEM -->
 <div id="marketingModal" class="modal">
   <div class="modal-content">
-    <span class="close-modal" onclick="closeModal('marketingModal')">&times;</span>
+    <span class="close-modal" onclick="closeModal()">&times;</span>
     <div class="modal-header">
       <h2>Marketing Threshold System</h2>
       <p>Java Desktop Application — Built with Apache NetBeans</p>
@@ -874,25 +926,21 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-social">
-      <!-- GitHub -->
       <a href="https://github.com/beealat" target="_blank" aria-label="GitHub">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
         </svg>
       </a>
-      <!-- LinkedIn -->
       <a href="#" target="_blank" aria-label="LinkedIn">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
         </svg>
       </a>
-      <!-- Facebook -->
       <a href="#" target="_blank" aria-label="Facebook">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
         </svg>
       </a>
-      <!-- Instagram -->
       <a href="#" target="_blank" aria-label="Instagram">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
@@ -914,34 +962,41 @@
   }
 
   // Modal functions
-  function openModal(modalId) {
-    document.getElementById(modalId).style.display = 'block';
-    document.body.style.overflow = 'hidden';
+  function openModal() {
+    const modal = document.getElementById('marketingModal');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
   }
 
-  function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-    document.body.style.overflow = 'auto';
+  function closeModal() {
+    const modal = document.getElementById('marketingModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
   }
+
+  // Add click event to the marketing card
+  document.getElementById('marketingCard').addEventListener('click', function(e) {
+    // Don't open modal if clicking on links inside the card
+    if (!e.target.closest('a')) {
+      openModal();
+    }
+  });
 
   // Close modal when clicking outside
   window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-      event.target.style.display = 'none';
-      document.body.style.overflow = 'auto';
+    const modal = document.getElementById('marketingModal');
+    if (event.target === modal) {
+      closeModal();
     }
   }
 
   // Close modal with Escape key
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
-      const modals = document.querySelectorAll('.modal');
-      modals.forEach(modal => {
-        if (modal.style.display === 'block') {
-          modal.style.display = 'none';
-          document.body.style.overflow = 'auto';
-        }
-      });
+      const modal = document.getElementById('marketingModal');
+      if (modal.style.display === 'block') {
+        closeModal();
+      }
     }
   });
 
