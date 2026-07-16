@@ -747,10 +747,11 @@
   <h2 class="section-title reveal">Projects</h2>
 
   <div class="projects-grid">
-    <div class="project-card reveal">
+    <div class="project-card clickable reveal" onclick="openEvidence('portfolio-site')">
       <span class="project-tag">Web Development</span>
       <div class="project-name">Personal Portfolio Website</div>
       <p class="project-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card clickable reveal" onclick="openEvidence('marketing-threshold')">
       <span class="project-tag">GUI Application</span>
@@ -885,6 +886,30 @@
 <div class="evidence-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
   <div class="evidence-modal">
     <button class="evidence-close" onclick="closeEvidence()" aria-label="Close">&times;</button>
+
+    <div id="evidence-portfolio-site" class="evidence-panel">
+      <span class="evidence-tag">Web Development</span>
+      <div class="evidence-title">Personal Portfolio Website</div>
+      <p class="evidence-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills. Below are screenshots of the home, education, projects, and skills sections.</p>
+      <div class="evidence-gallery">
+        <div>
+          <img src="portfolio-site-1.png" alt="Portfolio home screen"/>
+          <div class="evidence-caption">Home</div>
+        </div>
+        <div>
+          <img src="portfolio-site-2.png" alt="Portfolio education section"/>
+          <div class="evidence-caption">Education</div>
+        </div>
+        <div>
+          <img src="portfolio-site-3.png" alt="Portfolio projects section"/>
+          <div class="evidence-caption">Projects</div>
+        </div>
+        <div>
+          <img src="portfolio-site-4.png" alt="Portfolio skills section"/>
+          <div class="evidence-caption">Skills</div>
+        </div>
+      </div>
+    </div>
 
     <div id="evidence-marketing-threshold" class="evidence-panel">
       <span class="evidence-tag">GUI Application</span>
