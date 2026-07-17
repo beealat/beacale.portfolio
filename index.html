@@ -497,6 +497,47 @@
       .evidence-title { font-size: 1.5rem; }
     }
 
+    /* ── LIVE DEMO ── */
+    .evidence-demo-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    .demo-btn {
+      display: inline-block;
+      background: var(--sage-dark);
+      color: var(--cream);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.65rem 1.2rem;
+      transition: background 0.2s ease;
+    }
+
+    .demo-btn:hover { background: var(--charcoal); }
+
+    .evidence-demo-note {
+      font-size: 0.74rem;
+      color: var(--light);
+      font-style: italic;
+    }
+
+    .evidence-demo-frame {
+      width: 100%;
+      height: 70vh;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+      background: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .evidence-demo-frame { height: 55vh; }
+    }
+
     /* ── SKILLS ── */
     .skills-layout {
       display: grid;
@@ -764,10 +805,11 @@
       <div class="project-name">Simple Calculator App</div>
       <p class="project-desc">A functional calculator application developed in VS Code featuring basic arithmetic operations and a clean interface.</p>
     </div>
-    <div class="project-card reveal">
+    <div class="project-card clickable reveal" onclick="openEvidence('pinterest-app')">
       <span class="project-tag">Web Development</span>
       <div class="project-name">Pinterest-Inspired App</div>
       <p class="project-desc">A visually-driven image board web application inspired by Pinterest, featuring a masonry grid layout, pinning functionality, and a clean responsive UI.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card reveal">
       <span class="project-tag">Major Subject</span>
@@ -907,6 +949,52 @@
         <div>
           <img src="portfolio-site-4.png" alt="Portfolio skills section"/>
           <div class="evidence-caption">Skills</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="evidence-pinterest-app" class="evidence-panel">
+      <span class="evidence-tag">Web Development</span>
+      <div class="evidence-title">Pinterest-Inspired App</div>
+      <p class="evidence-desc">A visually-driven image board web application inspired by Pinterest, featuring a masonry grid layout, pinning functionality, and a clean responsive UI. Try it live below, or open it full-screen — every page (Home, About, Gallery, Collections, Contact) is fully interactive.</p>
+      <div class="evidence-demo-bar">
+        <a href="projects/pixora/index.html" target="_blank" class="demo-btn">Open Full Demo ↗</a>
+        <span class="evidence-demo-note">Frontend demo — dark mode &amp; navigation work, no data is saved.</span>
+      </div>
+      <iframe src="projects/pixora/index.html" class="evidence-demo-frame" title="Pixora live demo" loading="lazy"></iframe>
+      <p class="evidence-desc" style="margin-bottom:0.9rem;">Screenshots for reference:</p>
+      <div class="evidence-gallery">
+        <div>
+          <img src="pinterest-app-1.png" alt="Pixora home page with hero banner"/>
+          <div class="evidence-caption">Home</div>
+        </div>
+        <div>
+          <img src="pinterest-app-2.png" alt="Pixora featured posts grid"/>
+          <div class="evidence-caption">Featured Posts</div>
+        </div>
+        <div>
+          <img src="pinterest-app-3.png" alt="Pixora save photos to collections form"/>
+          <div class="evidence-caption">Save to Collections</div>
+        </div>
+        <div>
+          <img src="pinterest-app-4.png" alt="Pixora post your photos upload form"/>
+          <div class="evidence-caption">Post Your Photos</div>
+        </div>
+        <div>
+          <img src="pinterest-app-5.png" alt="Pixora about page purpose and vision"/>
+          <div class="evidence-caption">About — Purpose &amp; Vision</div>
+        </div>
+        <div>
+          <img src="pinterest-app-6.png" alt="Pixora gallery page with photo grid"/>
+          <div class="evidence-caption">Gallery</div>
+        </div>
+        <div>
+          <img src="pinterest-app-7.png" alt="Pixora collections page"/>
+          <div class="evidence-caption">Collections</div>
+        </div>
+        <div>
+          <img src="pinterest-app-8.png" alt="Pixora contact page"/>
+          <div class="evidence-caption">Contact</div>
         </div>
       </div>
     </div>
