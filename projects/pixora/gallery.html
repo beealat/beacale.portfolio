@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Gallery - Pixora Photography</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Remove body margin and add padding for fixed header */
+    body {
+      padding-top: 70px;
+      margin: 0;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    /* Make header stick to top with no space */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Creative Header Section */
+    .gallery-header {
+      background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gallery-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .gallery-title {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .gallery-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 30px auto 0;
+    }
+
+    .stat-item {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Creative Filter Section */
+    .filter-section {
+      background: var(--white);
+      padding: 30px 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .filter-section {
+      background: var(--dark-card);
+      box-shadow: 0 5px 20px var(--dark-shadow);
+    }
+
+    .filter-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .filter-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tag {
+      background: var(--light-bg);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      border: 2px solid transparent;
+    }
+
+    body.dark-mode .filter-tag {
+      background: var(--dark-bg);
+    }
+
+    .filter-tag:hover, .filter-tag.active {
+      background: var(--accent-orange);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .view-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .view-btn {
+      background: var(--light-bg);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .view-btn {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .view-btn.active {
+      background: var(--main-purple);
+      color: var(--white);
+    }
+
+    /* Creative Gallery Grid */
+    .gallery-section {
+      padding: 40px 20px;
+    }
+
+    .gallery-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .photo-card {
+      background: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    body.dark-mode .photo-card {
+      background: var(--dark-card);
+      box-shadow: 0 8px 25px var(--dark-shadow);
+    }
+
+    .photo-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .photo-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-card:hover .photo-image {
+      transform: scale(1.1);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .photo-card:hover .photo-overlay {
+      opacity: 1;
+    }
+
+    .photo-info {
+      color: var(--white);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .photo-card:hover .photo-info {
+      transform: translateY(0);
+    }
+
+    .photo-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .photo-meta {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .photo-actions {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 10px;
+      transform: translateX(50px);
+      transition: transform 0.3s ease;
+    }
+
+    .photo-card:hover .photo-actions {
+      transform: translateX(0);
+    }
+
+    .action-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--main-purple);
+    }
+
+    .action-btn:hover {
+      background: var(--accent-orange);
+      color: var(--white);
+      transform: scale(1.1);
+    }
+
+    /* Upload Section */
+    .upload-section {
+      background: linear-gradient(135deg, var(--light-bg), #e8e2f1);
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    body.dark-mode .upload-section {
+      background: linear-gradient(135deg, var(--dark-bg), #2a1a40);
+    }
+
+    .upload-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .upload-card {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .upload-card {
+      background: var(--dark-card);
+    }
+
+    .upload-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--white);
+      font-size: 2rem;
+    }
+
+    .upload-btn {
+      background: var(--accent-orange);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-btn:hover {
+      background: crimson;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(220, 20, 60, 0.3);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .gallery-title {
+        font-size: 2.2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-tags {
+        justify-content: center;
+      }
+
+      .view-controls {
+        justify-content: center;
+      }
+
+      .creative-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-card {
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-header {
+        padding: 30px 15px;
+      }
+
+      .gallery-title {
+        font-size: 1.8rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+    }
+.scroll-up-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 30spx;
+  height: 30px;
+  background: linear-gradient(135deg, var(--accent-orange), #ff6b9d);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  margin-right: -10;
+}
+
+.scroll-up-btn:hover {
+  background: linear-gradient(135deg, crimson, var(--accent-orange));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.6);
+}
+
+/* Dark mode support */
+body.dark-mode .scroll-up-btn {
+  background: linear-gradient(135deg, var(--accent-orange), var(--main-purple));
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.3);
+}
+
+body.dark-mode .scroll-up-btn:hover {
+  background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-up-btn {
+    bottom: 80px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">
+        <img src="https://i.pinimg.com/736x/54/4b/94/544b941c8c0d2dc7ecef446c5a8cdc6b.jpg" alt="Pixora Logo" class="logo-img">
+        <span class="logo-text">Pixora</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="gallery.html" class="nav-link active">Gallery</a>
+        <a href="collections.html" class="nav-link">Collections</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-controls">
+        <!-- Dark Mode Toggle in Header -->
+        <div class="dark-mode-toggle" id="darkModeToggle">
+          <div class="toggle-track">
+            <div class="toggle-thumb">
+              <i class="fas fa-sun light-icon"></i>
+              <i class="fas fa-moon dark-icon"></i>
+            </div>
+          </div>
+          <span class="toggle-label">Dark Mode</span>
+        </div>
+
+        <a href="#" class="btn-call">
+          <i class="fa-solid fa-phone"></i>
+          <span>0912-345-6789</span>
+        </a>
+        <div class="profile-user">
+          <img src="https://i.pinimg.com/736x/9f/4c/f0/9f4cf0f24b376077a2fcdab2e85c3584.jpg" alt="User Profile" class="profile-img">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CREATIVE GALLERY HEADER -->
+  <section class="gallery-header">
+    <div class="gallery-title">My Gallery</div>
+    <div class="gallery-subtitle">Where every pixel tells a story</div>
+    
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number">24</span>
+        <span class="stat-label">Photos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">8</span>
+        <span class="stat-label">Collections</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">156</span>
+        <span class="stat-label">Likes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">6</span>
+        <span class="stat-label">This Month</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER SECTION -->
+  <section class="filter-section">
+    <div class="filter-container">
+      <div class="filter-tags">
+        <div class="filter-tag active">All Photos</div>
+        <div class="filter-tag">Portraits</div>
+        <div class="filter-tag">Nature</div>
+        <div class="filter-tag">Travel</div>
+        <div class="filter-tag">Urban</div>
+        <div class="filter-tag">Favorites</div>
+      </div>
+      
+      <div class="view-controls">
+        <button class="view-btn active" title="Grid View">
+          <i class="fas fa-th"></i>
+        </button>
+        <button class="view-btn" title="List View">
+          <i class="fas fa-list"></i>
+        </button>
+        <button class="view-btn" title="Masonry View">
+          <i class="fas fa-th-large"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATIVE GALLERY GRID -->
+  <section class="gallery-section">
+    <div class="gallery-container">
+      <div class="creative-grid">
+        <!-- Photo 1 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/736x/6e/c8/65/6ec86523e7fcb785f71548d91ded43f9.jpg" alt="Golden Hour Portrait" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Golden Hour Magic</div>
+              <div class="photo-meta">Portrait • 2 days ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Photo 2 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/1200x/fe/80/97/fe8097f621babc516e87a6c71b34f603.jpg" alt="Mountain Landscape" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Mountain Serenity</div>
+              <div class="photo-meta">Nature • 1 week ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Photo 3 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/1200x/30/b8/10/30b81087a3b06a0d10e28d835b2f8b73.jpg" alt="City Lights" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Urban Dreams</div>
+              <div class="photo-meta">Travel • 3 days ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Photo 4 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/1200x/02/0a/a1/020aa191a471a7d5e6c3d393da575ed8.jpg" alt="Food Photography" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Culinary Art</div>
+              <div class="photo-meta">Food • 2 weeks ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Photo 5 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/736x/83/2d/ac/832dac09e0d45055beef6e22d6be4a01.jpg" alt="Architecture" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Geometric Harmony</div>
+              <div class="photo-meta">Urban • 5 days ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Photo 6 -->
+        <div class="photo-card">
+          <img src="https://i.pinimg.com/1200x/af/8f/1e/af8f1e914ede786649b40a73b5aee923.jpg" alt="Fashion" class="photo-image">
+          <div class="photo-overlay">
+            <div class="photo-info">
+              <div class="photo-title">Style Statement</div>
+              <div class="photo-meta">Fashion • 1 week ago</div>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button class="action-btn" title="Like">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="action-btn" title="Save">
+              <i class="far fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPLOAD SECTION -->
+  <section class="upload-section">
+    <div class="upload-container">
+      <div class="upload-card">
+        <div class="upload-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h3>Share Your Vision</h3>
+        <p>Ready to add your masterpiece to the gallery? Upload your photos and let your creativity shine.</p>
+        <button class="upload-btn">
+          <i class="fas fa-plus"></i>
+          Upload New Photo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Menu</h3>
+        <p>Home</p>
+        <p>Gallery</p>
+        <p>Collections</p>
+        <p>Contact</p>
+      </div>
+      <div>
+        <h3>Follow Me</h3>
+        <p>📷 Instagram</p>
+        <p>🐦 Twitter</p>
+        <p>📘 Facebook</p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <input type="email" placeholder="Your email">
+        <button>Send</button>
+      </div>
+    </div>
+    <p class="copy">© 2025 Pixora | Designed by Bea Christina Cale</p>
+  </footer>
+ <button class="scroll-up-btn" id="scrollUpBtn" title="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script>
+       // Dark Mode Toggle Functionality
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const body = document.body;
+    const toggleLabel = document.querySelector(".toggle-label");
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem("darkMode") === "enabled") {
+      body.classList.add("dark-mode");
+      toggleLabel.textContent = "Light Mode";
+    } else {
+      toggleLabel.textContent = "Dark Mode";
+    }
+
+    // Toggle dark mode
+    darkModeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+      
+      if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "enabled");
+        toggleLabel.textContent = "Light Mode";
+      } else {
+        localStorage.setItem("darkMode", "disabled");
+        toggleLabel.textContent = "Dark Mode";
+      }
+    });
+
+    // Gallery Interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filter tags functionality
+      const filterTags = document.querySelectorAll('.filter-tag');
+      filterTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+          filterTags.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // View controls functionality
+      const viewBtns = document.querySelectorAll('.view-btn');
+      viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          viewBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Like button functionality
+      const likeBtns = document.querySelectorAll('.action-btn .fa-heart');
+      likeBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          this.classList.toggle('far');
+          this.classList.toggle('fas');
+          this.style.color = this.classList.contains('fas') ? '#dc143c' : '';
+        });
+      });
+
+      // Simple navigation fix
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          const currentPage = window.location.pathname.split('/').pop();
+          if (href === currentPage) {
+            e.preventDefault();
+          }
+        });
+      });
+    });
+
+    // Scroll to Top Button Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollUpBtn = document.getElementById("scrollUpBtn");
+        
+        if (!scrollUpBtn) {
+            console.log('Scroll button not found');
+            return;
+        }
+
+        // Function to check scroll position and show/hide button
+        function checkScrollPosition() {
+            if (window.pageYOffset > 300) {
+                scrollUpBtn.style.opacity = '1';
+                scrollUpBtn.style.visibility = 'visible';
+                scrollUpBtn.style.transform = 'translateY(0)';
+            } else {
+                scrollUpBtn.style.opacity = '0';
+                scrollUpBtn.style.visibility = 'hidden';
+                scrollUpBtn.style.transform = 'translateY(20px)';
+            }
+        }
+
+        // Smooth scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', checkScrollPosition);
+        scrollUpBtn.addEventListener('click', scrollToTop);
+
+        // Check initial scroll position
+        checkScrollPosition();
+    });
+  </script>
+</body>
+</html>

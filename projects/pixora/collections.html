@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Collections - Pixora Photography</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Remove body margin and add padding for fixed header */
+    body {
+      padding-top: 70px;
+      margin: 0;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    /* Make header stick to top with no space */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Collections Header */
+    .collections-header {
+      background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .collections-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .collections-title {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .collections-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .collections-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 30px auto 0;
+    }
+
+    .collection-stat {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .collection-stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .collection-stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Collections Management */
+    .collections-management {
+      background: var(--white);
+      padding: 30px 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .collections-management {
+      background: var(--dark-card);
+      box-shadow: 0 5px 20px var(--dark-shadow);
+    }
+
+    .collections-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .collection-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .collection-filter {
+      background: var(--light-bg);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      border: 2px solid transparent;
+    }
+
+    body.dark-mode .collection-filter {
+      background: var(--dark-bg);
+    }
+
+    .collection-filter:hover, .collection-filter.active {
+      background: var(--accent-orange);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .collection-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .collection-action-btn {
+      background: var(--light-bg);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    body.dark-mode .collection-action-btn {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .collection-action-btn.primary {
+      background: var(--accent-orange);
+      color: var(--white);
+    }
+
+    .collection-action-btn.primary:hover {
+      background: crimson;
+      transform: translateY(-2px);
+    }
+
+    /* Creative Collections Grid - MATCH GALLERY SIZE */
+    .collections-section {
+      padding: 40px 20px;
+    }
+
+    .collections-grid-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Match the gallery page grid exactly */
+    .creative-collections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .collection-card {
+      background: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    body.dark-mode .collection-card {
+      background: var(--dark-card);
+      box-shadow: 0 8px 25px var(--dark-shadow);
+    }
+
+    .collection-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .collection-cover {
+      position: relative;
+  overflow: visible;
+  height: 250px;
+    }
+
+    .collection-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .collection-card:hover .collection-image {
+      transform: scale(1.1);
+    }
+
+    .collection-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .collection-card:hover .collection-overlay {
+      opacity: 1;
+    }
+
+    .collection-info {
+      color: var(--white);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .collection-card:hover .collection-info {
+      transform: translateY(0);
+    }
+
+    .collection-photo-count {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .collection-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #321d5d; /* your purple accent color */
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 10; /* keep badge above images */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  pointer-events: none; /* so hover still works on image */
+}
+
+    .collection-card:hover .collection-badge {
+      transform: translateX(0);
+    }
+
+    .collection-content {
+      padding: 20px;
+    }
+
+    .collection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .collection-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--main-purple);
+      margin: 0;
+    }
+
+    body.dark-mode .collection-name {
+      color: var(--dark-text);
+    }
+
+    .collection-privacy {
+      font-size: 0.8rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    body.dark-mode .collection-privacy {
+      color: #aaa;
+    }
+
+    .collection-description {
+      color: var(--text-dark);
+      line-height: 1.5;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    body.dark-mode .collection-description {
+      color: var(--dark-text);
+    }
+
+    .collection-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+
+    body.dark-mode .collection-meta {
+      color: #aaa;
+    }
+
+    .collection-actions-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .collection-action {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .collection-action:not(.delete) {
+      background-color: var(--main-purple);
+      color: var(--white);
+    }
+
+    .collection-action:not(.delete):hover {
+      background-color: #321d5d;
+    }
+
+    .collection-action.delete {
+      background-color: #dc3545;
+      color: var(--white);
+    }
+
+    .collection-action.delete:hover {
+      background-color: #c82333;
+    }
+
+    /* Recently Saved Section - Match gallery style */
+    .recently-saved-section {
+      background: var(--white);
+      padding: 50px 20px;
+      margin-top: 40px;
+    }
+
+    body.dark-mode .recently-saved-section {
+      background: var(--dark-card);
+    }
+
+    .recently-saved-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: var(--main-purple);
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    body.dark-mode .section-title {
+      color: var(--dark-text);
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent-orange);
+    }
+
+    .recent-photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .recent-photo-card {
+      background: var(--light-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    body.dark-mode .recent-photo-card {
+      background: var(--dark-bg);
+      box-shadow: 0 3px 10px var(--dark-shadow);
+    }
+
+    .recent-photo-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .recent-photo {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .recent-photo-info {
+      padding: 15px;
+    }
+
+    .recent-photo-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--main-purple);
+      margin-bottom: 5px;
+    }
+
+    body.dark-mode .recent-photo-title {
+      color: var(--dark-text);
+    }
+
+    .recent-photo-source {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    body.dark-mode .recent-photo-source {
+      color: #aaa;
+    }
+
+    /* Create Collection Section */
+    .create-collection-section {
+      background: linear-gradient(135deg, var(--light-bg), #e8e2f1);
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    body.dark-mode .create-collection-section {
+      background: linear-gradient(135deg, var(--dark-bg), #2a1a40);
+    }
+
+    .create-collection-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .create-collection-card {
+      background: var(--white);
+      padding: 50px 40px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark-mode .create-collection-card {
+      background: var(--dark-card);
+    }
+
+    .create-collection-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--main-purple), var(--accent-orange));
+    }
+
+    .create-collection-icon {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      color: var(--white);
+      font-size: 2.2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .create-collection-btn {
+      background: var(--accent-orange);
+      color: var(--white);
+      border: none;
+      padding: 15px 35px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 5px 20px rgba(220, 20, 60, 0.3);
+    }
+
+    .create-collection-btn:hover {
+      background: crimson;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(220, 20, 60, 0.4);
+    }
+
+    /* Empty State */
+    .empty-collections {
+      text-align: center;
+      padding: 80px 20px;
+      color: #666;
+    }
+
+    body.dark-mode .empty-collections {
+      color: #aaa;
+    }
+
+    .empty-collections i {
+      font-size: 5rem;
+      margin-bottom: 25px;
+      color: #ccc;
+    }
+
+    body.dark-mode .empty-collections i {
+      color: #555;
+    }
+
+    .empty-collections h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: var(--main-purple);
+    }
+
+    body.dark-mode .empty-collections h3 {
+      color: var(--dark-text);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .collections-title {
+        font-size: 2.2rem;
+      }
+
+      .collections-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .collections-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .collection-filters {
+        justify-content: center;
+      }
+
+      .collection-actions {
+        justify-content: center;
+      }
+
+      .creative-collections-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .create-collection-card {
+        padding: 40px 25px;
+      }
+
+      .recent-photos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .collections-header {
+        padding: 30px 15px;
+      }
+
+      .collections-title {
+        font-size: 1.8rem;
+      }
+
+      .collections-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .collection-stat {
+        text-align: center;
+      }
+
+      .collection-actions-bar {
+        flex-direction: column;
+      }
+
+      .collection-action {
+        padding: 10px 15px;
+      }
+    }
+/* Floating Scroll Up Button */
+.scroll-up-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 30px; /* Fixed: was 30spx (typo) */
+  height: 30px; /* Fixed: was 30px (too small) */
+  background: linear-gradient(135deg, var(--accent-orange), #ff6b9d);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  margin-right: -10;
+  /* Removed: margin-right: -10 (was incomplete) */
+}
+
+.scroll-up-btn:hover {
+  background: linear-gradient(135deg, crimson, var(--accent-orange));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.6);
+}
+
+/* Dark mode support */
+body.dark-mode .scroll-up-btn {
+  background: linear-gradient(135deg, var(--accent-orange), var(--main-purple));
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.3);
+}
+
+body.dark-mode .scroll-up-btn:hover {
+  background: linear-gradient(135deg, var(--main-purple), var(--accent-orange));
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-up-btn {
+    bottom: 80px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">
+        <img src="https://i.pinimg.com/736x/54/4b/94/544b941c8c0d2dc7ecef446c5a8cdc6b.jpg" alt="Pixora Logo" class="logo-img">
+        <span class="logo-text">Pixora</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="collections.html" class="nav-link active">Collections</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-controls">
+        <!-- Dark Mode Toggle in Header -->
+        <div class="dark-mode-toggle" id="darkModeToggle">
+          <div class="toggle-track">
+            <div class="toggle-thumb">
+              <i class="fas fa-sun light-icon"></i>
+              <i class="fas fa-moon dark-icon"></i>
+            </div>
+          </div>
+          <span class="toggle-label">Dark Mode</span>
+        </div>
+
+        <a href="#" class="btn-call">
+          <i class="fa-solid fa-phone"></i>
+          <span>0912-345-6789</span>
+        </a>
+        <div class="profile-user">
+          <img src="https://i.pinimg.com/736x/9f/4c/f0/9f4cf0f24b376077a2fcdab2e85c3584.jpg" alt="User Profile" class="profile-img">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COLLECTIONS HEADER -->
+  <section class="collections-header">
+    <div class="collections-title">My Collections</div>
+    <div class="collections-subtitle">Organize your inspiration, curate your vision</div>
+    
+    <div class="collections-stats">
+      <div class="collection-stat">
+        <span class="collection-stat-number">8</span>
+        <span class="collection-stat-label">Collections</span>
+      </div>
+      <div class="collection-stat">
+        <span class="collection-stat-number">156</span>
+        <span class="collection-stat-label">Saved Photos</span>
+      </div>
+      <div class="collection-stat">
+        <span class="collection-stat-number">12</span>
+        <span class="collection-stat-label">Shared</span>
+      </div>
+      <div class="collection-stat">
+        <span class="collection-stat-number">4</span>
+        <span class="collection-stat-label">This Month</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS MANAGEMENT -->
+  <section class="collections-management">
+    <div class="collections-container">
+      <div class="collection-filters">
+        <div class="collection-filter active">All Collections</div>
+        <div class="collection-filter">Public</div>
+        <div class="collection-filter">Private</div>
+        <div class="collection-filter">Favorites</div>
+        <div class="collection-filter">Recently Updated</div>
+      </div>
+      
+      <div class="collection-actions">
+        <button class="collection-action-btn">
+          <i class="fas fa-sort"></i>
+          Sort By
+        </button>
+        <button class="collection-action-btn primary">
+          <i class="fas fa-plus"></i>
+          New Collection
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATIVE COLLECTIONS GRID -->
+  <section class="collections-section">
+    <div class="collections-grid-container">
+      <div class="creative-collections-grid">
+        <!-- Collection 1 -->
+        <div class="collection-card">
+          <div class="collection-cover">
+            <img src="https://i.pinimg.com/736x/6e/c8/65/6ec86523e7fcb785f71548d91ded43f9.jpg" alt="Favorites Collection" class="collection-image">
+            <div class="collection-overlay">
+              <div class="collection-info">
+                <div class="collection-photo-count">24 photos</div>
+              </div>
+            </div>
+            <div class="collection-badge">Most Saved</div>
+          </div>
+          <div class="collection-content">
+            <div class="collection-header">
+              <h3 class="collection-name">My Favorites</h3>
+              <span class="collection-privacy">
+                <i class="fas fa-lock"></i>
+                Private
+              </span>
+            </div>
+            <p class="collection-description">A curated collection of my all-time favorite inspirational photos and personal masterpieces.</p>
+            <div class="collection-meta">
+              <span>Updated 2 days ago</span>
+              <span>24 items</span>
+            </div>
+            <div class="collection-actions-bar">
+              <button class="collection-action">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <button class="collection-action">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="collection-action delete">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collection 2 -->
+        <div class="collection-card">
+          <div class="collection-cover">
+            <img src="https://i.pinimg.com/1200x/30/b8/10/30b81087a3b06a0d10e28d835b2f8b73.jpg" alt="Travel Inspiration" class="collection-image">
+            <div class="collection-overlay">
+              <div class="collection-info">
+                <div class="collection-photo-count">18 photos</div>
+              </div>
+            </div>
+            <div class="collection-badge">Public</div>
+          </div>
+          <div class="collection-content">
+            <div class="collection-header">
+              <h3 class="collection-name">Wanderlust</h3>
+              <span class="collection-privacy">
+                <i class="fas fa-globe"></i>
+                Public
+              </span>
+            </div>
+            <p class="collection-description">Dream destinations and travel photography that fuels my adventurous spirit and wanderlust.</p>
+            <div class="collection-meta">
+              <span>Updated 1 week ago</span>
+              <span>18 items</span>
+            </div>
+            <div class="collection-actions-bar">
+              <button class="collection-action">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <button class="collection-action">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="collection-action delete">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collection 3 -->
+        <div class="collection-card">
+          <div class="collection-cover">
+            <img src="https://i.pinimg.com/1200x/fe/80/97/fe8097f621babc516e87a6c71b34f603.jpg" alt="Nature Wonders" class="collection-image">
+            <div class="collection-overlay">
+              <div class="collection-info">
+                <div class="collection-photo-count">15 photos</div>
+              </div>
+            </div>
+            <div class="collection-badge">Public</div>
+          </div>
+          <div class="collection-content">
+            <div class="collection-header">
+              <h3 class="collection-name">Earth's Beauty</h3>
+              <span class="collection-privacy">
+                <i class="fas fa-globe"></i>
+                Public
+              </span>
+            </div>
+            <p class="collection-description">Breathtaking landscapes and natural wonders that remind us of our planet's incredible beauty.</p>
+            <div class="collection-meta">
+              <span>Updated 3 days ago</span>
+              <span>15 items</span>
+            </div>
+            <div class="collection-actions-bar">
+              <button class="collection-action">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <button class="collection-action">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="collection-action delete">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collection 4 -->
+        <div class="collection-card">
+          <div class="collection-cover">
+            <img src="https://i.pinimg.com/736x/8a/f4/63/8af463dc85bf7d54dd0c7c05d17b974e.jpg" alt="Creative Inspiration" class="collection-image">
+            <div class="collection-overlay">
+              <div class="collection-info">
+                <div class="collection-photo-count">32 photos</div>
+              </div>
+            </div>
+            <div class="collection-badge">Private</div>
+          </div>
+          <div class="collection-content">
+            <div class="collection-header">
+              <h3 class="collection-name">Creative Spark</h3>
+              <span class="collection-privacy">
+                <i class="fas fa-lock"></i>
+                Private
+              </span>
+            </div>
+            <p class="collection-description">Visual inspiration and creative references that ignite new ideas and artistic directions.</p>
+            <div class="collection-meta">
+              <span>Updated yesterday</span>
+              <span>32 items</span>
+            </div>
+            <div class="collection-actions-bar">
+              <button class="collection-action">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <button class="collection-action">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="collection-action delete">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENTLY SAVED SECTION -->
+  <section class="recently-saved-section">
+    <div class="recently-saved-container">
+      <h2 class="section-title">Recently Saved</h2>
+      <div class="recent-photos-grid">
+        <!-- Recent Photo 1 -->
+        <div class="recent-photo-card">
+          <img src="https://i.pinimg.com/736x/6e/86/b1/6e86b186eb0fd59c7f9132b685ce2c99.jpg" alt="White Dress" class="recent-photo">
+          <div class="recent-photo-info">
+            <div class="recent-photo-title">Ethereal Portrait</div>
+            <div class="recent-photo-source">from @portrait_master</div>
+          </div>
+        </div>
+
+        <!-- Recent Photo 2 -->
+        <div class="recent-photo-card">
+          <img src="https://i.pinimg.com/1200x/7d/12/3c/7d123c733b8195cc865db266080d440f.jpg" alt="Cranberry Tart" class="recent-photo">
+          <div class="recent-photo-info">
+            <div class="recent-photo-title">Autumn Delight</div>
+            <div class="recent-photo-source">from @foodie_photos</div>
+          </div>
+        </div>
+
+        <!-- Recent Photo 3 -->
+        <div class="recent-photo-card">
+          <img src="https://i.pinimg.com/736x/f4/28/aa/f428aa1a4a80dbd10c18aa4448bfa271.jpg" alt="City Night" class="recent-photo">
+          <div class="recent-photo-info">
+            <div class="recent-photo-title">Urban Nights</div>
+            <div class="recent-photo-source">from @city_lens</div>
+          </div>
+        </div>
+
+        <!-- Recent Photo 4 -->
+        <div class="recent-photo-card">
+          <img src="https://i.pinimg.com/1200x/3a/87/45/3a8745d095e1b8eb8fd1f334c0b822c5.jpg" alt="Floral" class="recent-photo">
+          <div class="recent-photo-info">
+            <div class="recent-photo-title">Botanical Beauty</div>
+            <div class="recent-photo-source">from @nature_captured</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATE COLLECTION SECTION -->
+  <section class="create-collection-section">
+    <div class="create-collection-container">
+      <div class="create-collection-card">
+        <div class="create-collection-icon">
+          <i class="fas fa-folder-plus"></i>
+        </div>
+        <h3>Start a New Collection</h3>
+        <p>Organize your saved photos into beautiful, themed collections. Curate your inspiration and share your vision.</p>
+        <button class="create-collection-btn">
+          <i class="fas fa-plus"></i>
+          Create Collection
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Menu</h3>
+        <p>Home</p>
+        <p>Gallery</p>
+        <p>Collections</p>
+        <p>Contact</p>
+      </div>
+      <div>
+        <h3>Follow Me</h3>
+        <p>📷 Instagram</p>
+        <p>🐦 Twitter</p>
+        <p>📘 Facebook</p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <input type="email" placeholder="Your email">
+        <button>Send</button>
+      </div>
+    </div>
+    <p class="copy">© 2025 Pixora | Designed by Bea Christina Cale</p>
+  </footer>
+<button class="scroll-up-btn" id="scrollUpBtn" title="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+      <script>
+    // Dark Mode Toggle Functionality
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const body = document.body;
+    const toggleLabel = document.querySelector(".toggle-label");
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem("darkMode") === "enabled") {
+      body.classList.add("dark-mode");
+      toggleLabel.textContent = "Light Mode";
+    } else {
+      toggleLabel.textContent = "Dark Mode";
+    }
+
+    // Toggle dark mode
+    darkModeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+      
+      if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "enabled");
+        toggleLabel.textContent = "Light Mode";
+      } else {
+        localStorage.setItem("darkMode", "disabled");
+        toggleLabel.textContent = "Dark Mode";
+      }
+    });
+
+    // Collections Management Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filter functionality
+      const collectionFilters = document.querySelectorAll('.collection-filter');
+      collectionFilters.forEach(filter => {
+        filter.addEventListener('click', function() {
+          collectionFilters.forEach(f => f.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Collection action buttons
+      const viewButtons = document.querySelectorAll('.collection-action:not(.delete)');
+      viewButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const collectionName = this.closest('.collection-card').querySelector('.collection-name').textContent;
+          if (this.querySelector('.fa-eye')) {
+            alert(`Viewing collection: "${collectionName}"`);
+          } else if (this.querySelector('.fa-edit')) {
+            alert(`Editing collection: "${collectionName}"`);
+          }
+        });
+      });
+
+      // Delete buttons
+      const deleteButtons = document.querySelectorAll('.collection-action.delete');
+      deleteButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const collectionName = this.closest('.collection-card').querySelector('.collection-name').textContent;
+          if (confirm(`Are you sure you want to delete "${collectionName}"? All saved photos will be removed from this collection.`)) {
+            this.closest('.collection-card').style.opacity = '0';
+            setTimeout(() => {
+              this.closest('.collection-card').remove();
+              updateCollectionsStats();
+            }, 300);
+          }
+        });
+      });
+
+      // Create collection button
+      const createCollectionBtn = document.querySelector('.create-collection-btn');
+      if (createCollectionBtn) {
+        createCollectionBtn.addEventListener('click', function() {
+          alert('Opening collection creation form...');
+        });
+      }
+
+      // Update collections stats
+      function updateCollectionsStats() {
+        const collectionCards = document.querySelectorAll('.collection-card');
+        const statElement = document.querySelector('.collection-stat-number');
+        if (statElement) {
+          statElement.textContent = collectionCards.length;
+        }
+      }
+
+      // Simple navigation fix
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          const currentPage = window.location.pathname.split('/').pop();
+          if (href === currentPage) {
+            e.preventDefault();
+          }
+        });
+      });
+    });
+
+    // Scroll to Top Button Functionality - SIMPLIFIED VERSION
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollUpBtn = document.getElementById("scrollUpBtn");
+        
+        if (!scrollUpBtn) {
+            console.log('Scroll button not found');
+            return;
+        }
+
+        console.log('✅ Scroll button found!');
+
+        // Show/hide button based on scroll
+        function toggleScrollButton() {
+            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollPosition > 300) {
+                scrollUpBtn.style.opacity = '1';
+                scrollUpBtn.style.visibility = 'visible';
+                scrollUpBtn.style.transform = 'translateY(0)';
+            } else {
+                scrollUpBtn.style.opacity = '0';
+                scrollUpBtn.style.visibility = 'hidden';
+                scrollUpBtn.style.transform = 'translateY(20px)';
+            }
+        }
+
+        // Scroll to top function
+        scrollUpBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add scroll event listener
+        window.addEventListener('scroll', toggleScrollButton);
+        
+        // Check initial position
+        toggleScrollButton();
+    });
+  </script>
+</body>
+</html>

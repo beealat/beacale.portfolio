@@ -1,0 +1,259 @@
+<!DOCTYPE html> <!-- Defines this document as HTML5 -->
+<html lang="en"> <!-- Root element; language set to English -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!-- Font Awesome icons -->
+  <meta charset="UTF-8" /> <!-- Character encoding set to UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsive design for mobile devices -->
+  <title>My Photography Hub</title> <!-- Page title shown in browser tab -->
+  <link rel="stylesheet" href="style.css" /> <!-- Link to external CSS file -->
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header"> <!-- Top header section -->
+    <div class="container header-container"> <!-- Container for header elements -->
+      <div class="logo"> <!-- Logo section -->
+        <img src="https://i.pinimg.com/736x/54/4b/94/544b941c8c0d2dc7ecef446c5a8cdc6b.jpg" alt="Pixora Logo" class="logo-img"> <!-- Logo image -->
+        <span class="logo-text">Pixora</span> <!-- Logo text -->
+      </div>
+
+      <div class="search-bar"> <!-- Search input and button -->
+        <input type="text" placeholder="Search photos, authors, titles..." id="searchInput"> <!-- Input field for search -->
+        <button type="button" id="searchBtn"> <!-- Search button -->
+          <i class="fas fa-search"></i> <!-- Search icon using Font Awesome -->
+        </button>
+      </div>
+  
+      <nav class="nav"> <!-- Navigation menu -->
+        <a href="index.html" class="nav-link active">Home</a> <!-- Active Home link -->
+        <a href="about.html" class="nav-link">About</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="collections.html" class="nav-link">Collections</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-controls"> <!-- Right side controls -->
+        <!-- Dark Mode Toggle -->
+        <div class="dark-mode-toggle" id="darkModeToggle">
+          <div class="toggle-track"> <!-- Background track for toggle -->
+            <div class="toggle-thumb"> <!-- Movable thumb -->
+              <i class="fas fa-sun light-icon"></i> <!-- Sun icon -->
+              <i class="fas fa-moon dark-icon"></i> <!-- Moon icon -->
+            </div>
+          </div>
+          <span class="toggle-label">Dark Mode</span> <!-- Label for toggle -->
+        </div>
+
+        <a href="#" class="btn-call"> <!-- Contact phone button -->
+          <i class="fa-solid fa-phone"></i> <!-- Phone icon -->
+          <span>0912-345-6789</span> <!-- Phone number text -->
+        </a>
+        <div class="profile-user"> <!-- User profile section -->
+          <img src="https://i.pinimg.com/736x/9f/4c/f0/9f4cf0f24b376077a2fcdab2e85c3584.jpg" alt="User Profile" class="profile-img"> <!-- Profile image -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero"> <!-- Main banner section -->
+    <div class="overlay"> <!-- Overlay for hero text -->
+      <h1>Capturing Beautiful Moments</h1> <!-- Hero headline -->
+      <p>Experience the art of photography — where every click tells a story.</p> <!-- Subtext -->
+      <button class="main-btn">Explore Gallery</button> <!-- Call-to-action button -->
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories"> <!-- Photography categories section -->
+    <h2>Photography Styles</h2>
+    <div class="category-grid"> <!-- Grid layout for categories -->
+      <div class="category-item"> <!-- Individual category -->
+        <img src="https://i.pinimg.com/736x/52/ef/1d/52ef1d7c78c7f24567013f2a552d3130.jpg" alt=""> <!-- Category image -->
+        <h3>Portrait</h3> <!-- Category title -->
+        <p>Capturing emotions and expressions of people.</p> <!-- Description -->
+      </div>
+      <div class="category-item">
+        <img src="https://i.pinimg.com/1200x/fe/80/97/fe8097f621babc516e87a6c71b34f603.jpg" alt="">
+        <h3>Nature</h3>
+        <p>The breathtaking beauty of nature through my lens.</p>
+      </div>
+      <div class="category-item">
+        <img src="https://i.pinimg.com/1200x/30/b8/10/30b81087a3b06a0d10e28d835b2f8b73.jpg" alt="">
+        <h3>Travel</h3>
+        <p>See the world in frames — one destination at a time.</p>
+      </div>
+      <div class="category-item">
+        <img src="https://i.pinimg.com/1200x/02/0a/a1/020aa191a471a7d5e6c3d393da575ed8.jpg" alt="">
+        <h3>Food</h3>
+        <p>Showcasing the artistry and colors of cuisine.</p>
+      </div>
+      <div class="category-item">
+        <img src="https://i.pinimg.com/736x/83/2d/ac/832dac09e0d45055beef6e22d6be4a01.jpg" alt="">
+        <h3>Urban</h3>
+        <p>City lights and architecture through the lens.</p>
+      </div>
+      <div class="category-item">
+        <img src="https://i.pinimg.com/1200x/af/8f/1e/af8f1e914ede786649b40a73b5aee923.jpg" alt="">
+        <h3>Fashion</h3>
+        <p>Where creativity meets style and aesthetic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED GALLERY -->
+  <section class="gallery"> <!-- Featured photos section -->
+    <h2>Today's Featured Posts</h2>
+    <div class="gallery-grid"> <!-- Grid layout for gallery -->
+      <div class="photo"> <!-- Individual photo -->
+        <img src="https://i.pinimg.com/736x/6e/c8/65/6ec86523e7fcb785f71548d91ded43f9.jpg" alt="">
+        <div class="caption">Beautiful Scenery</div> <!-- Photo caption -->
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/1200x/7d/12/3c/7d123c733b8195cc865db266080d440f.jpg" alt="">
+        <div class="caption">Cranberry Tart Aesthetic</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/6e/86/b1/6e86b186eb0fd59c7f9132b685ce2c99.jpg" alt="">
+        <div class="caption">White Dress</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/8a/f4/63/8af463dc85bf7d54dd0c7c05d17b974e.jpg" alt="">
+        <div class="caption">Vibrant Sunset</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/f4/28/aa/f428aa1a4a80dbd10c18aa4448bfa271.jpg" alt="">
+        <div class="caption">Chill Night</div>
+      </div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=400&q=80" alt="">
+        <div class="caption">Cup of Coffee Aesthetic</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/63/c7/86/63c786bbd84f9df39eec098a8d67bf74.jpg" alt="">
+        <div class="caption">Dreamscape</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/1200x/ed/dd/e8/eddde80792435123a16b2fd68f58fb79.jpg" alt="">
+        <div class="caption">Urban Aesthetic</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/1200x/3a/87/45/3a8745d095e1b8eb8fd1f334c0b822c5.jpg" alt="">
+        <div class="caption">Flowers</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/00/ea/16/00ea1622391d427ccc0e17517d938097.jpg" alt="">
+        <div class="caption">Anne Hathaway Portrait</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/1200x/eb/b4/47/ebb447418f801e06efc3e4a1c6026c1c.jpg" alt="">
+        <div class="caption">Urban Streets</div>
+      </div>
+      <div class="photo">
+        <img src="https://i.pinimg.com/736x/05/87/b8/0587b852369a77eae736653bee7983b1.jpg" alt="">
+        <div class="caption">Mountain Aesthetic</div>
+      </div>
+    </div>
+    <div class="show-more-container"> <!-- Container for Show More button -->
+      <button class="show-more-btn">Show More</button> <!-- Button to load more photos -->
+    </div>
+  </section>
+
+  <!-- INTERACTIVE SECTION -->
+  <section class="interactive"> <!-- Section to add photos to collection -->
+    <h2>Save Photos To Your Collections</h2>
+    <div class="controls"> <!-- Input and buttons -->
+      <input type="text" id="itemInput" placeholder="Enter photo title..."> <!-- Input field -->
+      <button id="addBtn">Add Photo</button> <!-- Add button -->
+      <button id="clearBtn" class="clear-btn">Clear All</button> <!-- Clear button -->
+    </div>
+
+    <ul id="galleryList"></ul> <!-- List of photos added -->
+
+    <div class="summary"> <!-- Summary of total photos -->
+      <p>Total photos to be added: <span id="itemCount">0</span></p> <!-- Counter -->
+      <button id="checkoutBtn">Submit</button> <!-- Submit button -->
+    </div>
+  </section>
+
+  <!-- BLOG SECTION -->
+  <section class="post-photos"> <!-- User can post photos -->
+    <h2>Post Your Photos</h2>
+    <div class="post-box">
+      <p>Share your favorite moments with the community! Upload your photo and add a short caption.</p>
+      <input type="text" placeholder="Enter photo title..." class="post-input"> <!-- Caption input -->
+      <input type="file" class="post-file"> <!-- File upload input -->
+      <div class="post-buttons">
+        <button class="btn-upload">Upload</button> <!-- Upload button -->
+        <button class="btn-clear">Clear</button> <!-- Clear input button -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid"> <!-- Grid layout for footer -->
+      <div> <!-- Menu section -->
+        <h3>Menu</h3>
+        <p>Home</p>
+        <p>Gallery</p>
+        <p>Collections</p>
+        <p>Contact</p>
+      </div>
+      <div> <!-- Social media section -->
+        <h3>Follow Me</h3>
+        <p>📷 Instagram</p>
+        <p>🐦 Twitter</p>
+        <p>📘 Facebook</p>
+      </div>
+      <div> <!-- Subscription section -->
+        <h3>Subscribe</h3>
+        <input type="email" placeholder="Your email">
+        <button>Send</button>
+      </div>
+    </div>
+    <p class="copy">© 2025 Pixora | Designed by Bea Christina Cale</p> <!-- Copyright -->
+  </footer>
+
+  <!-- Floating Scroll Up Button -->
+  <button class="scroll-up-btn" id="scrollUpBtn" title="Scroll to top">
+    <i class="fas fa-chevron-up"></i> <!-- Arrow icon -->
+  </button>
+
+  <!-- Floating Action Button -->
+  <button class="fab-btn" id="fabBtn" title="Save to your collections">
+    <i class="fas fa-star"></i> <!-- Star icon -->
+  </button>
+
+  <!-- Sidebar -->
+  <div id="saveSidebar" class="save-sidebar"> <!-- Sidebar container -->
+    <div class="sidebar-header">
+      <h3>Save Photos to Collection</h3> <!-- Sidebar title -->
+      <button id="closeSidebar" class="close-sidebar">✖</button> <!-- Close button -->
+    </div>
+
+    <div class="sidebar-controls"> <!-- Input and add button in sidebar -->
+      <input type="text" id="sidebarItemInput" placeholder="Enter photo title..." />
+      <button id="sidebarAddBtn">Add Photo</button>
+    </div>
+
+    <ul id="sidebarGalleryList"></ul> <!-- Sidebar photo list -->
+
+    <div class="sidebar-footer"> <!-- Sidebar footer -->
+      <span>Total photos to be added: <span id="sidebarItemCount">0</span></span> <!-- Sidebar counter -->
+      <div class="sidebar-buttons">
+        <button id="sidebarSubmitBtn">Submit</button> <!-- Submit button -->
+        <button id="sidebarClearBtn" class="clear-btn">Clear All</button> <!-- Clear button -->
+      </div>
+    </div>
+
+    <div class="recently-added-section"> <!-- Recently added photos section -->
+      <h4>Recently Added Photos</h4>
+      <div id="recentlyAddedGrid" class="recently-added-grid"> <!-- Grid container -->
+        <p class="empty-message">No photos added yet</p> <!-- Message if no photos -->
+      </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script> <!-- Link to JS file -->
+</body>
+</html>

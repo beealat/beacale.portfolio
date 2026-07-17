@@ -1,0 +1,1543 @@
+/* UNIVERSAL RESET AND BASE STYLES */
+* {
+  margin: 0;          /* Remove default margin from all elements */
+  padding: 0;         /* Remove default padding from all elements */
+  box-sizing: border-box; /* Include padding and border in element's total width/height */
+  font-family: "Poppins", sans-serif; /* Set default font for entire site */
+}
+
+/* CSS CUSTOM PROPERTIES (VARIABLES) */
+:root {
+  /* Light theme color variables */
+  --main-purple: #1d0b34;      /* Primary brand color */
+  --accent-orange: #dc143c;    /* Secondary accent color (actually crimson) */
+  --light-bg: #f7f4fa;         /* Light background color */
+  --white: #ffffff;            /* Pure white */
+  --text-dark: #2a2338;        /* Dark text color for light mode */
+  --text-light: #f9f8fc;       /* Light text color for dark backgrounds */
+  
+  /* Dark mode color variables */
+  --dark-bg: #121212;          /* Dark background color */
+  --dark-card: #1e1e1e;        /* Dark card/container background */
+  --dark-text: #e0e0e0;        /* Light text color for dark mode */
+  --dark-border: #333;         /* Border color for dark mode */
+  --dark-shadow: rgba(0, 0, 0, 0.5); /* Shadow color for dark mode */
+}
+
+/* GENERAL PAGE STYLES */
+html {
+  scroll-behavior: smooth; /* Enable smooth scrolling for anchor links */
+}
+
+body {
+  background-color: var(--light-bg); /* Use light background variable */
+  color: var(--text-dark);           /* Use dark text color for light mode */
+  /* Remove transition for immediate change - prevents delay in theme switching */
+}
+
+/* DARK MODE CLASS - Applied to body when dark mode is active */
+body.dark-mode {
+  background-color: var(--dark-bg); /* Switch to dark background */
+  color: var(--dark-text);          /* Switch to light text color */
+}
+
+/* HEADER/NAVIGATION STYLES */
+header {
+  width: 100%; /* Full width header */
+  background: linear-gradient(90deg, #d4cce0, #25053b, #ac1a35); /* Color gradient background */
+  border-bottom: 3px solid var(--main-purple); /* Bottom border with main color */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+  position: fixed; /* Fixed positioning to stay at top */
+  top: 0; /* Position at very top */
+  left: 0; /* Align to left edge */
+  z-index: 100; /* High z-index to stay above other content */
+  /* Remove transition for immediate theme changes */
+}
+
+/* Dark mode header styles */
+body.dark-mode header {
+  background: linear-gradient(90deg, #25053b, #180625, #ac1a35); /* Darker gradient */
+  border-bottom: 3px solid #ac1a35; /* Different border color */
+}
+
+/* Header container layout */
+.header .container {
+  display: flex; /* Flexbox for horizontal layout */
+  align-items: center; /* Vertically center items */
+  justify-content: space-between; /* Space items evenly */
+  width: 100%; /* Full width */
+}
+
+/* LOGO STYLES */
+.logo {
+  display: flex; /* Flexbox for logo layout */
+  align-items: center; /* Center logo vertically */
+  gap: 8px; /* Space between logo image and text */
+  margin-left: -35px; /* Negative margin for positioning */
+}
+
+.logo-img {
+  width: 28px; /* Fixed width */
+  height: 28px; /* Fixed height */
+  object-fit: contain; /* Maintain aspect ratio */
+  border-radius: 5px; /* Slightly rounded corners */
+}
+
+.logo-text {
+  font-family: 'Poppins', sans-serif; /* Font family */
+  font-size: 1.6rem; /* Large font size */
+  font-weight: 700; /* Bold weight */
+  color: var(--main-purple); /* Main brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode logo text */
+body.dark-mode .logo-text {
+  color: var(--dark-text); /* Light color for dark mode */
+}
+
+/* MAIN NAVIGATION */
+.nav {
+  position: absolute; /* Absolute positioning */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Precise centering */
+  display: flex; /* Flexbox for nav items */
+  gap: 2rem; /* Space between nav items */
+}
+
+.nav-link {
+  color: white; /* White text color */
+  font-size: 1rem; /* Standard font size */
+  text-decoration: none; /* Remove underline */
+  position: relative; /* For pseudo-element positioning */
+  font-weight: 600; /* Semi-bold weight */
+}
+
+/* Dark mode nav links */
+body.dark-mode .nav-link {
+  color: var(--dark-text); /* Light text for dark mode */
+}
+
+/* Animated underline effect */
+.nav-link::after {
+  content: ""; /* Empty content for pseudo-element */
+  position: absolute; /* Position relative to nav link */
+  width: 0%; /* Start with no width */
+  height: 2px; /* Thin line */
+  bottom: -4px; /* Position below text */
+  left: 0; /* Align to left */
+  background-color: var(--accent-orange); /* Accent color */
+  transition: width 0.3s ease; /* Smooth width transition */
+}
+
+.nav-link:hover {
+  color: var(--accent-orange); /* Change color on hover */
+}
+
+.nav-link:hover::after {
+  width: 100%; /* Expand underline to full width on hover */
+}
+
+/* CALL-TO-ACTION BUTTON */
+.btn-call {
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--text-light); /* Light text */
+  padding: 8px 16px; /* Vertical and horizontal padding */
+  border-radius: 20px; /* Rounded corners */
+  text-decoration: none; /* Remove underline */
+  font-weight: 500; /* Medium weight */
+  margin-left: auto; /* Push to right side */
+  border: 2px solid crimson; /* Crimson border */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode call button */
+body.dark-mode .btn-call {
+  background-color: var(--main-purple); /* Keep purple background */
+  color: var(--dark-text); /* Light text */
+  border: 2px solid crimson; /* Crimson border */
+}
+
+/* Alternative header styling */
+header {
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space items */
+  align-items: center; /* Center vertically */
+  padding: 15px 60px; /* Top/bottom and left/right padding */
+  background-color: var(--white); /* White background */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Subtle shadow */
+  position: sticky; /* Sticky positioning */
+  top: 0; /* Stick to top */
+  z-index: 1000; /* Very high z-index */
+}
+
+/* HERO SECTION */
+.hero {
+  background: 
+    linear-gradient(rgba(29,11,52,0.6), rgba(142, 64, 83, 0.6)), /* Overlay gradient */
+    url('https://i.pinimg.com/736x/16/87/98/1687986cba1bc3ea1dd6f1af03a00e96.jpg') center/cover no-repeat; /* Background image */
+  height: 50vh; /* Reduced viewport height */
+  position: relative; /* For pseudo-element positioning */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  color: var(--text-light); /* Light text color */
+}
+
+/* Gradient overlay at bottom */
+.hero::after {
+  content: ""; /* Empty content */
+  position: absolute; /* Position relative to hero */
+  bottom: 0; /* Align to bottom */
+  left: 0; /* Align to left */
+  width: 100%; /* Full width */
+  height: 100px; /* Fixed height */
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5)); /* Fade to dark */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Shadow effect */
+}
+
+/* Hero content overlay */
+.overlay {
+  background: rgba(0,0,0,0.5); /* Semi-transparent black */
+  color: var(--text-light); /* Light text */
+  text-align: center; /* Center text */
+  padding: 35px; /* Padding around content */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.overlay h1 {
+  font-size: 2.2rem; /* Large heading size */
+  margin-bottom: 10px; /* Space below heading */
+}
+
+/* Primary button styling */
+.main-btn {
+  background-color: var(--accent-orange); /* Accent color background */
+  border: none; /* No border */
+  padding: 10px 20px; /* Button padding */
+  color: var(--white); /* White text */
+  border-radius: 25px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 1rem; /* Standard font size */
+  margin-top: 10px; /* Space above button */
+}
+
+.main-btn:hover {
+  background-color: var(--main-purple); /* Change to purple on hover */
+}
+
+/* CATEGORIES SECTION */
+.categories {
+  text-align: center; /* Center align content */
+  padding: 60px 0; /* Vertical padding */
+  background: repeating-linear-gradient( /* Diagonal stripe pattern */
+    45deg, /* 45 degree angle */
+    var(--light-bg), /* Main color */
+    var(--light-bg) 40px, /* Same color for 40px */
+    rgba(255,255,255,0.05) 40px, /* Transparent stripe */
+    rgba(255,255,255,0.05) 80px /* Transparent stripe end */
+  );
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode categories background */
+body.dark-mode .categories {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--dark-bg), /* Dark background */
+    var(--dark-bg) 40px,
+    rgba(30, 30, 30, 0.1) 40px, /* Subtle stripe */
+    rgba(30, 30, 30, 0.1) 80px
+  );
+}
+
+.categories h2 {
+  margin-bottom: 30px; /* Space below heading */
+  font-size: 2rem; /* Large font size */
+  color: var(--main-purple); /* Brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode categories heading */
+body.dark-mode .categories h2 {
+  color: var(--dark-text); /* Light text color */
+}
+
+/* Category grid layout */
+.category-grid {
+  display: grid; /* CSS Grid layout */
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  gap: 20px 15px; /* Row and column gaps */
+  padding: 0 60px; /* Horizontal padding */
+  justify-items: center; /* Center grid items */
+}
+
+/* Individual category item */
+.category-item {
+  width: 90%; /* 90% of grid cell width */
+  background-color: var(--white); /* White background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(29,11,52,0.15); /* Subtle shadow */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode category items */
+body.dark-mode .category-item {
+  background-color: var(--dark-card); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  border: 1px solid var(--dark-border); /* Dark border */
+  box-shadow: 0 2px 10px var(--dark-shadow); /* Dark shadow */
+}
+
+.category-item img {
+  width: 100%; /* Full width of container */
+  height: 160px; /* Fixed height */
+  object-fit: cover; /* Crop image to fit */
+  border-radius: 10px 10px 0 0; /* Rounded top corners only */
+}
+
+.category-item h3 {
+  padding-top: 10px; /* Space above heading */
+  font-size: 1.1rem; /* Medium font size */
+  color: var(--main-purple); /* Brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode category headings */
+body.dark-mode .category-item h3 {
+  color: var(--dark-text); /* Light text */
+}
+
+.category-item p {
+  padding: 0 15px 15px; /* Padding: top, sides, bottom */
+  font-size: 0.9rem; /* Smaller text */
+  color: var(--text-dark); /* Dark text color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode category text */
+body.dark-mode .category-item p {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Category item hover effects */
+.category-item:hover {
+  transform: scale(1.05); /* Scale up slightly */
+  box-shadow: 0 12px 25px rgba(29,11,52,0.2); /* Enhanced shadow */
+  outline: 2px solid crimson; /* Crimson outline */
+  outline-offset: -2px; /* Inset outline */
+}
+
+/* Dark mode hover effects */
+body.dark-mode .category-item:hover {
+  box-shadow: 0 12px 25px var(--dark-shadow); /* Dark shadow */
+}
+
+/* GALLERY SECTION */
+.gallery {
+  text-align: center; /* Center align content */
+  padding: 40px 80px 60px 80px; /* Top, right, bottom, left padding */
+  background-color: var(--white); /* White background */
+  /* Remove transition for immediate theme change */
+  overflow: hidden; /* Prevent unwanted scrolling */
+  position: relative; /* For positioning context */
+}
+
+/* Dark mode gallery */
+body.dark-mode .gallery {
+  background-color: var(--dark-card); /* Dark background */
+}
+
+.gallery h2 {
+  font-size: 2rem; /* Large heading */
+  margin-top: 0px; /* No top margin */
+  margin-bottom: 40px; /* Space below heading */
+  color: var(--main-purple); /* Brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode gallery heading */
+body.dark-mode .gallery h2 {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Gallery grid layout */
+.gallery-grid {
+  display: grid; /* CSS Grid */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 20px; /* Space between items */
+  justify-items: center; /* Center items */
+  margin-bottom: 30px; /* Space below grid */
+}
+
+/* Individual photo container */
+.photo {
+  position: relative; /* For caption positioning */
+  overflow: hidden; /* Hide overflow */
+  border-radius: 10px; /* Rounded corners */
+  width: 100%; /* Full width of grid cell */
+  max-width: 300px; /* Maximum width */
+  height: 200px; /* Fixed height for consistency */
+}
+
+.photo img {
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  object-fit: cover; /* Crop to fit */
+  transition: transform 0.3s; /* Smooth zoom transition */
+}
+
+.photo:hover img {
+  transform: scale(1.1); /* Zoom in on hover */
+}
+
+/* Photo caption */
+.caption {
+  position: absolute; /* Position over image */
+  bottom: 0; /* Align to bottom */
+  left: 0; /* Align to left */
+  width: 100%; /* Full width */
+  background: rgba(220, 20, 60, 0.85); /* Semi-transparent crimson */
+  color: var(--text-light); /* Light text */
+  font-size: 0.9rem; /* Smaller text */
+  padding: 8px 0; /* Vertical padding */
+  opacity: 0; /* Start hidden */
+  transform: translateY(100%); /* Start below container */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth reveal */
+}
+
+.photo:hover .caption {
+  opacity: 1; /* Make visible */
+  transform: translateY(0); /* Slide up into position */
+}
+
+/* INTERACTIVE SECTION */
+.interactive {
+  text-align: center; /* Center content */
+  padding: 40px 80px 60px 80px; /* Section padding */
+  background-color: var(--light-bg); /* Light background */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode interactive section */
+body.dark-mode .interactive {
+  background-color: var(--dark-bg); /* Dark background */
+}
+
+.interactive h2 {
+  margin-bottom: 20px; /* Space below heading */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode interactive heading */
+body.dark-mode .interactive h2 {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Control buttons and inputs */
+.controls {
+  display: flex; /* Flexbox layout */
+  gap: 10px; /* Space between controls */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  flex-wrap: wrap; /* Wrap on small screens */
+  margin-bottom: 20px; /* Space below controls */
+}
+
+.controls input {
+  padding: 10px; /* Input padding */
+  width: 40%; /* 40% of container width */
+  border: 1px solid crimson; /* Crimson border */
+  border-radius: 8px; /* Rounded corners */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode input */
+body.dark-mode .controls input {
+  background-color: var(--dark-card); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  border-color: var(--accent-orange); /* Accent border */
+}
+
+.controls button {
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--text-light); /* Light text */
+  border: none; /* No border */
+  padding: 10px 16px; /* Button padding */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s; /* Smooth transitions */
+}
+
+.controls button:hover {
+  background-color: #321d5d; /* Darker purple on hover */
+}
+
+/* GALLERY LIST STYLES */
+#galleryList {
+  list-style: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 30px auto; /* Center with top/bottom margin */
+  width: 70%; /* 70% of container width */
+}
+
+#galleryList li {
+  background-color: var(--white); /* White background */
+  border-radius: 8px; /* Rounded corners */
+  margin: 8px 0; /* Vertical spacing */
+  padding: 10px 16px; /* Internal spacing */
+  display: flex; /* Flexbox for layout */
+  justify-content: space-between; /* Space items */
+  align-items: center; /* Center vertically */
+  gap: 10px; /* Space between elements */
+  box-shadow: 0 2px 8px rgba(29,11,52,0.1); /* Subtle shadow */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode list items */
+body.dark-mode #galleryList li {
+  background-color: var(--dark-card); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  box-shadow: 0 2px 8px var(--dark-shadow); /* Dark shadow */
+}
+
+#galleryList li:hover {
+  transform: translateY(-3px); /* Lift effect on hover */
+  box-shadow: 0 4px 12px rgba(29,11,52,0.15); /* Enhanced shadow */
+}
+
+/* Dark mode hover effects */
+body.dark-mode #galleryList li:hover {
+  box-shadow: 0 4px 12px var(--dark-shadow); /* Dark shadow */
+}
+
+/* Thumbnail images in list */
+#galleryList li img.thumb {
+  width: 60px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  object-fit: cover; /* Crop to fit */
+  border-radius: 6px; /* Rounded corners */
+  border: 1px solid crimson; /* Crimson border */
+}
+
+#galleryList li span {
+  flex-grow: 1; /* Take available space */
+  text-align: left; /* Left align text */
+  font-weight: 500; /* Medium weight */
+  color: var(--main-purple); /* Brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode list text */
+body.dark-mode #galleryList li span {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Delete button styling */
+.deleteBtn {
+  background-color: crimson; /* Crimson background */
+  border: none; /* No border */
+  color: white; /* White text */
+  border-radius: 6px; /* Rounded corners */
+  padding: 6px 12px; /* Button padding */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s; /* Color transition */
+}
+
+.deleteBtn:hover {
+  background-color: #e63946; /* Lighter red on hover */
+}
+
+/* POST PHOTOS SECTION */
+.post-photos {
+  text-align: center; /* Center content */
+  padding: 40px 80px 60px 80px; /* Section padding */
+  background-color: var(--white); /* White background */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode post section */
+body.dark-mode .post-photos {
+  background-color: var(--dark-card); /* Dark background */
+}
+
+.post-photos h2 {
+  font-size: 25px; /* Fixed font size */
+  margin-bottom: 30px; /* Space below heading */
+  color: var(--main-purple); /* Brand color */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode post heading */
+body.dark-mode .post-photos h2 {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Post form container */
+.post-box {
+  background-color: var(--light-bg); /* Light background */
+  padding: 40px; /* Internal spacing */
+  border-radius: 10px; /* Rounded corners */
+  width: 60%; /* 60% of container width */
+  margin: 0 auto; /* Center horizontally */
+  box-shadow: 0 2px 10px rgba(29,11,52,0.15); /* Subtle shadow */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode post box */
+body.dark-mode .post-box {
+  background-color: var(--dark-bg); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  box-shadow: 0 2px 10px var(--dark-shadow); /* Dark shadow */
+}
+
+.post-box p {
+  margin-bottom: 20px; /* Space below paragraph */
+  color: var(--text-dark); /* Dark text */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode post text */
+body.dark-mode .post-box p {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Form input styles */
+.post-input, .post-file {
+  display: block; /* Block display */
+  width: 80%; /* 80% of container width */
+  margin: 10px auto; /* Center with vertical spacing */
+  padding: 10px; /* Internal padding */
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid crimson; /* Crimson border */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode form inputs */
+body.dark-mode .post-input,
+body.dark-mode .post-file {
+  background-color: var(--dark-card); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  border-color: var(--accent-orange); /* Accent border */
+}
+
+/* Form buttons container */
+.post-buttons {
+  margin-top: 20px; /* Space above buttons */
+  display: flex; /* Flexbox layout */
+  justify-content: center; /* Center buttons */
+  gap: 20px; /* Space between buttons */
+}
+
+.post-buttons button {
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 10px 20px; /* Button padding */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-weight: 500; /* Medium weight */
+  transition: all 0.3s; /* Smooth transitions */
+}
+
+.post-buttons button:hover {
+  background-color: var(--accent-orange); /* Accent color on hover */
+}
+
+/* CHECKOUT BUTTON */
+#checkoutBtn {
+  background-color: var(--accent-orange); /* Accent background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 8px 13px; /* Button padding */
+  border-radius: 25px; /* Rounded corners */
+  font-size: 15px; /* Font size */
+  font-weight: 550; /* Semi-bold */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+  margin-top: 15px; /* Space above button */
+  box-shadow: none; /* No shadow */
+  position: static; /* Normal document flow */
+}
+
+#checkoutBtn:hover {
+  background-color: crimson; /* Darker red on hover */
+  transform: translateY(-2px); /* Lift effect */
+}
+
+/* FOOTER STYLES */
+footer {
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--text-light); /* Light text */
+  padding: 50px 80px; /* Section padding */
+  margin-top: 60px; /* Space above footer */
+  border-top: 2px solid crimson; /* Top border */
+  /* Remove transition for immediate theme change */
+}
+
+/* Dark mode footer */
+body.dark-mode footer {
+  background-color: #2a1a40; /* Darker purple */
+}
+
+/* Footer grid layout */
+.footer-grid {
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space items evenly */
+  flex-wrap: wrap; /* Wrap on small screens */
+}
+
+footer input {
+  padding: 8px; /* Input padding */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+}
+
+footer button {
+  background-color: var(--accent-orange); /* Accent background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 8px 10px; /* Button padding */
+  border-radius: 5px; /* Rounded corners */
+  margin-left: 5px; /* Space from input */
+  transition: all 0.3s; /* Smooth transitions */
+}
+
+footer button:hover {
+  background: linear-gradient(45deg, crimson, #dc143c); /* Gradient on hover */
+}
+
+/* Copyright text */
+.copy {
+  text-align: center; /* Center text */
+  margin-top: 30px; /* Space above */
+  font-size: 0.9rem; /* Smaller text */
+  color: var(--text-light); /* Light color */
+  opacity: 0.8; /* Semi-transparent */
+}
+
+/* SHOW MORE BUTTON */
+.show-more-btn {
+  display: inline-block; /* Inline block */
+  background-color: crimson; /* Crimson background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 10px 24px; /* Button padding */
+  font-size: 1rem; /* Standard font size */
+  border-radius: 25px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+  position: relative; /* For positioning */
+  left: 215%; /* Position far right */
+  transform: translateX(215%); /* Adjust positioning */
+  margin-top: 30px; /* Space above */
+}
+
+.show-more-btn:hover {
+  background-color: rgba(29,11,52,0.7); /* Transparent purple on hover */
+  transform: translateX(215%) translateY(-2px); /* Lift effect */
+}
+
+/* FLOATING ACTION BUTTON (FAB) */
+.fab-btn {
+  position: fixed; /* Fixed positioning */
+  bottom: 40px; /* Position from bottom */
+  right: 15px; /* Position from right */
+  background-color: var(--accent-orange); /* Accent background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  border-radius: 50%; /* Circular button */
+  width: 55px; /* Fixed width */
+  height: 55px; /* Fixed height */
+  font-size: 24px; /* Large icon */
+  cursor: pointer; /* Pointer cursor */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Shadow for depth */
+  z-index: 1001; /* High z-index */
+  transition: all 0.3s ease; /* Smooth transitions */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+
+.fab-btn:hover {
+  background-color: crimson; /* Darker red on hover */
+  transform: scale(1.1); /* Scale up */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3); /* Enhanced shadow */
+}
+
+/* SIDEBAR STYLES */
+.save-sidebar {
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Align to top */
+  right: -400px; /* Start off-screen */
+  width: 350px; /* Fixed width */
+  height: 100%; /* Full height */
+  background-color: var(--white); /* White background */
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2); /* Left shadow */
+  padding: 20px; /* Internal spacing */
+  transition: right 0.3s ease; /* Slide animation */
+  z-index: 1000; /* High z-index */
+  overflow-y: auto; /* Scroll if content overflows */
+}
+
+.save-sidebar.active {
+  right: 0; /* Slide into view */
+}
+
+/* Sidebar header */
+.sidebar-header {
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space items */
+  align-items: center; /* Center vertically */
+  margin-bottom: 15px; /* Space below */
+}
+
+.sidebar-header h3 {
+  font-size: 1.2rem; /* Medium heading */
+  color: var(--main-purple); /* Brand color */
+}
+
+.close-sidebar {
+  background: none; /* Transparent background */
+  border: none; /* No border */
+  font-size: 18px; /* Icon size */
+  cursor: pointer; /* Pointer cursor */
+  color: var(--main-purple); /* Brand color */
+}
+
+/* Sidebar controls */
+.sidebar-controls {
+  display: flex; /* Flexbox layout */
+  gap: 10px; /* Space between controls */
+  margin-bottom: 20px; /* Space below */
+}
+
+.sidebar-controls input {
+  flex: 1; /* Take available space */
+  padding: 8px; /* Input padding */
+  border-radius: 6px; /* Rounded corners */
+  border: 1px solid #ccc; /* Light border */
+}
+
+.sidebar-controls button {
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 8px 12px; /* Button padding */
+  border-radius: 6px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+}
+
+.sidebar-controls button:hover {
+  background-color: #321d5d; /* Darker purple on hover */
+}
+
+/* Sidebar gallery list */
+#sidebarGalleryList {
+  list-style: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0 0 20px 0; /* Bottom margin only */
+}
+
+#sidebarGalleryList li {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  justify-content: space-between; /* Space items */
+  margin-bottom: 10px; /* Space between items */
+  padding: 6px 10px; /* Internal spacing */
+  background-color: var(--light-bg); /* Light background */
+  border-radius: 6px; /* Rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+
+#sidebarGalleryList li img.thumb {
+  width: 50px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  object-fit: cover; /* Crop to fit */
+  border-radius: 4px; /* Rounded corners */
+  margin-right: 8px; /* Space from text */
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space items */
+  align-items: center; /* Center vertically */
+  padding: 15px 0; /* Vertical padding */
+  border-top: 1px solid #eee; /* Top border */
+}
+
+.sidebar-footer button {
+  background-color: var(--accent-orange); /* Accent background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 8px 14px; /* Button padding */
+  border-radius: 6px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+}
+
+.sidebar-footer button:hover {
+  background-color: crimson; /* Darker red on hover */
+}
+
+/* CLEAR BUTTONS */
+.clear-btn {
+  background-color: #6c757d !important; /* Gray background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 10px 16px; /* Button padding */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s; /* Smooth transitions */
+}
+
+.clear-btn:hover {
+  background-color: #5a6268 !important; /* Darker gray on hover */
+}
+
+/* Sidebar button layout */
+.sidebar-buttons {
+  display: flex; /* Flexbox layout */
+  gap: 8px; /* Space between buttons */
+}
+
+/* RECENTLY ADDED PHOTOS SECTION */
+.recently-added-section {
+  margin-top: 30px; /* Space above section */
+  padding-top: 20px; /* Space inside top */
+  border-top: 2px solid #eee; /* Top border */
+}
+
+.recently-added-section h4 {
+  color: var(--main-purple); /* Brand color */
+  margin-bottom: 15px; /* Space below heading */
+  font-size: 1.1rem; /* Medium heading */
+}
+
+.recently-added-grid {
+  display: grid; /* CSS Grid */
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  gap: 8px; /* Small gap between items */
+  min-height: 60px; /* Minimum height */
+}
+
+.recently-added-grid .recent-photo {
+  width: 100%; /* Full width of grid cell */
+  height: 60px; /* Fixed height */
+  object-fit: cover; /* Crop to fit */
+  border-radius: 6px; /* Rounded corners */
+  border: 2px solid var(--accent-orange); /* Accent border */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.2s ease; /* Smooth scale */
+}
+
+.recently-added-grid .recent-photo:hover {
+  transform: scale(1.05); /* Scale up on hover */
+}
+
+/* Empty state message */
+.empty-message {
+  grid-column: 1 / -1; /* Span all columns */
+  text-align: center; /* Center text */
+  color: #999; /* Gray text */
+  font-style: italic; /* Italic style */
+  padding: 20px 0; /* Vertical padding */
+}
+
+/* Hide empty message when photos exist */
+.recently-added-grid.has-photos .empty-message {
+  display: none; /* Completely hide */
+}
+
+/* DARK MODE SIDEBAR STYLES */
+body.dark-mode .save-sidebar {
+  background-color: #1e1e1e; /* Dark background */
+  color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .sidebar-header h3 {
+  color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .close-sidebar {
+  color: #aaa; /* Medium gray */
+}
+
+body.dark-mode .close-sidebar:hover {
+  color: #fff; /* White on hover */
+}
+
+body.dark-mode .sidebar-controls input {
+  background-color: #2d2d2d; /* Dark input */
+  border-color: #444; /* Dark border */
+  color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .sidebar-controls button {
+  background-color: crimson; /* Crimson background */
+}
+
+body.dark-mode .sidebar-controls button:hover {
+  background-color: crimson; /* Same color on hover */
+}
+
+body.dark-mode #sidebarGalleryList li {
+  background-color: #2d2d2d; /* Dark background */
+  color: #e0e0e0; /* Light text */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* Dark shadow */
+}
+
+/* Remove highlight from sidebar count */
+.sidebar-footer span {
+  background-color: transparent !important; /* No background */
+  padding: 0 !important; /* No padding */
+  color: inherit !important; /* Inherit color */
+}
+
+body.dark-mode .sidebar-footer span {
+  background-color: transparent !important; /* No background */
+  color: inherit !important; /* Inherit color */
+}
+
+body.dark-mode #sidebarSubmitBtn {
+  background-color: crimson; /* Crimson background */
+}
+
+body.dark-mode #sidebarSubmitBtn:hover {
+  background-color: crimson; /* Same on hover */
+}
+
+body.dark-mode #sidebarClearBtn {
+  background-color: #7d868d; /* Medium gray */
+}
+
+body.dark-mode #sidebarClearBtn:hover {
+  background-color: #6c757d; /* Darker gray */
+}
+
+body.dark-mode .recently-added-section {
+  border-top-color: #444; /* Dark border */
+}
+
+body.dark-mode .recently-added-section h4 {
+  color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .recently-added-grid .recent-photo {
+  border-color: var(--main-purple); /* Purple border */
+}
+
+body.dark-mode .empty-message {
+  color: #666; /* Dark gray */
+}
+
+/* DARK MODE TOGGLE SWITCH */
+.dark-mode-toggle-container {
+  position: fixed; /* Fixed positioning */
+  bottom: 110px; /* Position from bottom */
+  left: 15px; /* Position from left */
+  z-index: 1001; /* High z-index */
+}
+
+.dark-mode-toggle {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  gap: 12px; /* Space between elements */
+  background: var(--white); /* White background */
+  padding: 12px 16px; /* Internal spacing */
+  border-radius: 30px; /* Rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+  border: 2px solid var(--main-purple); /* Purple border */
+}
+
+body.dark-mode .dark-mode-toggle {
+  background: var(--dark-card); /* Dark background */
+  border-color: var(--accent-orange); /* Accent border */
+}
+
+.dark-mode-toggle:hover {
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+}
+
+/* Toggle track (background) */
+.toggle-track {
+  position: relative; /* For thumb positioning */
+  width: 60px; /* Fixed width */
+  height: 30px; /* Fixed height */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient */
+  border-radius: 30px; /* Rounded */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Contain thumb */
+}
+
+body.dark-mode .toggle-track {
+  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Orange gradient */
+}
+
+/* Toggle thumb (slider) */
+.toggle-thumb {
+  position: absolute; /* Position within track */
+  top: 3px; /* Position from top */
+  left: 3px; /* Start position (light mode) */
+  width: 24px; /* Fixed width */
+  height: 24px; /* Fixed height */
+  background: var(--white); /* White background */
+  border-radius: 50%; /* Circular */
+  transition: all 0.3s ease; /* Smooth movement */
+  display: flex; /* Flexbox for icons */
+  align-items: center; /* Center icons */
+  justify-content: center; /* Center icons */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow */
+}
+
+body.dark-mode .toggle-thumb {
+  left: calc(100% - 27px); /* End position (dark mode) */
+  background: var(--dark-card); /* Dark background */
+}
+
+/* Toggle icons */
+.toggle-thumb .light-icon,
+.toggle-thumb .dark-icon {
+  font-size: 12px; /* Small icons */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.toggle-thumb .light-icon {
+  color: #ffd700; /* Yellow sun */
+  opacity: 1; /* Visible in light mode */
+}
+
+.toggle-thumb .dark-icon {
+  color: #1d0b34; /* Dark moon */
+  opacity: 0; /* Hidden in light mode */
+}
+
+body.dark-mode .toggle-thumb .light-icon {
+  opacity: 0; /* Hidden in dark mode */
+}
+
+body.dark-mode .toggle-thumb .dark-icon {
+  opacity: 1; /* Visible in dark mode */
+}
+
+/* Toggle label */
+.toggle-label {
+  font-weight: 600; /* Semi-bold */
+  font-size: 14px; /* Small text */
+  color: var(--main-purple); /* Brand color */
+  transition: color 0.3s ease; /* Color transition */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+body.dark-mode .toggle-label {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Pulse animation for attention */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(220, 20, 60, 0.4); /* Crimson glow */
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.dark-mode-toggle {
+  animation: pulse-glow 3s ease-in-out infinite; /* Continuous pulse */
+}
+
+/* HEADER CONTROLS */
+.header-controls {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  gap: 15px; /* Space between controls */
+}
+
+/* Header dark mode toggle */
+.dark-mode-toggle {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  gap: 8px; /* Smaller gap */
+  cursor: pointer; /* Pointer cursor */
+  padding: 8px 12px; /* Button-like padding */
+  border-radius: 20px; /* Rounded corners */
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.3); /* More opaque on hover */
+}
+
+/* Smaller toggle for header */
+.toggle-track {
+  position: relative; /* For thumb positioning */
+  width: 50px; /* Smaller width */
+  height: 24px; /* Smaller height */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient */
+  border-radius: 30px; /* Rounded */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Contain thumb */
+}
+
+body.dark-mode .toggle-track {
+  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Orange gradient */
+}
+
+/* Smaller thumb for header */
+.toggle-thumb {
+  position: absolute; /* Position within track */
+  top: 2px; /* Adjusted position */
+  left: 2px; /* Start position */
+  width: 20px; /* Smaller width */
+  height: 20px; /* Smaller height */
+  background: var(--white); /* White background */
+  border-radius: 50%; /* Circular */
+  transition: all 0.3s ease; /* Smooth movement */
+  display: flex; /* Flexbox for icons */
+  align-items: center; /* Center icons */
+  justify-content: center; /* Center icons */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow */
+}
+
+body.dark-mode .toggle-thumb {
+  left: calc(100% - 22px); /* End position */
+  background: var(--dark-card); /* Dark background */
+}
+
+/* Smaller icons for header */
+.toggle-thumb .light-icon,
+.toggle-thumb .dark-icon {
+  font-size: 10px; /* Smaller icons */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.toggle-thumb .light-icon {
+  color: #ffd700; /* Yellow sun */
+  opacity: 1; /* Visible in light mode */
+}
+
+.toggle-thumb .dark-icon {
+  color: #1d0b34; /* Dark moon */
+  opacity: 0; /* Hidden in light mode */
+}
+
+body.dark-mode .toggle-thumb .light-icon {
+  opacity: 0; /* Hidden in dark mode */
+}
+
+body.dark-mode .toggle-thumb .dark-icon {
+  opacity: 1; /* Visible in dark mode */
+}
+
+/* Header toggle label */
+.toggle-label {
+  font-weight: 600; /* Semi-bold */
+  font-size: 14px; /* Small text */
+  color: white; /* White text for header */
+  transition: color 0.3s ease; /* Color transition */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+body.dark-mode .toggle-label {
+  color: var(--dark-text); /* Light text */
+}
+
+/* Hide old toggle container */
+.dark-mode-toggle-container {
+  display: none; /* Completely hide */
+}
+
+/* SIDEBAR POSITIONING FIX */
+.save-sidebar {
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Align to top */
+  right: -400px; /* Start off-screen */
+  width: 350px; /* Fixed width */
+  height: 100%; /* Full height */
+  background-color: var(--white); /* White background */
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2); /* Left shadow */
+  padding: 20px; /* Internal spacing */
+  transition: right 0.3s ease; /* Slide animation */
+  z-index: 1000; /* High z-index */
+  overflow-y: auto; /* Scroll if needed */
+}
+
+.save-sidebar.active {
+  right: 0; /* Slide into view */
+}
+
+/* FAB BUTTON POSITIONING */
+.fab-btn {
+  position: fixed; /* Fixed positioning */
+  bottom: 40px; /* Position from bottom */
+  right: 15px; /* Position from right */
+  background-color: var(--accent-orange); /* Accent background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  border-radius: 50%; /* Circular */
+  width: 55px; /* Fixed width */
+  height: 55px; /* Fixed height */
+  font-size: 24px; /* Large icon */
+  cursor: pointer; /* Pointer cursor */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Shadow */
+  z-index: 1001; /* High z-index */
+  transition: all 0.3s ease; /* Smooth transitions */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  margin-right: -10px; /* Position adjustment */
+}
+
+.fab-btn:hover {
+  background-color: crimson; /* Darker red on hover */
+  transform: scale(1.1); /* Scale up */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3); /* Enhanced shadow */
+}
+
+/* Hide floating text artifacts */
+body::before {
+  display: none !important; /* Force hide */
+}
+
+/* PROFILE USER LOGO */
+.profile-user {
+  margin-left: auto; /* Push to right */
+  width: 40px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  border-radius: 50%; /* Circular */
+  margin-right: -20px; /* Position adjustment */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.3s ease; /* Smooth scale */
+}
+
+.profile-img {
+  width: 40px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  border-radius: 50%; /* Circular */
+  object-fit: cover; /* Crop to fit */
+  border: 2px solid white; /* White border */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.profile-img:hover {
+  transform: scale(1.1); /* Scale up on hover */
+  border-color: var(--accent-orange); /* Accent border on hover */
+}
+
+body.dark-mode .profile-img {
+  border-color: var(--dark-text); /* Light border in dark mode */
+}
+
+body.dark-mode .profile-img:hover {
+  border-color: var(--accent-orange); /* Accent border on hover */
+}
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  margin-left: -500px; /* Position adjustment */
+  flex: 0 1 400px; /* Flexible width with basis */
+}
+
+.search-bar input {
+  width: 75%; /* 75% of container */
+  height: 90%; /* 90% height */
+  padding: 10px 16px; /* Input padding */
+  border: 2px solid var(--main-purple); /* Purple border */
+  border-radius: 25px 0 0 25px; /* Left rounded only */
+  background-color: var(--white); /* White background */
+  color: var(--text-dark); /* Dark text */
+  font-size: 0.9rem; /* Smaller text */
+  outline: none; /* Remove focus outline */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.search-bar input:focus {
+  border-color: var(--accent-orange); /* Accent border on focus */
+  box-shadow: 0 0 8px rgba(220, 20, 60, 0.3); /* Glow effect */
+}
+
+.search-bar button {
+  padding: 10px 20px; /* Button padding */
+  background-color: var(--main-purple); /* Purple background */
+  color: var(--white); /* White text */
+  border: 2px solid var(--main-purple); /* Purple border */
+  border-left: none; /* Remove left border */
+  border-radius: 0 25px 25px 0; /* Right rounded only */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.search-bar button:hover {
+  background-color: var(--accent-orange); /* Accent background on hover */
+  border-color: var(--accent-orange); /* Accent border on hover */
+}
+
+/* Dark mode search bar */
+body.dark-mode .search-bar input {
+  background-color: var(--dark-card); /* Dark background */
+  color: var(--dark-text); /* Light text */
+  border-color: var(--dark-border); /* Dark border */
+}
+
+body.dark-mode .search-bar input:focus {
+  border-color: var(--accent-orange); /* Accent border on focus */
+}
+
+body.dark-mode .search-bar button {
+  background-color: var(--accent-orange); /* Accent background */
+  border-color: var(--dark-border); /* Dark border */
+}
+
+body.dark-mode .search-bar button:hover {
+  background-color: var(--accent-orange); /* Same color */
+  border-color: var(--accent-orange); /* Accent border */
+}
+
+/* ACTIVE NAV LINK STYLING */
+.nav-link.active {
+  color: var(--accent-orange) !important; /* Accent color */
+  font-weight: 700; /* Bold weight */
+}
+
+.nav-link.active::after {
+  width: 100%; /* Full underline */
+  background-color: var(--accent-orange); /* Accent color */
+}
+
+/* Active link hover states */
+.nav-link.active:hover {
+  color: var(--accent-orange) !important; /* Keep accent color */
+}
+
+.nav-link.active:hover::after {
+  width: 100%; /* Keep full underline */
+  background-color: var(--accent-orange); /* Keep accent color */
+}
+
+/* Dark mode active links */
+body.dark-mode .nav-link.active {
+  color: var(--accent-orange) !important; /* Accent color */
+}
+
+body.dark-mode .nav-link.active::after {
+  background-color: var(--accent-orange); /* Accent color */
+}
+
+/* FLOATING SCROLL UP BUTTON */
+.scroll-up-btn {
+  position: fixed; /* Fixed positioning */
+  bottom: 100px; /* Position above FAB */
+  right: 30px; /* Position from right */
+  width: 30px; /* Small width */
+  height: 30px; /* Small height */
+  background: linear-gradient(135deg, var(--accent-orange), #ff6b9d); /* Gradient */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  border-radius: 50%; /* Circular */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 1.2rem; /* Icon size */
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4); /* Shadow */
+  transition: all 0.3s ease; /* Smooth transitions */
+  z-index: 1002; /* Very high z-index */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  opacity: 0; /* Start hidden */
+  visibility: hidden; /* Start hidden */
+  transform: translateY(20px); /* Start position */
+  margin-right: -10px; /* Position adjustment */
+}
+
+.scroll-up-btn.show {
+  opacity: 1; /* Make visible */
+  visibility: visible; /* Make visible */
+  transform: translateY(0); /* Normal position */
+}
+
+.scroll-up-btn:hover {
+  background: linear-gradient(135deg, crimson, var(--accent-orange)); /* Darker gradient */
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.6); /* Enhanced shadow */
+}
+
+/* Dark mode scroll button */
+body.dark-mode .scroll-up-btn {
+  background: linear-gradient(135deg, var(--accent-orange), var(--main-purple)); /* Different gradient */
+  box-shadow: 0 5px 15px rgba(220, 20, 60, 0.3); /* Softer shadow */
+}
+
+body.dark-mode .scroll-up-btn:hover {
+  background: linear-gradient(135deg, var(--main-purple), var(--accent-orange)); /* Reversed gradient */
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5); /* Enhanced shadow */
+}
+
+/* GALLERY FIXES */
+.gallery {
+  text-align: center; /* Center content */
+  padding: 40px 80px 60px 80px; /* Section padding */
+  background-color: var(--white); /* White background */
+  overflow: hidden; /* Prevent scrollbars */
+  position: relative; /* Positioning context */
+}
+
+body.dark-mode .gallery {
+  background-color: var(--dark-card); /* Dark background */
+}
+
+/* Show More Button Container */
+.show-more-container {
+  text-align: center; /* Center button */
+  margin-top: 20px; /* Space above */
+  width: 100%; /* Full width */
+}
+
+/* Fixed Show More Button */
+.show-more-btn {
+  display: inline-block; /* Inline block */
+  background-color: crimson; /* Crimson background */
+  color: var(--white); /* White text */
+  border: none; /* No border */
+  padding: 12px 30px; /* Button padding */
+  font-size: 1rem; /* Standard text */
+  border-radius: 25px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+  margin: 0 auto; /* Center horizontally */
+  position: static; /* Normal flow */
+  transform: none; /* No transform */
+  left: auto; /* No positioning */
+}
+
+.show-more-btn:hover {
+  background-color: var(--main-purple); /* Purple on hover */
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+
+/* Ensure consistent photo sizing */
+.photo {
+  position: relative; /* For caption positioning */
+  overflow: hidden; /* Hide overflow */
+  border-radius: 10px; /* Rounded corners */
+  width: 100%; /* Full width of grid cell */
+  max-width: 300px; /* Maximum width */
+  height: 200px; /* Fixed height */
+}
+
+.photo img {
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  object-fit: cover; /* Crop to fit */
+  transition: transform 0.3s; /* Smooth zoom */
+}
