@@ -21,6 +21,8 @@
     --white: #ffffff;
     --amber: #b8874a;
     --amber-soft: rgba(184,135,74,0.12);
+    --clay: #a8654f;
+    --clay-soft: rgba(168,101,79,0.12);
   }
 
   html, body { height: 100%; }
@@ -33,11 +35,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  .app {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 2.4rem 1.6rem 3.5rem;
-  }
+  .app { max-width: 1000px; margin: 0 auto; padding: 2.2rem 1.6rem 3.5rem; }
 
   /* ── HEADER ── */
   .app-header {
@@ -45,8 +43,8 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 2.2rem;
-    padding-bottom: 1.4rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1.3rem;
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
@@ -70,30 +68,43 @@
 
   .app-title em { font-style: italic; color: var(--sage-dark); }
 
-  .app-sub {
-    font-size: 0.82rem;
-    color: var(--mid);
-    max-width: 300px;
-    text-align: right;
-    font-weight: 300;
+  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; }
+
+  .tomato-stat {
+    font-size: 0.78rem;
+    color: var(--clay);
+    background: var(--clay-soft);
+    padding: 0.3rem 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
   }
 
-  @media (max-width: 640px) { .app-sub { text-align: left; max-width: none; } }
+  .speed-toggle {
+    display: flex;
+    border: 1px solid var(--sage-light);
+    overflow: hidden;
+  }
+  .speed-toggle button {
+    font-family: inherit;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    border: none;
+    background: var(--white);
+    color: var(--mid);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .speed-toggle button.active { background: var(--sage-dark); color: var(--white); }
 
   /* ── LAYOUT ── */
-  .board {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 1.4rem;
-  }
-
+  .board { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.4rem; }
   @media (max-width: 800px) { .board { grid-template-columns: 1fr; } }
 
-  .panel {
-    background: var(--white);
-    border: 1px solid var(--border);
-    padding: 1.5rem 1.5rem 1.7rem;
-  }
+  .panel { background: var(--white); border: 1px solid var(--border); padding: 1.5rem 1.5rem 1.7rem; }
 
   .panel-label {
     font-size: 0.65rem;
@@ -117,15 +128,10 @@
   }
 
   /* ── ADD TASK FORM ── */
-  .task-form {
-    display: flex;
-    gap: 0.6rem;
-    margin-bottom: 1.2rem;
-    flex-wrap: wrap;
-  }
+  .task-form { display: flex; gap: 0.55rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
 
   .task-form input[type="text"] {
-    flex: 1;
+    flex: 1.4;
     min-width: 140px;
     padding: 0.65rem 0.8rem;
     border: 1px solid var(--border);
@@ -135,19 +141,29 @@
     color: var(--charcoal);
   }
 
-  .task-form select {
-    padding: 0.65rem 0.6rem;
+  .task-form select, .task-form input[type="number"] {
+    padding: 0.65rem 0.5rem;
     border: 1px solid var(--border);
     background: var(--cream);
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--charcoal);
   }
 
-  .task-form input:focus, .task-form select:focus, .task-form textarea:focus {
-    outline: none;
-    border-color: var(--sage-dark);
+  .task-form input[type="number"] { width: 4.2rem; }
+
+  .field-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--light);
+    display: block;
+    margin-bottom: 0.25rem;
   }
+
+  .field-group { display: flex; flex-direction: column; }
+
+  .task-form input:focus, .task-form select:focus { outline: none; border-color: var(--sage-dark); }
 
   .btn {
     display: inline-flex;
@@ -164,20 +180,18 @@
     text-transform: uppercase;
     cursor: pointer;
     transition: background 0.2s, transform 0.15s;
+    height: fit-content;
+    align-self: flex-end;
   }
 
   .btn:hover { background: var(--charcoal); }
   .btn:active { transform: scale(0.97); }
   .btn:disabled { background: var(--border); color: var(--light); cursor: not-allowed; }
 
-  .btn-ghost {
-    background: transparent;
-    color: var(--sage-dark);
-    border: 1px solid var(--sage-light);
-  }
+  .btn-ghost { background: transparent; color: var(--sage-dark); border: 1px solid var(--sage-light); }
   .btn-ghost:hover { background: var(--ivory); color: var(--charcoal); }
 
-  /* ── TASK LIST (priority queue) ── */
+  /* ── TASK LIST ── */
   .task-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
 
   .task-row {
@@ -197,110 +211,61 @@
   .task-row.p4 { border-left-color: var(--sage-light); }
   .task-row.p5 { border-left-color: var(--border); }
 
-  .task-rank {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--light);
-    width: 1.2rem;
-  }
-
+  .task-type-icon { font-size: 1.05rem; width: 1.4rem; text-align: center; }
+  .task-rank { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--light); width: 1rem; }
   .task-info { flex: 1; min-width: 0; }
   .task-name { font-size: 0.86rem; color: var(--charcoal); font-weight: 500; }
   .task-priority { font-size: 0.7rem; color: var(--mid); margin-top: 0.1rem; }
 
-  .empty-state {
-    font-size: 0.8rem;
-    color: var(--light);
-    font-style: italic;
-    padding: 1rem 0;
-    text-align: center;
-  }
+  .empty-state { font-size: 0.8rem; color: var(--light); font-style: italic; padding: 1rem 0; text-align: center; }
 
   /* ── SESSION / TIMER ── */
   .session-panel { display: flex; flex-direction: column; align-items: center; text-align: center; }
 
-  .timer-wrap { position: relative; width: 176px; height: 176px; margin: 0.4rem 0 1.2rem; }
+  .round-dots { display: flex; gap: 0.3rem; margin-bottom: 0.6rem; min-height: 0.5rem; }
+  .round-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+  .round-dot.done { background: var(--sage-dark); }
+  .round-dot.now { background: var(--amber); }
 
+  .timer-wrap { position: relative; width: 176px; height: 176px; margin: 0.3rem 0 1rem; }
   .timer-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-
   .timer-track { fill: none; stroke: var(--ivory); stroke-width: 6; }
   .timer-fill {
-    fill: none;
-    stroke: var(--sage-dark);
-    stroke-width: 6;
-    stroke-linecap: round;
+    fill: none; stroke: var(--sage-dark); stroke-width: 6; stroke-linecap: round;
     transition: stroke-dashoffset 1s linear, stroke 0.4s;
   }
   .timer-fill.on-break { stroke: var(--amber); }
+  .timer-fill.on-long-break { stroke: var(--clay); }
 
-  .timer-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  .timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .timer-time { font-family: 'DM Mono', monospace; font-size: 1.6rem; color: var(--charcoal); }
+  .timer-phase { font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--sage-dark); margin-top: 0.2rem; }
 
-  .timer-time {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.7rem;
-    color: var(--charcoal);
-  }
-
-  .timer-phase {
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--sage-dark);
-    margin-top: 0.2rem;
-  }
-
-  .session-task {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    color: var(--charcoal);
-    margin-bottom: 0.2rem;
-    min-height: 1.5rem;
-  }
-
-  .session-meta {
-    font-size: 0.76rem;
-    color: var(--mid);
-    margin-bottom: 1.1rem;
-    min-height: 1rem;
-  }
+  .session-task { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--charcoal); margin-bottom: 0.15rem; min-height: 1.4rem; }
+  .session-meta { font-size: 0.75rem; color: var(--mid); margin-bottom: 1rem; min-height: 1rem; }
 
   .session-controls { display: flex; gap: 0.6rem; margin-bottom: 0.4rem; }
 
   .break-suggestion {
     margin-top: 1rem;
-    padding: 0.6rem 0.9rem;
+    padding: 0.65rem 0.9rem;
     background: var(--amber-soft);
     border: 1px solid rgba(184,135,74,0.3);
     font-size: 0.78rem;
     color: #8a6534;
     display: none;
     width: 100%;
+    text-align: left;
   }
-
+  .break-suggestion.long { background: var(--clay-soft); border-color: rgba(168,101,79,0.3); color: #7a4636; }
   .break-suggestion.visible { display: block; animation: fadeIn 0.3s ease; }
+  .break-suggestion .bs-label { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; display: block; margin-bottom: 0.2rem; }
 
   /* ── COMPLETED STACK ── */
   .completed-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; max-height: 190px; overflow-y: auto; }
-
-  .completed-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.82rem;
-    color: var(--charcoal);
-    padding: 0.5rem 0.7rem;
-    background: var(--ivory);
-    animation: fadeIn 0.3s ease;
-  }
-
-  .completed-row::before { content: '✓'; color: var(--sage-dark); font-size: 0.7rem; }
+  .completed-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--charcoal); padding: 0.5rem 0.7rem; background: var(--ivory); animation: fadeIn 0.3s ease; }
+  .completed-row .cr-icon { color: var(--sage-dark); font-size: 0.7rem; }
+  .completed-row .cr-meta { margin-left: auto; font-size: 0.68rem; color: var(--light); white-space: nowrap; }
 
   /* ── PROGRESS ── */
   .progress-row { display: flex; align-items: center; gap: 0.9rem; }
@@ -310,37 +275,15 @@
   .progress-caption { font-size: 0.75rem; color: var(--mid); margin-top: 0.5rem; }
 
   /* ── BREAKS ── */
+  .break-type-select { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
   .break-chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-  .break-chip {
-    font-size: 0.72rem;
-    padding: 0.35rem 0.7rem;
-    background: var(--ivory);
-    color: var(--mid);
-    border: 1px solid var(--border);
-  }
+  .break-chip { font-size: 0.72rem; padding: 0.35rem 0.7rem; background: var(--ivory); color: var(--mid); border: 1px solid var(--border); }
 
-  /* ── FULL WIDTH SECTIONS ── */
-  .full-row { grid-column: 1 / -1; }
-
-  .two-col-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.4rem; }
-  @media (max-width: 800px) { .two-col-bottom { grid-template-columns: 1fr; } }
-
-  /* ── TOAST ── */
   .toast {
-    position: fixed;
-    bottom: 1.4rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--charcoal);
-    color: var(--cream);
-    font-size: 0.78rem;
-    padding: 0.7rem 1.2rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s, transform 0.25s;
-    z-index: 50;
-    max-width: 90vw;
-    text-align: center;
+    position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--charcoal); color: var(--cream); font-size: 0.78rem; padding: 0.7rem 1.2rem;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 50;
+    max-width: 90vw; text-align: center;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -349,13 +292,7 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-thumb { background: var(--border); }
 
-  .footnote {
-    text-align: center;
-    font-size: 0.7rem;
-    color: var(--light);
-    margin-top: 2rem;
-    font-style: italic;
-  }
+  .footnote { text-align: center; font-size: 0.7rem; color: var(--light); margin-top: 2rem; font-style: italic; }
 </style>
 </head>
 <body>
@@ -367,7 +304,13 @@
       <span class="app-eyebrow">Live Demo · Simulated</span>
       <h1 class="app-title">Pomo<em>Task</em></h1>
     </div>
-    <p class="app-sub">A priority-queue Pomodoro planner — add tasks, focus in timed intervals, and clear your queue one session at a time.</p>
+    <div class="header-right">
+      <span class="tomato-stat">🍅 <span id="tomatoCount">0</span> pomodoros today</span>
+      <div class="speed-toggle">
+        <button id="modeDemo" class="active" data-mode="demo">Demo Speed</button>
+        <button id="modeReal" data-mode="real">Real Time</button>
+      </div>
+    </div>
   </div>
 
   <div class="board">
@@ -377,14 +320,34 @@
       <div class="panel-label">Task Queue <span class="count" id="queueCount">0 waiting</span></div>
 
       <div class="task-form">
-        <input type="text" id="taskName" placeholder="Task name…" maxlength="40" />
-        <select id="taskPriority">
-          <option value="1">P1 · Urgent</option>
-          <option value="2">P2 · High</option>
-          <option value="3" selected>P3 · Normal</option>
-          <option value="4">P4 · Low</option>
-          <option value="5">P5 · Someday</option>
-        </select>
+        <div class="field-group" style="flex:1.4; min-width:140px;">
+          <span class="field-label">Task</span>
+          <input type="text" id="taskName" placeholder="What are you working on?" maxlength="40" />
+        </div>
+        <div class="field-group">
+          <span class="field-label">Type</span>
+          <select id="taskType">
+            <option value="coding">💻 Coding</option>
+            <option value="writing">✍️ Writing</option>
+            <option value="study">📖 Reading / Study</option>
+            <option value="design">🎨 Design</option>
+            <option value="admin">🗂️ Admin / Other</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Priority</span>
+          <select id="taskPriority">
+            <option value="1">P1 · Urgent</option>
+            <option value="2">P2 · High</option>
+            <option value="3" selected>P3 · Normal</option>
+            <option value="4">P4 · Low</option>
+            <option value="5">P5 · Someday</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Pomodoros</span>
+          <input type="number" id="taskPomos" value="4" min="1" max="8" />
+        </div>
         <button class="btn" id="addTaskBtn">Add</button>
       </div>
 
@@ -398,6 +361,7 @@
       <div class="panel-label" style="width:100%;">Focus Session</div>
 
       <div class="session-task" id="sessionTaskName">No active session</div>
+      <div class="round-dots" id="roundDots"></div>
       <div class="session-meta" id="sessionMeta">Start the next task in your queue</div>
 
       <div class="timer-wrap">
@@ -414,7 +378,7 @@
 
       <div class="session-controls">
         <button class="btn" id="startSessionBtn">Start Next Task</button>
-        <button class="btn btn-ghost" id="skipBtn" style="display:none;">Skip Interval</button>
+        <button class="btn btn-ghost" id="skipBtn" style="display:none;">Skip</button>
       </div>
 
       <div class="break-suggestion" id="breakSuggestion"></div>
@@ -438,54 +402,85 @@
       <p class="progress-caption" id="progressCaption">No tasks yet — your first session will start the count.</p>
 
       <div style="margin-top:1.4rem;">
-        <div class="panel-label" style="margin-bottom:0.7rem;">Break Suggestions</div>
+        <div class="panel-label" style="margin-bottom:0.7rem;">Break Ideas by Type</div>
+        <div class="break-type-select" id="breakTypeSelect"></div>
         <div class="break-chip-row" id="breakChips"></div>
         <div class="task-form" style="margin-bottom:0;">
-          <input type="text" id="customBreak" placeholder="Add a custom break…" maxlength="40" />
-          <button class="btn btn-ghost" id="addBreakBtn">Add Break</button>
+          <input type="text" id="customBreak" placeholder="Add your own break idea…" maxlength="50" />
+          <button class="btn btn-ghost" id="addBreakBtn">Add</button>
         </div>
       </div>
     </div>
 
   </div>
 
-  <p class="footnote">Frontend simulation of the PomoTask Java console app — Priority Queue, Recursion, Stack, and Loop-based logic reimagined for the browser. No data is saved between visits.</p>
+  <p class="footnote">A real 25/5/15-minute Pomodoro structure — long break every 4 rounds — with break suggestions matched to what you're working on. No data is saved between visits.</p>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 (function () {
-  // ---- State (mirrors the Java PomoTask data structures) ----
-  let focusTasks = [];          // acts as PriorityQueue<Task>
-  let completedTasks = [];      // acts as Stack<String> (push/pop via array end)
-  let breakTasks = [
-    "Stretch your arms",
-    "Drink some water",
-    "Chill or rest your mind",
-    "Deep breathing exercise",
-    "Check your posture"
+  // ---- Constants: real Pomodoro structure ----
+  const FOCUS_MIN = 25;
+  const SHORT_BREAK_MIN = 5;
+  const LONG_BREAK_MIN = 15;
+  const LONG_BREAK_EVERY = 4;
+
+  const TYPE_META = {
+    coding: { icon: '💻', label: 'Coding' },
+    writing: { icon: '✍️', label: 'Writing' },
+    study: { icon: '📖', label: 'Reading / Study' },
+    design: { icon: '🎨', label: 'Design' },
+    admin: { icon: '🗂️', label: 'Admin / Other' }
+  };
+
+  let breaksByType = {
+    coding: ["Look 20 ft away for 20 seconds (20-20-20 rule)", "Roll your shoulders and stretch your wrists", "Stand up and pace for a minute", "Refill your water bottle", "Close your eyes and breathe deeply"],
+    writing: ["Shake out your writing hand and wrist", "Step outside for fresh air", "Reread your favorite line from today", "Reset your posture", "Grab a snack or tea"],
+    study: ["Rest your eyes — look far away for 20 seconds", "Stand and stretch your legs", "Summarize what you just read out loud", "Hydrate", "Tidy your desk for a fresh start"],
+    design: ["Look away from the screen and rest your eyes", "Doodle something unrelated for fun", "Stretch your hands and wrists", "Walk over for water", "Look at a plant or something green"],
+    admin: ["Stand up and stretch", "Drink some water", "Check your posture", "Take 5 deep breaths", "Tidy your workspace"]
+  };
+
+  const longBreakSuggestions = [
+    "Take a short walk outside",
+    "Make a proper snack or meal",
+    "Do a 10-minute stretch or light yoga",
+    "Step away from all screens completely",
+    "Chat with someone nearby",
+    "Put on a song and just relax"
   ];
+
+  // ---- State ----
+  let focusTasks = [];        // priority queue
+  let completedTasks = [];    // stack
+  let tomatoCount = 0;        // total focus rounds completed today
+  let speedMode = 'demo';     // 'demo' = 1 min -> 1 sec, 'real' = 1 min -> 60 sec
+  let activeBreakType = 'coding';
 
   let sessionActive = false;
   let currentTask = null;
-  let intervalIndex = 0;
-  const focusIntervals = [5, 10, 15]; // seconds, mirrors original demo timing
-  let secondsLeft = 0;
+  let roundIndex = 0;         // which pomodoro round (0-based) for currentTask
   let onBreak = false;
+  let isLongBreak = false;
+  let secondsLeft = 0;
   let tickHandle = null;
 
   const CIRCUMFERENCE = 2 * Math.PI * 44;
 
   // ---- DOM refs ----
   const taskNameInput = document.getElementById('taskName');
+  const taskTypeSelect = document.getElementById('taskType');
   const taskPrioritySelect = document.getElementById('taskPriority');
+  const taskPomosInput = document.getElementById('taskPomos');
   const addTaskBtn = document.getElementById('addTaskBtn');
   const taskList = document.getElementById('taskList');
   const queueCount = document.getElementById('queueCount');
 
   const sessionTaskName = document.getElementById('sessionTaskName');
   const sessionMeta = document.getElementById('sessionMeta');
+  const roundDots = document.getElementById('roundDots');
   const timerTime = document.getElementById('timerTime');
   const timerPhase = document.getElementById('timerPhase');
   const timerFill = document.getElementById('timerFill');
@@ -500,9 +495,14 @@
   const progressNum = document.getElementById('progressNum');
   const progressCaption = document.getElementById('progressCaption');
 
+  const breakTypeSelect = document.getElementById('breakTypeSelect');
   const breakChips = document.getElementById('breakChips');
   const customBreakInput = document.getElementById('customBreak');
   const addBreakBtn = document.getElementById('addBreakBtn');
+
+  const tomatoCountEl = document.getElementById('tomatoCount');
+  const modeDemoBtn = document.getElementById('modeDemo');
+  const modeRealBtn = document.getElementById('modeReal');
 
   const toast = document.getElementById('toast');
 
@@ -513,29 +513,7 @@
     toast.textContent = msg;
     toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
-  }
-
-  // ---- Priority queue rendering (sorted, not mutated on view) ----
-  function renderQueue() {
-    const sorted = [...focusTasks].sort((a, b) => a.priority - b.priority);
-    taskList.innerHTML = '';
-    if (sorted.length === 0) {
-      taskList.innerHTML = '<li class="empty-state">No tasks yet — add one above to fill the queue.</li>';
-    } else {
-      sorted.forEach((t, i) => {
-        const li = document.createElement('li');
-        li.className = 'task-row p' + t.priority;
-        li.innerHTML = `<span class="task-rank">${i + 1}</span>
-          <span class="task-info">
-            <div class="task-name">${escapeHtml(t.name)}</div>
-            <div class="task-priority">Priority ${t.priority} of 5</div>
-          </span>`;
-        taskList.appendChild(li);
-      });
-    }
-    queueCount.textContent = focusTasks.length + (focusTasks.length === 1 ? ' waiting' : ' waiting');
-    startSessionBtn.disabled = focusTasks.length === 0 || sessionActive;
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
   function escapeHtml(str) {
@@ -544,21 +522,80 @@
     return div.innerHTML;
   }
 
+  // ---- Speed toggle ----
+  function unitSeconds(minutes) { return speedMode === 'real' ? minutes * 60 : minutes; }
+
+  function setMode(mode) {
+    if (sessionActive) { showToast('Finish or skip the current round before switching speed.'); return; }
+    speedMode = mode;
+    modeDemoBtn.classList.toggle('active', mode === 'demo');
+    modeRealBtn.classList.toggle('active', mode === 'real');
+  }
+  modeDemoBtn.addEventListener('click', () => setMode('demo'));
+  modeRealBtn.addEventListener('click', () => setMode('real'));
+
+  // ---- Priority queue rendering ----
+  function renderQueue() {
+    const sorted = [...focusTasks].sort((a, b) => a.priority - b.priority);
+    taskList.innerHTML = '';
+    if (sorted.length === 0) {
+      taskList.innerHTML = '<li class="empty-state">No tasks yet — add one above to fill the queue.</li>';
+    } else {
+      sorted.forEach((t, i) => {
+        const meta = TYPE_META[t.type];
+        const estMin = t.pomos * FOCUS_MIN + Math.max(0, t.pomos - 1) * SHORT_BREAK_MIN;
+        const li = document.createElement('li');
+        li.className = 'task-row p' + t.priority;
+        li.innerHTML = `<span class="task-rank">${i + 1}</span>
+          <span class="task-type-icon">${meta.icon}</span>
+          <span class="task-info">
+            <div class="task-name">${escapeHtml(t.name)}</div>
+            <div class="task-priority">Priority ${t.priority} · ${t.pomos} pomodoro${t.pomos === 1 ? '' : 's'} · ~${estMin} min</div>
+          </span>`;
+        taskList.appendChild(li);
+      });
+    }
+    queueCount.textContent = focusTasks.length + ' waiting';
+    startSessionBtn.disabled = focusTasks.length === 0 || sessionActive;
+  }
+
   addTaskBtn.addEventListener('click', () => {
     const name = taskNameInput.value.trim();
     if (!name) { showToast('Enter a task name first.'); return; }
-    focusTasks.push({ name, priority: parseInt(taskPrioritySelect.value, 10) });
+    let pomos = parseInt(taskPomosInput.value, 10);
+    if (!pomos || pomos < 1) pomos = 1;
+    if (pomos > 8) pomos = 8;
+    focusTasks.push({
+      name,
+      type: taskTypeSelect.value,
+      priority: parseInt(taskPrioritySelect.value, 10),
+      pomos
+    });
     taskNameInput.value = '';
     renderQueue();
+    renderProgress();
     showToast('Task added to queue.');
   });
-
   taskNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addTaskBtn.click(); });
 
-  // ---- Break suggestions ----
+  // ---- Break library UI ----
+  function renderBreakTypeSelect() {
+    breakTypeSelect.innerHTML = '';
+    Object.keys(TYPE_META).forEach(key => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-ghost';
+      btn.style.padding = '0.35rem 0.7rem';
+      btn.style.fontSize = '0.68rem';
+      btn.textContent = TYPE_META[key].icon + ' ' + TYPE_META[key].label;
+      if (key === activeBreakType) { btn.style.background = 'var(--sage-dark)'; btn.style.color = '#fff'; }
+      btn.addEventListener('click', () => { activeBreakType = key; renderBreakTypeSelect(); renderBreakChips(); });
+      breakTypeSelect.appendChild(btn);
+    });
+  }
+
   function renderBreakChips() {
     breakChips.innerHTML = '';
-    breakTasks.forEach(b => {
+    breaksByType[activeBreakType].forEach(b => {
       const chip = document.createElement('span');
       chip.className = 'break-chip';
       chip.textContent = b;
@@ -568,22 +605,22 @@
 
   addBreakBtn.addEventListener('click', () => {
     const val = customBreakInput.value.trim();
-    if (!val) { showToast('Type a break activity first.'); return; }
-    breakTasks.push(val);
+    if (!val) { showToast('Type a break idea first.'); return; }
+    breaksByType[activeBreakType].push(val);
     customBreakInput.value = '';
     renderBreakChips();
-    showToast('Custom break added.');
+    showToast(`Added to ${TYPE_META[activeBreakType].label} breaks.`);
   });
-
   customBreakInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addBreakBtn.click(); });
 
-  function randomBreak() {
-    return breakTasks[Math.floor(Math.random() * breakTasks.length)];
+  function randomBreakFor(type) {
+    const pool = breaksByType[type] && breaksByType[type].length ? breaksByType[type] : breaksByType.admin;
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 
   // ---- Completed stack ----
-  function pushCompleted(name) {
-    completedTasks.push(name); // top of stack = end of array
+  function pushCompleted(task) {
+    completedTasks.push(task);
     renderCompleted();
     renderProgress();
   }
@@ -593,11 +630,11 @@
     if (completedTasks.length === 0) {
       completedList.innerHTML = '<li class="empty-state">Nothing completed yet.</li>';
     } else {
-      // LIFO: most recently pushed shown first
       for (let i = completedTasks.length - 1; i >= 0; i--) {
+        const t = completedTasks[i];
         const li = document.createElement('li');
         li.className = 'completed-row';
-        li.textContent = completedTasks[i];
+        li.innerHTML = `<span class="cr-icon">✓</span> ${TYPE_META[t.type].icon} ${escapeHtml(t.name)} <span class="cr-meta">${t.pomos} 🍅</span>`;
         completedList.appendChild(li);
       }
     }
@@ -619,48 +656,57 @@
     progressCaption.textContent = `${done} of ${total} task${total === 1 ? '' : 's'} complete.`;
   }
 
-  // ---- Session / recursive focus cycle (implemented as a timed loop) ----
+  // ---- Timer helpers ----
   function formatTime(s) {
     const m = Math.floor(s / 60).toString().padStart(2, '0');
     const sec = (s % 60).toString().padStart(2, '0');
     return `${m}:${sec}`;
   }
 
-  function setRing(fraction, breakMode) {
+  function setRing(fraction) {
     const offset = CIRCUMFERENCE * (1 - fraction);
     timerFill.setAttribute('stroke-dashoffset', offset);
-    timerFill.classList.toggle('on-break', !!breakMode);
+    timerFill.classList.toggle('on-break', onBreak && !isLongBreak);
+    timerFill.classList.toggle('on-long-break', onBreak && isLongBreak);
   }
 
+  function renderRoundDots() {
+    roundDots.innerHTML = '';
+    if (!currentTask) return;
+    for (let i = 0; i < currentTask.pomos; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'round-dot' + (i < roundIndex ? ' done' : i === roundIndex && !onBreak ? ' now' : '');
+      roundDots.appendChild(dot);
+    }
+  }
+
+  // ---- Session flow (recursive round-by-round) ----
   startSessionBtn.addEventListener('click', () => {
     if (sessionActive || focusTasks.length === 0) return;
-    // poll() — highest priority task (lowest number) leaves the queue
     focusTasks.sort((a, b) => a.priority - b.priority);
     currentTask = focusTasks.shift();
     renderQueue();
     renderProgress();
 
     sessionActive = true;
-    intervalIndex = 0;
+    roundIndex = 0;
     startSessionBtn.disabled = true;
     skipBtn.style.display = 'inline-flex';
-    sessionTaskName.textContent = currentTask.name;
+    sessionTaskName.textContent = `${TYPE_META[currentTask.type].icon} ${currentTask.name}`;
     breakSuggestionEl.classList.remove('visible');
-    runInterval();
+    runRound();
   });
 
-  function runInterval() {
-    if (intervalIndex >= focusIntervals.length) {
-      finishSession();
-      return;
-    }
+  function runRound() {
+    if (roundIndex >= currentTask.pomos) { finishTask(); return; }
     onBreak = false;
-    const minutes = focusIntervals[intervalIndex];
-    secondsLeft = minutes;
-    sessionMeta.textContent = `Interval ${intervalIndex + 1} of ${focusIntervals.length}`;
+    isLongBreak = false;
+    secondsLeft = unitSeconds(FOCUS_MIN);
+    sessionMeta.textContent = `Pomodoro ${roundIndex + 1} of ${currentTask.pomos} · Focus (${FOCUS_MIN} min)`;
     timerPhase.textContent = 'Focusing';
     breakSuggestionEl.classList.remove('visible');
-    tick(minutes);
+    renderRoundDots();
+    tick(secondsLeft);
   }
 
   function tick(totalSeconds) {
@@ -670,14 +716,9 @@
       secondsLeft--;
       if (secondsLeft <= 0) {
         clearInterval(tickHandle);
-        setRing(0, onBreak);
+        setRing(0);
         timerTime.textContent = '00:00';
-        if (onBreak) {
-          intervalIndex++;
-          runInterval();
-        } else {
-          showBreak();
-        }
+        onIntervalComplete();
         return;
       }
       updateTimerDisplay(totalSeconds);
@@ -686,55 +727,82 @@
 
   function updateTimerDisplay(totalSeconds) {
     timerTime.textContent = formatTime(secondsLeft);
-    setRing(secondsLeft / totalSeconds, onBreak);
+    setRing(secondsLeft / totalSeconds);
   }
 
-  function showBreak() {
-    const b = randomBreak();
-    breakSuggestionEl.textContent = '☕ Break suggestion: ' + b;
-    breakSuggestionEl.classList.add('visible');
-    timerPhase.textContent = 'On Break';
-    sessionMeta.textContent = `Interval ${intervalIndex + 1} complete — short break`;
+  function onIntervalComplete() {
+    if (!onBreak) {
+      // a focus round just finished
+      roundIndex++;
+      tomatoCount++;
+      tomatoCountEl.textContent = tomatoCount;
+      renderRoundDots();
+
+      if (roundIndex >= currentTask.pomos) {
+        finishTask();
+        return;
+      }
+      // decide short vs long break by GLOBAL tomato count
+      isLongBreak = (tomatoCount % LONG_BREAK_EVERY === 0);
+      startBreak();
+    } else {
+      // break finished -> next round
+      runRound();
+    }
+  }
+
+  function startBreak() {
     onBreak = true;
-    const breakLength = 4; // short simulated break
-    secondsLeft = breakLength;
-    tick(breakLength);
+    const minutes = isLongBreak ? LONG_BREAK_MIN : SHORT_BREAK_MIN;
+    secondsLeft = unitSeconds(minutes);
+    timerPhase.textContent = isLongBreak ? 'Long Break' : 'Short Break';
+    sessionMeta.textContent = isLongBreak
+      ? `You've completed ${tomatoCount} pomodoros — take a longer reset (${LONG_BREAK_MIN} min)`
+      : `Nice round — short break (${SHORT_BREAK_MIN} min)`;
+
+    const suggestion = isLongBreak ? longBreakSuggestions[Math.floor(Math.random() * longBreakSuggestions.length)]
+                                    : randomBreakFor(currentTask.type);
+    breakSuggestionEl.className = 'break-suggestion visible' + (isLongBreak ? ' long' : '');
+    breakSuggestionEl.innerHTML = `<span class="bs-label">${isLongBreak ? 'Long break idea' : TYPE_META[currentTask.type].label + ' break idea'}</span>${escapeHtml(suggestion)}`;
+
+    tick(secondsLeft);
   }
 
   skipBtn.addEventListener('click', () => {
     if (!sessionActive) return;
     clearInterval(tickHandle);
-    if (onBreak) {
-      intervalIndex++;
-      runInterval();
-    } else {
-      secondsLeft = 0;
-      onBreak = false;
-      showBreak();
-    }
+    secondsLeft = 0;
+    onIntervalComplete();
   });
 
-  function finishSession() {
+  function finishTask() {
+    clearInterval(tickHandle);
     timerPhase.textContent = 'Complete';
-    sessionMeta.textContent = 'All intervals finished';
+    sessionMeta.textContent = `"${currentTask.name}" finished — ${currentTask.pomos} pomodoro${currentTask.pomos === 1 ? '' : 's'} done`;
     breakSuggestionEl.classList.remove('visible');
-    setRing(0, false);
+    setRing(0);
     timerTime.textContent = '00:00';
-    pushCompleted(currentTask.name);
-    showToast(`"${currentTask.name}" completed — nice focus!`);
+    pushCompleted(currentTask);
+    showToast(`"${currentTask.name}" complete — great focus!`);
+
     sessionActive = false;
+    const finishedTask = currentTask;
     currentTask = null;
+    roundIndex = 0;
     skipBtn.style.display = 'none';
-    sessionTaskName.textContent = 'No active session';
+    renderRoundDots();
+
     setTimeout(() => {
+      sessionTaskName.textContent = 'No active session';
       sessionMeta.textContent = 'Start the next task in your queue';
       timerPhase.textContent = 'Idle';
-    }, 1800);
+    }, 2200);
     renderQueue();
   }
 
   // ---- init ----
   renderQueue();
+  renderBreakTypeSelect();
   renderBreakChips();
   renderCompleted();
   renderProgress();
