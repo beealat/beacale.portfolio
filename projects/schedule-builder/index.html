@@ -123,8 +123,6 @@
     margin-top:1rem; font-size:.8rem; color:#a15b1f; background:#fdf1e4;
     border:1px solid #f2ddbf; padding:.7rem 1rem; border-radius:calc(var(--radius) - 2px);
   }
-  .ocr-status{ margin-top:.8rem; font-size:.78rem; color:var(--accent); display:none; }
-  .ocr-status.show{ display:block; }
 
   table.preview{ width:100%; border-collapse:collapse; margin-top:1rem; font-size:.82rem; }
   table.preview th{ text-align:left; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:.5rem .6rem; border-bottom:1px solid var(--border);}
@@ -281,7 +279,7 @@
   <!-- STEP 1: INPUT -->
   <div class="panel" id="panel-1">
     <h2 class="section-h">Paste your schedule</h2>
-    <p class="section-p">Copy the rows straight from your enrollment system's checklist table (subject code, title, schedule, units) and paste them below — tabs or spaces both work. Or upload a .txt/.csv export, or a screenshot.</p>
+    <p class="section-p">Copy the rows straight from your enrollment system's checklist table (subject code, title, schedule, units) and paste them below — tabs or spaces both work. Or upload a .txt/.csv export.</p>
     <textarea id="rawInput" placeholder="GE 4120&#9;ELECTIVE 3&#9;* 1:30P-3:00P F410 MW *&#9;3/3
 IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F *&#9;3/5"></textarea>
     <div class="row">
@@ -289,10 +287,7 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
       <button class="btn ghost" id="sampleBtn">Load Sample</button>
       <label class="file-label" for="fileInput">Upload .txt / .csv</label>
       <input type="file" id="fileInput" accept=".txt,.csv" />
-      <label class="file-label" for="imageInput">Upload Screenshot</label>
-      <input type="file" id="imageInput" accept="image/*" />
     </div>
-    <div class="ocr-status" id="ocrStatus"></div>
     <div class="parse-warning hidden" id="parseWarning"></div>
   </div>
 
@@ -431,29 +426,77 @@ function parseSession(seg){
   if(start==null || end==null || days.length===0) return null;
   return {start, end, room, days};
 }
+function extractUnits(str){
+  const slash = str.match(/(\d+)\s*\/\s*(\d+)/);
+  if(slash) return slash[0];
+  const dec = str.match(/^\(?\s*(\d+(?:\.\d+)?)\s*\)?$/);
+  if(dec) return dec[1];
+  return '';
+}
+
 function parseScheduleText(text){
   const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
   const subjects = [];
+  const codeRe = /^([A-Z]{2,6}\s?\d{2,4}[A-Za-z]?)\b/;
+  let pending = null; // {code, title, sessions, units} — used for the multi-line format
+
+  function flushPending(){
+    if(pending){ subjects.push(pending); pending = null; }
+  }
+
   for(const line of lines){
     if(/SUBJ/i.test(line) && /(DESCRIPTIVE|SCHEDULE|TITLE)/i.test(line)) continue;
-    const scheduleMatch = line.match(/\*[\s\S]*\*/);
-    const beforeSchedule = scheduleMatch ? line.slice(0, scheduleMatch.index) : line;
-    const afterSchedule = scheduleMatch ? line.slice(scheduleMatch.index + scheduleMatch[0].length) : '';
-    const codeMatch = beforeSchedule.match(/([A-Z]{2,6}\s?\d{2,4}[A-Za-z]?)/);
-    if(!codeMatch) continue;
-    const code = codeMatch[1].replace(/\s+/g,' ').trim();
-    let title = beforeSchedule.slice(codeMatch.index + codeMatch[0].length).trim();
-    title = title.replace(/^[\t\s\-–:]+/, '').trim();
-    if(!title) title = '(Untitled Subject)';
-    let sessions = [];
-    if(scheduleMatch){
+
+    const hasSchedule = /\*[\s\S]*\*/.test(line);
+    const codeMatch = line.match(codeRe);
+
+    // Case 1: single line holding code, title, schedule, and (maybe) units together
+    if(codeMatch && hasSchedule){
+      flushPending();
+      const scheduleMatch = line.match(/\*[\s\S]*\*/);
+      const beforeSchedule = line.slice(0, scheduleMatch.index);
+      const afterSchedule = line.slice(scheduleMatch.index + scheduleMatch[0].length);
+      const code = codeMatch[1].replace(/\s+/g,' ').trim();
+      let title = beforeSchedule.slice(codeMatch[0].length).trim();
+      title = title.replace(/^[\t\s\-–:]+/, '').trim();
+      if(!title) title = '(Untitled Subject)';
+      const sessions = [];
       const segs = scheduleMatch[0].split('*').map(s=>s.trim()).filter(Boolean);
       segs.forEach(seg=>{ const s = parseSession(seg); if(s) sessions.push(s); });
+      const units = extractUnits(afterSchedule);
+      subjects.push({code, title, sessions, units});
+      continue;
     }
-    const unitsMatch = afterSchedule.match(/(\d+)\s*\/\s*(\d+)/);
-    const units = unitsMatch ? unitsMatch[0] : '';
-    subjects.push({code, title, sessions, units});
+
+    // Case 2: a line that's just "CODE   Title" — start of a multi-line record
+    if(codeMatch && !hasSchedule){
+      flushPending();
+      let title = line.slice(codeMatch[0].length).trim();
+      title = title.replace(/^[\t\s\-–:]+/, '').trim();
+      pending = { code: codeMatch[1].replace(/\s+/g,' ').trim(), title: title || '(Untitled Subject)', sessions: [], units: '' };
+      continue;
+    }
+
+    // Case 3: a schedule-only line (possibly wrapped in parentheses) belonging to the pending subject
+    if(hasSchedule && pending){
+      const scheduleMatch = line.match(/\*[\s\S]*\*/);
+      const segs = scheduleMatch[0].split('*').map(s=>s.trim()).filter(Boolean);
+      segs.forEach(seg=>{ const s = parseSession(seg); if(s) pending.sessions.push(s); });
+      continue;
+    }
+
+    // Case 4: a units-only line, e.g. "3.00" or "3/3" — closes out the pending subject
+    if(pending){
+      const units = extractUnits(line);
+      if(units){
+        pending.units = units;
+        flushPending();
+        continue;
+      }
+    }
+    // otherwise: an unrecognized stray line — skip it
   }
+  flushPending();
   return subjects;
 }
 
@@ -597,44 +640,6 @@ document.getElementById('fileInput').addEventListener('change', (e)=>{
   const reader = new FileReader();
   reader.onload = ()=>{ document.getElementById('rawInput').value = reader.result; };
   reader.readAsText(file);
-});
-
-// Screenshot OCR (experimental)
-let tesseractLoading = null;
-function loadTesseract(){
-  if(window.Tesseract) return Promise.resolve();
-  if(tesseractLoading) return tesseractLoading;
-  tesseractLoading = new Promise((resolve,reject)=>{
-    const s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js';
-    s.onload = ()=>resolve();
-    s.onerror = ()=>reject(new Error('OCR engine failed to load'));
-    document.head.appendChild(s);
-  });
-  return tesseractLoading;
-}
-document.getElementById('imageInput').addEventListener('change', async (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const status = document.getElementById('ocrStatus');
-  status.classList.add('show');
-  status.textContent = 'Loading OCR engine…';
-  try{
-    await loadTesseract();
-    status.textContent = 'Reading text from the image — this can take a moment…';
-    const url = URL.createObjectURL(file);
-    const result = await window.Tesseract.recognize(url, 'eng');
-    const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
-    if(text){
-      document.getElementById('rawInput').value = text;
-      status.textContent = 'Text extracted — please review it above before parsing (image OCR can misread rows).';
-      showToast('Text extracted from image — please review it.');
-    } else {
-      status.textContent = 'Could not read any text — try pasting the schedule manually instead.';
-    }
-  } catch(err){
-    status.textContent = 'OCR unavailable right now — please paste the schedule text manually instead.';
-  }
 });
 
 document.getElementById('parseBtn').addEventListener('click', ()=>{
@@ -814,7 +819,6 @@ document.getElementById('startOverBtn').addEventListener('click', ()=>{
   document.body.setAttribute('data-theme','minimalist');
   document.getElementById('rawInput').value='';
   document.getElementById('parseWarning').classList.add('hidden');
-  document.getElementById('ocrStatus').classList.remove('show');
   renderStyleGrid(); renderLayoutRow();
   drawColorWheel(state.accentHsl.l); placeCursorFromHsl(); renderPresets();
   goToStep(1);
