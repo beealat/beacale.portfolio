@@ -826,10 +826,11 @@
       <div class="project-name">Making Stories into Screens</div>
       <p class="project-desc">A Figma-designed mobile app prototype that translates narrative stories into interactive screen flows — complete with wireframes, high-fidelity UI, and clickable mobile app frames.</p>
     </div>
-    <div class="project-card reveal">
+    <div class="project-card clickable reveal" onclick="openEvidence('pomotask')">
       <span class="project-tag">Productivity App</span>
       <div class="project-name">Simple Time Management App</div>
       <p class="project-desc">A Pomodoro-based time management app with task tracking, focus timer, and break intervals to boost productivity and study habits.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
   </div>
 </section>
@@ -997,6 +998,17 @@
           <div class="evidence-caption">Contact</div>
         </div>
       </div>
+    </div>
+
+    <div id="evidence-pomotask" class="evidence-panel">
+      <span class="evidence-tag">Productivity App</span>
+      <div class="evidence-title">Simple Time Management App — PomoTask</div>
+      <p class="evidence-desc">A Pomodoro-based time management app originally built in Java, using a priority queue for task ordering, recursion for the focus-session loop, and a stack for completed tasks. Below is a browser-based recreation of the same logic — try it live, or open it full-screen. Add a task, start a session, and watch the focus/break cycle run.</p>
+      <div class="evidence-demo-bar">
+        <a href="projects/pomotask/index.html" target="_blank" class="demo-btn">Open Full Demo ↗</a>
+        <span class="evidence-demo-note">Frontend simulation of the Java console app — nothing is saved between visits.</span>
+      </div>
+      <iframe src="projects/pomotask/index.html" class="evidence-demo-frame" title="PomoTask live demo" loading="lazy"></iframe>
     </div>
 
     <div id="evidence-marketing-threshold" class="evidence-panel">
