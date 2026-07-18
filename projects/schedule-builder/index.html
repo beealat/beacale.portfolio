@@ -200,14 +200,19 @@
   .grid-cell{ border-right:1px solid var(--border-faint); }
   .grid-cell.hour-line{ border-top:1px solid var(--border-faint); }
   .subject-block{
-    margin:1px 3px; padding:5px 7px; border-radius:calc(var(--radius) - 2px);
-    font-family:var(--font-block); font-size:.68rem; line-height:1.3; overflow:hidden; z-index:2; box-shadow:var(--shadow);
-    cursor:pointer;
+    margin:3px 4px; padding:5px 7px; border-radius:calc(var(--radius) - 2px);
+    font-family:var(--font-block); font-size:.68rem; line-height:1.22; overflow:hidden; z-index:2; box-shadow:var(--shadow);
+    cursor:pointer; box-sizing:border-box;
   }
-  .subject-block:hover{ outline:2px solid rgba(255,255,255,0.6); outline-offset:-2px; }
-  .sb-code{ font-weight:700; font-size:.74rem; }
-  .sb-title{ font-size:.66rem; opacity:.92; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .sb-meta{ font-size:.6rem; opacity:.8; margin-top:2px;}
+  .subject-block:hover{ outline:2px solid rgba(255,255,255,0.6); outline-offset:-2px; z-index:3; }
+  .sb-code{ font-weight:700; font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sb-title{
+    font-size:.63rem; opacity:.92; word-break:break-word; overflow:hidden;
+  }
+  .sb-meta{ font-size:.58rem; opacity:.8; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* short time-slots: hide the room/time line to leave all the room for the title itself */
+  .subject-block.block-tiny .sb-meta{ display:none; }
+  .subject-block.block-small .sb-meta{ display:none; }
   .now-line{ position:absolute; left:0; right:0; height:2px; background:var(--accent); z-index:5; pointer-events:none; }
   .now-dot{ position:absolute; width:8px; height:8px; border-radius:50%; background:var(--accent); left:54px; transform:translate(-50%,-50%); z-index:6; }
 
@@ -260,7 +265,26 @@
   footer.credit{ text-align:center; color:var(--muted); font-size:.72rem; margin-top:2.5rem; }
   footer.credit a{ color:var(--accent); }
 
-  @media(max-width:640px){ .panel{padding:1.3rem;} .color-panel{flex-direction:column;} }
+  @media(max-width:640px){
+    .panel{padding:1.3rem;}
+    .color-panel{flex-direction:column;}
+    .wheel-block{ align-self:center; }
+    .agenda-item{ flex-wrap:wrap; }
+    .agenda-time{ min-width:auto; }
+    .result-actions .btn{ flex:1 1 auto; text-align:center; }
+  }
+  @media(max-width:480px){
+    body{ padding:2.5vh 4vw 5vh; }
+    .schedule-grid{ min-width:460px; }
+    .day-header{ font-size:.64rem; }
+    .time-label{ font-size:.58rem; }
+    .subject-block{ font-size:.6rem; padding:3px 4px; }
+    .sb-code{ font-size:.64rem; }
+    .sb-title{ font-size:.56rem; }
+    .sb-meta{ font-size:.52rem; }
+    .color-wheel-wrap{ width:150px; height:150px; }
+    .lightness-row{ width:150px; }
+  }
 </style>
 </head>
 <body data-theme="minimalist">
@@ -896,6 +920,30 @@ function renderOutput(){
   renderLegend(subjects, colorMap);
 }
 
+function fitBlockContent(block){
+  const titleEl = block.querySelector('.sb-title');
+  const metaEl = block.querySelector('.sb-meta');
+  if(!titleEl) return;
+  let guard = 0;
+  // Shrink the title first; if it still doesn't fit at a readable minimum, drop the meta line too.
+  while(block.scrollHeight > block.clientHeight + 1 && guard < 14){
+    const current = parseFloat(getComputedStyle(titleEl).fontSize);
+    if(current <= 8){ break; }
+    titleEl.style.fontSize = (current - 0.5) + 'px';
+    guard++;
+  }
+  if(block.scrollHeight > block.clientHeight + 1 && metaEl && metaEl.style.display !== 'none'){
+    metaEl.style.display = 'none';
+  }
+  guard = 0;
+  while(block.scrollHeight > block.clientHeight + 1 && guard < 10){
+    const current = parseFloat(getComputedStyle(titleEl).fontSize);
+    if(current <= 7){ break; }
+    titleEl.style.fontSize = (current - 0.5) + 'px';
+    guard++;
+  }
+}
+
 function renderWeeklyGrid(subjects, colorMap){
   let usedDays = new Set(); let minTime = 24*60, maxTime = 0;
   subjects.forEach(s=>s.sessions.forEach(ses=>{
@@ -915,8 +963,11 @@ function renderWeeklyGrid(subjects, colorMap){
   container.innerHTML = '';
   container.style.position = 'relative';
   const totalSlots = (maxTime-minTime)/30;
-  container.style.gridTemplateColumns = `56px repeat(${days.length}, minmax(90px,1fr))`;
-  container.style.gridTemplateRows = `44px repeat(${totalSlots}, 22px)`;
+  const isNarrow = window.innerWidth <= 480;
+  const timeColWidth = isNarrow ? 42 : 56;
+  const minColWidth = isNarrow ? 62 : 90;
+  container.style.gridTemplateColumns = `${timeColWidth}px repeat(${days.length}, minmax(${minColWidth}px,1fr))`;
+  container.style.gridTemplateRows = `44px repeat(${totalSlots}, 30px)`;
 
   const corner = document.createElement('div');
   corner.className='grid-corner'; corner.style.gridColumn='1'; corner.style.gridRow='1';
@@ -949,6 +1000,7 @@ function renderWeeklyGrid(subjects, colorMap){
     }
   });
 
+  const createdBlocks = [];
   subjects.forEach(sub=>{
     sub.sessions.forEach((ses, sessionIdx)=>{
       if(ses.start==null || ses.end==null) return;
@@ -959,8 +1011,10 @@ function renderWeeklyGrid(subjects, colorMap){
         const endSlot = Math.max(startSlot+1, Math.round((ses.end-minTime)/30));
         const key = blockKey(sub.code, sessionIdx, d);
         const bg = resolveBlockColor(sub.code, sessionIdx, d, colorMap);
+        const durationMin = ses.end - ses.start;
+        const sizeClass = durationMin <= 30 ? ' block-tiny' : (durationMin <= 60 ? ' block-small' : '');
         const block = document.createElement('div');
-        block.className='subject-block';
+        block.className='subject-block' + sizeClass;
         block.style.gridColumn = dayIdx+2;
         block.style.gridRow = `${2+startSlot} / ${2+endSlot}`;
         block.style.background = bg;
@@ -972,20 +1026,25 @@ function renderWeeklyGrid(subjects, colorMap){
           openBlockPicker(key, bg, e.clientX, e.clientY);
         });
         container.appendChild(block);
+        createdBlocks.push(block);
       });
     });
+  });
+  // After layout, shrink any title that doesn't fully fit instead of cutting it off.
+  requestAnimationFrame(()=>{
+    createdBlocks.forEach(block=>fitBlockContent(block));
   });
 
   if(days.includes(TODAY_KEY)){
     const now = new Date();
     const nowMins = now.getHours()*60+now.getMinutes();
     if(nowMins>=minTime && nowMins<=maxTime){
-      const offset = 44 + ((nowMins-minTime)/30)*22;
+      const offset = 44 + ((nowMins-minTime)/30)*30;
       const line = document.createElement('div');
       line.className='now-line'; line.style.top = offset+'px';
       container.appendChild(line);
       const dot = document.createElement('div');
-      dot.className='now-dot'; dot.style.top = offset+'px';
+      dot.className='now-dot'; dot.style.top = offset+'px'; dot.style.left = (timeColWidth-2)+'px';
       container.appendChild(dot);
     }
   }
@@ -1113,11 +1172,40 @@ function renderLegend(subjects, colorMap){
 document.getElementById('downloadBtn').addEventListener('click', ()=>{
   const btn = document.getElementById('downloadBtn');
   const target = document.getElementById('exportArea');
+  const gridWrap = target.querySelector('.grid-wrap');
+  const scheduleGridEl = document.getElementById('scheduleGrid');
   const originalLabel = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Preparing image…';
+
+  // Temporarily un-clip anything that scrolls (the weekly grid on narrow screens)
+  // so the exported image contains the FULL schedule, not just the visible slice.
+  const restoreFns = [];
+  if(gridWrap){
+    const prevOverflow = gridWrap.style.overflow;
+    const prevWidth = gridWrap.style.width;
+    const fullWidth = scheduleGridEl.scrollWidth;
+    gridWrap.style.overflow = 'visible';
+    gridWrap.style.width = fullWidth + 'px';
+    restoreFns.push(()=>{ gridWrap.style.overflow = prevOverflow; gridWrap.style.width = prevWidth; });
+  }
+  const prevTargetWidth = target.style.width;
+  target.style.width = target.scrollWidth + 'px';
+  restoreFns.push(()=>{ target.style.width = prevTargetWidth; });
+
   const bg = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
-  html2canvas(target, {backgroundColor: bg, scale: 2, useCORS: true}).then(canvas=>{
+  const fullWidth = target.scrollWidth;
+  const fullHeight = target.scrollHeight;
+
+  html2canvas(target, {
+    backgroundColor: bg,
+    scale: 2,
+    useCORS: true,
+    width: fullWidth,
+    height: fullHeight,
+    windowWidth: fullWidth,
+    windowHeight: fullHeight
+  }).then(canvas=>{
     const link = document.createElement('a');
     const stamp = new Date().toISOString().slice(0,10);
     link.download = `my-schedule-${state.theme}-${stamp}.png`;
@@ -1129,6 +1217,7 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   }).catch(()=>{
     showToast("Couldn't generate the image — try again, or try a different browser.");
   }).finally(()=>{
+    restoreFns.forEach(fn=>fn());
     btn.disabled = false;
     btn.textContent = originalLabel;
   });
