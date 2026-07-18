@@ -526,16 +526,27 @@
       font-style: italic;
     }
 
-    .evidence-demo-frame {
+    .evidence-demo-frame { display: none; } /* legacy, superseded by wrap below */
+
+    .evidence-demo-wrap {
       width: 100%;
       height: 70vh;
+      overflow: hidden;
       border: 1px solid var(--border);
       margin-bottom: 2rem;
       background: #fff;
+      position: relative;
+    }
+
+    .evidence-demo-wrap iframe {
+      width: 1440px;
+      border: none;
+      transform-origin: top left;
+      display: block;
     }
 
     @media (max-width: 600px) {
-      .evidence-demo-frame { height: 55vh; }
+      .evidence-demo-wrap { height: 55vh; }
     }
 
     /* ── SKILLS ── */
@@ -962,7 +973,9 @@
         <a href="projects/pixora/index.html" target="_blank" class="demo-btn">Open Full Demo ↗</a>
         <span class="evidence-demo-note">Frontend demo — dark mode &amp; navigation work, no data is saved.</span>
       </div>
-      <iframe src="projects/pixora/index.html" class="evidence-demo-frame" title="Pixora live demo" loading="lazy"></iframe>
+      <div class="evidence-demo-wrap">
+        <iframe src="projects/pixora/index.html" title="Pixora live demo" loading="lazy"></iframe>
+      </div>
       <p class="evidence-desc" style="margin-bottom:0.9rem;">Screenshots for reference:</p>
       <div class="evidence-gallery">
         <div>
@@ -1008,7 +1021,9 @@
         <a href="projects/pomotask/index.html" target="_blank" class="demo-btn">Open Full Demo ↗</a>
         <span class="evidence-demo-note">Toggle Real Time or Demo Speed inside the app — nothing is saved between visits.</span>
       </div>
-      <iframe src="projects/pomotask/index.html" class="evidence-demo-frame" title="PomoTask live demo" loading="lazy"></iframe>
+      <div class="evidence-demo-wrap">
+        <iframe src="projects/pomotask/index.html" title="PomoTask live demo" loading="lazy"></iframe>
+      </div>
     </div>
 
     <div id="evidence-marketing-threshold" class="evidence-panel">
@@ -1040,12 +1055,33 @@
   }
 
   // Project evidence modal
+  function scaleDemoFrames(panel) {
+    if (!panel) return;
+    panel.querySelectorAll('.evidence-demo-wrap').forEach(wrap => {
+      const frame = wrap.querySelector('iframe');
+      if (!frame) return;
+      const scale = wrap.clientWidth / 1440;
+      frame.style.width = '1440px';
+      frame.style.transform = 'scale(' + scale + ')';
+      frame.style.transformOrigin = 'top left';
+      frame.style.border = 'none';
+      frame.style.display = 'block';
+      frame.style.height = (wrap.clientHeight / scale) + 'px';
+    });
+  }
+  window.addEventListener('resize', () => {
+    const activePanel = Array.from(document.querySelectorAll('.evidence-panel'))
+      .find(p => p.style.display === 'block');
+    if (activePanel) scaleDemoFrames(activePanel);
+  });
+
   function openEvidence(id) {
     document.querySelectorAll('.evidence-panel').forEach(p => p.style.display = 'none');
     const panel = document.getElementById('evidence-' + id);
     if (panel) panel.style.display = 'block';
     document.getElementById('evidenceOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (panel) setTimeout(() => scaleDemoFrames(panel), 50);
   }
 
   function closeEvidence() {
