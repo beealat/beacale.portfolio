@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Schedule Builder — Bea Christina Cale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,500&family=Parisienne&family=Baloo+2:wght@500;700&family=Quicksand:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg:#fafafa; --surface:#ffffff; --border:#e4e4e4; --border-faint:#eeeeee;
+    --text:#1a1a1a; --muted:#767676; --radius:6px; --shadow:none;
+    --font-display:'Space Grotesk',sans-serif; --font-body:'Space Grotesk',sans-serif; --font-block:'Space Grotesk',sans-serif;
+    --accent:#5c7360;
+  }
+  [data-theme="colorful"]{
+    --bg:#fffaf0; --surface:#ffffff; --border:#eee2cf; --border-faint:#f4ecdd;
+    --text:#20232b; --muted:#5b5f6b; --radius:16px; --shadow:0 8px 20px rgba(20,20,20,0.08);
+    --font-display:'Poppins',sans-serif; --font-body:'Poppins',sans-serif; --font-block:'Poppins',sans-serif;
+  }
+  [data-theme="coquette"]{
+    --bg:#fdf3f6; --surface:#fffafc; --border:#f3d9e3; --border-faint:#f9eaf0;
+    --text:#4a2530; --muted:#9c6d7c; --radius:20px; --shadow:0 10px 24px rgba(214,120,153,0.16);
+    --font-display:'Parisienne',cursive; --font-body:'Playfair Display',serif; --font-block:'Playfair Display',serif;
+  }
+  [data-theme="cute"]{
+    --bg:#f4fbff; --surface:#ffffff; --border:#d9edf8; --border-faint:#eaf6fc;
+    --text:#2b3a4a; --muted:#7893a6; --radius:22px; --shadow:0 10px 20px rgba(120,180,220,0.16);
+    --font-display:'Baloo 2',cursive; --font-body:'Quicksand',sans-serif; --font-block:'Quicksand',sans-serif;
+  }
+  [data-theme="aesthetic"]{
+    --bg:#f2ede4; --surface:#faf8f4; --border:#ddd3c2; --border-faint:#e9e2d5;
+    --text:#3a3630; --muted:#8a8375; --radius:2px; --shadow:0 14px 30px rgba(0,0,0,0.06);
+    --font-display:'Cormorant Garamond',serif; --font-body:'EB Garamond',serif; --font-block:'EB Garamond',serif;
+  }
+  [data-theme="dark-academia"]{
+    --bg:#2b2420; --surface:#352c26; --border:#4d4038; --border-faint:#3f342c;
+    --text:#ece3d6; --muted:#b5a794; --radius:4px; --shadow:0 14px 30px rgba(0,0,0,0.4);
+    --font-display:'Cormorant Garamond',serif; --font-body:'EB Garamond',serif; --font-block:'EB Garamond',serif;
+  }
+  [data-theme="retro"]{
+    --bg:#f4ead1; --surface:#fff8e8; --border:#e0c08a; --border-faint:#ecd9ab;
+    --text:#4a2f1c; --muted:#8a6a45; --radius:10px; --shadow:5px 5px 0 rgba(74,47,28,0.12);
+    --font-display:'Poppins',sans-serif; --font-body:'Poppins',sans-serif; --font-block:'Poppins',sans-serif;
+  }
+  [data-theme="professional"]{
+    --bg:#f5f7fa; --surface:#ffffff; --border:#d7dee6; --border-faint:#e8edf2;
+    --text:#1c2b3a; --muted:#5a6b7a; --radius:4px; --shadow:0 4px 14px rgba(20,30,50,0.06);
+    --font-display:'Space Grotesk',sans-serif; --font-body:'Space Grotesk',sans-serif; --font-block:'Space Grotesk',sans-serif;
+  }
+
+  html,body{height:100%;}
+  body{
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:3vh 4vw 6vh;
+    transition:background .35s ease, color .35s ease;
+  }
+  .app{max-width:1080px;margin:0 auto;}
+
+  .app-head{margin-bottom:2rem;}
+  .app-title{
+    font-family:var(--font-display);
+    font-size:clamp(1.7rem,4vw,2.3rem);
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  [data-theme="coquette"] .app-title{font-weight:400;}
+  [data-theme="aesthetic"] .app-title{font-weight:400;}
+  [data-theme="dark-academia"] .app-title{font-weight:400;font-style:italic;}
+  .app-sub{color:var(--muted); font-size:.9rem; margin-top:.35rem; max-width:56ch;}
+
+  .steps{ display:flex; gap:.5rem; margin-top:1.6rem; flex-wrap:wrap; }
+  .step-chip{
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:.4rem .8rem; border-radius:999px; border:1px solid var(--border);
+    color:var(--muted); background:var(--surface); font-weight:600;
+  }
+  .step-chip.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .step-chip.done{ color:var(--accent); border-color:var(--accent); }
+
+  .panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:2rem; margin-top:1.4rem;
+  }
+  .hidden{display:none !important;}
+
+  h2.section-h{ font-family:var(--font-display); font-weight:600; font-size:1.3rem; margin-bottom:.4rem; }
+  h3.sub-h{ font-family:var(--font-body); font-weight:700; font-size:.92rem; margin:1.4rem 0 .6rem; color:var(--text); }
+  p.section-p{ color:var(--muted); font-size:.86rem; margin-bottom:1.2rem; max-width:64ch; }
+
+  textarea{
+    width:100%; min-height:200px; resize:vertical;
+    border:1px solid var(--border); border-radius:calc(var(--radius) - 2px);
+    padding:.9rem; font-family:'Space Grotesk',monospace; font-size:.82rem; line-height:1.5;
+    background:var(--bg); color:var(--text);
+  }
+  textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+
+  .row{display:flex; gap:.7rem; flex-wrap:wrap; margin-top:1rem; align-items:center;}
+  .btn{
+    font-family:var(--font-body); font-size:.82rem; font-weight:600;
+    padding:.65rem 1.3rem; border-radius:calc(var(--radius) - 1px);
+    border:1px solid var(--accent); background:var(--accent); color:#fff;
+    cursor:pointer; transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); opacity:.92; }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  .btn.secondary{ background:transparent; color:var(--accent); }
+  .btn.ghost{ background:transparent; color:var(--muted); border-color:var(--border); }
+  input[type="file"]{ display:none; }
+  .file-label{
+    font-size:.78rem; color:var(--muted); border:1px dashed var(--border);
+    padding:.6rem 1rem; border-radius:calc(var(--radius) - 2px); cursor:pointer;
+  }
+  .file-label:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .parse-warning{
+    margin-top:1rem; font-size:.8rem; color:#a15b1f; background:#fdf1e4;
+    border:1px solid #f2ddbf; padding:.7rem 1rem; border-radius:calc(var(--radius) - 2px);
+  }
+  .ocr-status{ margin-top:.8rem; font-size:.78rem; color:var(--accent); display:none; }
+  .ocr-status.show{ display:block; }
+
+  table.preview{ width:100%; border-collapse:collapse; margin-top:1rem; font-size:.82rem; }
+  table.preview th{ text-align:left; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:.5rem .6rem; border-bottom:1px solid var(--border);}
+  table.preview td{ padding:.55rem .6rem; border-bottom:1px solid var(--border-faint); vertical-align:top;}
+  table.preview tr:last-child td{border-bottom:none;}
+  .code-pill{ font-weight:700; font-family:var(--font-display); }
+  [data-theme="coquette"] .code-pill{ font-family:var(--font-block); }
+  .sess-line{ display:block; color:var(--muted); font-size:.78rem; }
+
+  /* style picker */
+  .style-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:1rem; margin-top:1rem; }
+  .style-card{
+    border:2px solid var(--border); border-radius:14px; padding:1rem; cursor:pointer;
+    text-align:left; background:var(--bg); transition:border-color .2s ease, transform .15s ease;
+  }
+  .style-card:hover{ transform:translateY(-2px); }
+  .style-card.selected{ border-color:var(--accent); }
+  .swatch-row{ display:flex; gap:.3rem; margin-bottom:.7rem; }
+  .swatch{ width:18px; height:18px; border-radius:50%; }
+  .style-name{ font-weight:700; font-size:.92rem; margin-bottom:.2rem; }
+  .style-desc{ font-size:.74rem; color:var(--muted); }
+
+  /* layout picker */
+  .layout-row{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem; }
+  .layout-chip{
+    font-size:.78rem; font-weight:600; padding:.55rem 1rem; border-radius:999px;
+    border:1.5px solid var(--border); background:var(--bg); color:var(--muted); cursor:pointer;
+    transition:all .2s ease;
+  }
+  .layout-chip.selected{ border-color:var(--accent); color:var(--accent); background:var(--surface); }
+
+  /* color controls */
+  .color-panel{ display:flex; gap:2rem; flex-wrap:wrap; margin-top:1rem; align-items:flex-start; }
+  .wheel-block{ display:flex; flex-direction:column; align-items:center; gap:.7rem; }
+  .color-wheel-wrap{ position:relative; width:170px; height:170px; }
+  .color-wheel-wrap canvas{ display:block; border-radius:50%; cursor:crosshair; box-shadow:0 2px 10px rgba(0,0,0,0.15); }
+  .wheel-cursor{
+    position:absolute; width:14px; height:14px; border-radius:50%; border:2px solid #fff;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
+    transform:translate(-50%,-50%); pointer-events:none;
+  }
+  .lightness-row{ display:flex; align-items:center; gap:.5rem; width:170px; }
+  .lightness-row label{ font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .lightness-row input[type="range"]{ flex:1; accent-color:var(--accent); }
+
+  .color-side{ flex:1; min-width:220px; }
+  .color-row{ display:flex; align-items:center; gap:1rem; margin-top:.2rem; flex-wrap:wrap; }
+  input[type="color"]{ width:44px; height:44px; border:none; border-radius:50%; padding:0; cursor:pointer; background:none; }
+  .preset-swatch{ width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; }
+  .preset-swatch.selected{ border-color:var(--text); }
+  .presets{ display:flex; gap:.5rem; flex-wrap:wrap; }
+  .hex-readout{ font-family:'Space Grotesk',monospace; font-size:.78rem; color:var(--muted); }
+
+  /* preview + output */
+  .live-preview-wrap{ margin-top:1.6rem; }
+  #exportArea{ background:var(--surface); border-radius:var(--radius); padding:1.2rem; }
+
+  .grid-wrap{ overflow-x:auto; border-radius:var(--radius); }
+  .schedule-grid{
+    display:grid; position:relative; background:var(--surface);
+    border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; min-width:640px;
+  }
+  .grid-corner{ background:var(--surface); border-bottom:1px solid var(--border); border-right:1px solid var(--border); }
+  .day-header{
+    display:flex; align-items:center; justify-content:center;
+    font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    border-bottom:1px solid var(--border); border-right:1px solid var(--border-faint);
+    color:var(--text); background:var(--surface);
+  }
+  .day-header.today{ color:var(--accent); }
+  .time-label{
+    font-size:.66rem; color:var(--muted); text-align:right; padding-right:.5rem;
+    border-right:1px solid var(--border); transform:translateY(-6px);
+  }
+  .grid-cell{ border-right:1px solid var(--border-faint); }
+  .grid-cell.hour-line{ border-top:1px solid var(--border-faint); }
+  .subject-block{
+    margin:1px 3px; padding:5px 7px; border-radius:calc(var(--radius) - 2px);
+    font-family:var(--font-block); font-size:.68rem; line-height:1.3; overflow:hidden; z-index:2; box-shadow:var(--shadow);
+    cursor:pointer;
+  }
+  .subject-block:hover{ outline:2px solid rgba(255,255,255,0.6); outline-offset:-2px; }
+  .sb-code{ font-weight:700; font-size:.74rem; }
+  .sb-title{ font-size:.66rem; opacity:.92; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .sb-meta{ font-size:.6rem; opacity:.8; margin-top:2px;}
+  .now-line{ position:absolute; left:0; right:0; height:2px; background:var(--accent); z-index:5; pointer-events:none; }
+  .now-dot{ position:absolute; width:8px; height:8px; border-radius:50%; background:var(--accent); left:54px; transform:translate(-50%,-50%); z-index:6; }
+
+  /* agenda list layout */
+  .agenda-wrap{ display:flex; flex-direction:column; gap:1.1rem; }
+  .agenda-day{ }
+  .agenda-day-title{
+    font-family:var(--font-display); font-weight:700; font-size:.95rem; margin-bottom:.5rem;
+    padding-bottom:.3rem; border-bottom:1px solid var(--border);
+  }
+  .agenda-item{
+    display:flex; align-items:center; gap:.8rem; padding:.6rem .8rem; border-radius:calc(var(--radius) - 1px);
+    border-left:4px solid var(--accent); background:var(--bg); margin-bottom:.4rem; font-family:var(--font-block);
+    cursor:pointer;
+  }
+  .agenda-item:hover{ outline:2px solid rgba(0,0,0,0.15); }
+  .agenda-time{ font-size:.72rem; font-weight:700; min-width:88px; }
+  .agenda-info{ flex:1; }
+  .agenda-code{ font-weight:700; font-size:.82rem; }
+  .agenda-title{ font-size:.74rem; color:var(--muted); }
+  .agenda-room{ font-size:.68rem; color:var(--muted); }
+
+  /* compact table layout */
+  table.compact{ width:100%; border-collapse:collapse; font-family:var(--font-block); font-size:.82rem; }
+  table.compact th{
+    text-align:left; font-size:.66rem; letter-spacing:.07em; text-transform:uppercase; color:var(--muted);
+    padding:.6rem .7rem; border-bottom:2px solid var(--border);
+  }
+  table.compact td{ padding:.6rem .7rem; border-bottom:1px solid var(--border-faint); }
+  table.compact tr td:first-child{ border-left:4px solid var(--accent); cursor:pointer; }
+
+  .legend{ display:flex; flex-direction:column; gap:.5rem; margin-top:1.3rem; }
+  .legend-item{ display:flex; align-items:center; gap:.6rem; font-size:.8rem; font-family:var(--font-block); }
+  .legend-swatch{ width:14px; height:14px; border-radius:4px; flex-shrink:0; }
+  .legend-item input[type="color"]{ width:24px; height:24px; margin-left:auto; }
+  .legend-title{ flex:1; }
+  .legend-hint{ font-size:.7rem; color:var(--muted); margin-top:.6rem; font-style:italic; }
+
+  .cal-empty{ text-align:center; padding:2.5rem 1rem; color:var(--muted); font-style:italic; font-size:.85rem; }
+
+  .result-actions{ display:flex; gap:.7rem; flex-wrap:wrap; margin-top:1.4rem; align-items:center; }
+
+  .toast{
+    position:fixed; bottom:1.4rem; left:50%; transform:translateX(-50%) translateY(20px);
+    background:#1a1a1a; color:#fafafa; font-size:.8rem; padding:.7rem 1.2rem; border-radius:8px;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:50; max-width:90vw; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  footer.credit{ text-align:center; color:var(--muted); font-size:.72rem; margin-top:2.5rem; }
+  footer.credit a{ color:var(--accent); }
+
+  @media(max-width:640px){ .panel{padding:1.3rem;} .color-panel{flex-direction:column;} }
+</style>
+</head>
+<body data-theme="minimalist">
+<div class="app">
+
+  <div class="app-head">
+    <div class="app-title">Schedule Builder</div>
+    <p class="app-sub">Paste your enrollment schedule (or upload it), then style, color, and lay it out exactly how you like — with a live preview the whole time.</p>
+    <div class="steps" id="stepsBar">
+      <span class="step-chip active" data-step="1">1 · Input</span>
+      <span class="step-chip" data-step="2">2 · Review</span>
+      <span class="step-chip" data-step="3">3 · Customize &amp; Export</span>
+    </div>
+  </div>
+
+  <!-- STEP 1: INPUT -->
+  <div class="panel" id="panel-1">
+    <h2 class="section-h">Paste your schedule</h2>
+    <p class="section-p">Copy the rows straight from your enrollment system's checklist table (subject code, title, schedule, units) and paste them below — tabs or spaces both work. Or upload a .txt/.csv export, or a screenshot.</p>
+    <textarea id="rawInput" placeholder="GE 4120&#9;ELECTIVE 3&#9;* 1:30P-3:00P F410 MW *&#9;3/3
+IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F *&#9;3/5"></textarea>
+    <div class="row">
+      <button class="btn" id="parseBtn">Parse Schedule →</button>
+      <button class="btn ghost" id="sampleBtn">Load Sample</button>
+      <label class="file-label" for="fileInput">Upload .txt / .csv</label>
+      <input type="file" id="fileInput" accept=".txt,.csv" />
+      <label class="file-label" for="imageInput">Upload Screenshot</label>
+      <input type="file" id="imageInput" accept="image/*" />
+    </div>
+    <div class="ocr-status" id="ocrStatus"></div>
+    <div class="parse-warning hidden" id="parseWarning"></div>
+  </div>
+
+  <!-- STEP 2: REVIEW -->
+  <div class="panel hidden" id="panel-2">
+    <h2 class="section-h">Review your subjects</h2>
+    <p class="section-p" id="reviewCount">Found subjects below. Check the sessions look right, then continue.</p>
+    <div style="overflow-x:auto;">
+      <table class="preview" id="previewTable"></table>
+    </div>
+    <div class="row">
+      <button class="btn secondary" id="backTo1">← Edit Input</button>
+      <button class="btn" id="toStep3">Looks Good →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: CUSTOMIZE + LIVE PREVIEW + EXPORT -->
+  <div class="panel hidden" id="panel-3">
+    <h2 class="section-h">Style it your way</h2>
+    <p class="section-p">Everything updates live below as you pick — try a few before you download.</p>
+
+    <h3 class="sub-h">Style</h3>
+    <div class="style-grid" id="styleGrid"></div>
+
+    <h3 class="sub-h">Layout</h3>
+    <div class="layout-row" id="layoutRow"></div>
+
+    <h3 class="sub-h">Color</h3>
+    <div class="color-panel">
+      <div class="wheel-block">
+        <div class="color-wheel-wrap">
+          <canvas id="colorWheel" width="170" height="170"></canvas>
+          <div class="wheel-cursor" id="wheelCursor"></div>
+        </div>
+        <div class="lightness-row">
+          <label>Light</label>
+          <input type="range" id="lightnessSlider" min="20" max="88" value="42"/>
+        </div>
+      </div>
+      <div class="color-side">
+        <div class="color-row">
+          <input type="color" id="colorPicker" value="#5c7360" />
+          <div class="presets" id="presetSwatches"></div>
+          <span class="hex-readout" id="hexReadout">#5c7360</span>
+        </div>
+        <p class="section-p" style="margin-top:.9rem;">This is your base color — every block is generated from it. Want one exact block a totally different color (say, all pink except one Friday session in blue)? Click directly on that block in the preview below.</p>
+      </div>
+    </div>
+
+    <div class="live-preview-wrap">
+      <h3 class="sub-h">Live preview</h3>
+      <div id="exportArea">
+        <div class="grid-wrap"><div class="schedule-grid" id="scheduleGrid"></div></div>
+        <div class="agenda-wrap hidden" id="agendaOutput"></div>
+        <div style="overflow-x:auto;"><table class="compact hidden" id="compactTable"></table></div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn" id="downloadBtn">Download as Image</button>
+      <button class="btn ghost" id="resetColorsBtn">Reset Custom Colors</button>
+      <button class="btn secondary" id="backTo2">← Review</button>
+      <button class="btn ghost" id="startOverBtn">Start Over</button>
+    </div>
+  </div>
+
+  <footer class="credit">Built by Bea Christina Cale · a frontend-only demo, nothing you enter is saved</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="color" id="blockColorPicker" style="position:fixed; opacity:0; width:1px; height:1px; pointer-events:none; left:-999px; top:-999px;">
+
+<script>
+/* ============================= TOAST ============================= */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ============================= PARSING ============================= */
+function parseTime(str){
+  const m = str.match(/(\d{1,2}):(\d{2})\s*([APap])/);
+  if(!m) return null;
+  let h = parseInt(m[1],10); const min = parseInt(m[2],10); const ap = m[3].toUpperCase();
+  if(ap==='P' && h!==12) h+=12;
+  if(ap==='A' && h===12) h=0;
+  return h*60+min;
+}
+function formatTime(mins){
+  if(mins==null) return '';
+  let h = Math.floor(mins/60), m = mins%60;
+  const ap = h>=12 ? 'PM' : 'AM';
+  let h12 = h%12; if(h12===0) h12=12;
+  return h12 + (m? ':'+String(m).padStart(2,'0') : '') + ap[0];
+}
+function formatTimeFull(mins){
+  if(mins==null) return '';
+  let h = Math.floor(mins/60), m = mins%60;
+  const ap = h>=12 ? 'PM' : 'AM';
+  let h12 = h%12; if(h12===0) h12=12;
+  return h12 + ':' + String(m).padStart(2,'0') + ap;
+}
+function formatHour(mins){
+  let h = Math.floor(mins/60);
+  const ap = h>=12 ? 'PM':'AM';
+  let h12 = h%12; if(h12===0) h12=12;
+  return h12+ap;
+}
+function parseDays(str){
+  const days=[]; let s=str;
+  while(s.length){
+    if(s.startsWith('Th')){days.push('Thu'); s=s.slice(2); continue;}
+    if(s.startsWith('Su')){days.push('Sun'); s=s.slice(2); continue;}
+    if(s.startsWith('Sa')){days.push('Sat'); s=s.slice(2); continue;}
+    const c=s[0];
+    const map={M:'Mon',T:'Tue',W:'Wed',F:'Fri',S:'Sat'};
+    if(map[c]) days.push(map[c]);
+    s=s.slice(1);
+  }
+  return days;
+}
+function parseSession(seg){
+  const m = seg.match(/^(\d{1,2}:\d{2}\s*[APap][Mm]?)\s*-\s*(\d{1,2}:\d{2}\s*[APap][Mm]?)\s*(.*)$/);
+  if(!m) return null;
+  const start = parseTime(m[1]), end = parseTime(m[2]);
+  const rest = m[3].trim();
+  const tokens = rest.split(/\s+/).filter(Boolean);
+  let daysToken = tokens.length ? tokens[tokens.length-1] : '';
+  let room = tokens.slice(0,-1).join(' ');
+  if(!/^[A-Za-z]+$/.test(daysToken)){ room = rest; daysToken=''; }
+  const days = parseDays(daysToken);
+  if(start==null || end==null || days.length===0) return null;
+  return {start, end, room, days};
+}
+function parseScheduleText(text){
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const subjects = [];
+  for(const line of lines){
+    if(/SUBJ/i.test(line) && /(DESCRIPTIVE|SCHEDULE|TITLE)/i.test(line)) continue;
+    const scheduleMatch = line.match(/\*[\s\S]*\*/);
+    const beforeSchedule = scheduleMatch ? line.slice(0, scheduleMatch.index) : line;
+    const afterSchedule = scheduleMatch ? line.slice(scheduleMatch.index + scheduleMatch[0].length) : '';
+    const codeMatch = beforeSchedule.match(/([A-Z]{2,6}\s?\d{2,4}[A-Za-z]?)/);
+    if(!codeMatch) continue;
+    const code = codeMatch[1].replace(/\s+/g,' ').trim();
+    let title = beforeSchedule.slice(codeMatch.index + codeMatch[0].length).trim();
+    title = title.replace(/^[\t\s\-–:]+/, '').trim();
+    if(!title) title = '(Untitled Subject)';
+    let sessions = [];
+    if(scheduleMatch){
+      const segs = scheduleMatch[0].split('*').map(s=>s.trim()).filter(Boolean);
+      segs.forEach(seg=>{ const s = parseSession(seg); if(s) sessions.push(s); });
+    }
+    const unitsMatch = afterSchedule.match(/(\d+)\s*\/\s*(\d+)/);
+    const units = unitsMatch ? unitsMatch[0] : '';
+    subjects.push({code, title, sessions, units});
+  }
+  return subjects;
+}
+
+/* ============================= COLOR UTILS ============================= */
+function hexToHsl(hex){
+  hex = hex.replace('#','');
+  if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const r = parseInt(hex.slice(0,2),16)/255, g = parseInt(hex.slice(2,4),16)/255, b = parseInt(hex.slice(4,6),16)/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+  if(max===min){h=0;s=0;}
+  else{
+    const d=max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h*=60;
+  }
+  return {h, s:s*100, l:l*100};
+}
+function hslToRgb(h,s,l){
+  h=((h%360)+360)%360; s=Math.max(0,Math.min(100,s))/100; l=Math.max(0,Math.min(100,l))/100;
+  const c=(1-Math.abs(2*l-1))*s, x=c*(1-Math.abs((h/60)%2-1)), m=l-c/2;
+  let r,g,b;
+  if(h<60){r=c;g=x;b=0;} else if(h<120){r=x;g=c;b=0;} else if(h<180){r=0;g=c;b=x;}
+  else if(h<240){r=0;g=x;b=c;} else if(h<300){r=x;g=0;b=c;} else {r=c;g=0;b=x;}
+  return [Math.round((r+m)*255), Math.round((g+m)*255), Math.round((b+m)*255)];
+}
+function hslToHex(h,s,l){
+  const [r,g,b] = hslToRgb(h,s,l);
+  const toHex=v=>v.toString(16).padStart(2,'0');
+  return '#'+toHex(r)+toHex(g)+toHex(b);
+}
+function textColorFor(hex){
+  const {l} = hexToHsl(hex);
+  return l < 55 ? '#ffffff' : '#20232b';
+}
+function clamp(v,min,max){ return Math.min(Math.max(v,min),max); }
+
+function makePalette(accentHex, count, theme){
+  const {h,s,l} = hexToHsl(accentHex);
+  const colors=[];
+  const n = Math.max(count,1);
+  for(let i=0;i<n;i++){
+    let hue, sat, light;
+    if(theme==='colorful'){
+      hue = (h + i*(360/Math.max(n,5)))%360;
+      sat = clamp(s, 48, 85);
+      light = clamp(l, 38, 68);
+    } else if(theme==='minimalist'){
+      hue = h;
+      sat = clamp(s, 15, 60);
+      light = clamp(l + (i%4)*7 - 10, 55, 92);
+    } else if(theme==='coquette' || theme==='cute'){
+      hue = (h + ((i%3)-1)*16 + 360)%360;
+      sat = clamp(s+10, 30, 74);
+      light = clamp(l + (i%3)*5 - 4, 68, 92);
+    } else if(theme==='dark-academia'){
+      hue = (h + ((i%4)-1.5)*12 + 360)%360;
+      sat = clamp(s+8, 22, 58);
+      light = clamp(l + (i%3)*4 - 6, 20, 46);
+    } else if(theme==='retro'){
+      hue = (h + i*24 + 15)%360;
+      sat = clamp(s, 45, 70);
+      light = clamp(l + (i%3)*5 - 6, 52, 78);
+    } else if(theme==='professional'){
+      hue = (h + ((i%3)-1)*12 + 360)%360;
+      sat = clamp(s, 18, 42);
+      light = clamp(l + (i%3)*6 - 4, 76, 92);
+    } else { // aesthetic
+      hue = (h + ((i%4)-1.5)*8 + 360)%360;
+      sat = clamp(s-6, 15, 55);
+      light = clamp(l + (i%4)*5 - 8, 65, 88);
+    }
+    colors.push(hslToHex(hue, sat, light));
+  }
+  return colors;
+}
+
+/* ============================= THEMES ============================= */
+const THEMES = [
+  {id:'minimalist',    name:'Minimalist',    desc:'Clean lines, quiet type, and generous whitespace for total clarity.', swatches:['#fafafa','#e4e4e4','#5c7360','#1a1a1a']},
+  {id:'colorful',      name:'Colorful',      desc:'Bold, rounded blocks in a lively spread of hues — hard to miss a class.', swatches:['#f97316','#22c55e','#3b82f6','#e11d48']},
+  {id:'coquette',      name:'Coquette',      desc:'Blush pink tones with a delicate ribbon accent — soft and feminine.', swatches:['#fdf3f6','#f3d9e3','#d67899','#4a2530']},
+  {id:'cute',          name:'Cute',          desc:'Pastel and rounded, with a sprinkle of sparkle — playful and light.', swatches:['#f4fbff','#d9edf8','#7ab6d9','#2b3a4a']},
+  {id:'aesthetic',     name:'Aesthetic',     desc:'Muted earth tones and elegant serif type, straight off a mood board.', swatches:['#f2ede4','#ddd3c2','#8a9e8c','#3a3630']},
+  {id:'dark-academia', name:'Dark Academia', desc:'Ink and burgundy on deep brown, candlelit serif for late-night study.', swatches:['#2b2420','#4d4038','#8a5a4a','#ece3d6']},
+  {id:'retro',         name:'Retro',         desc:'Warm mustard and cream with a groovy, poster-style bounce.', swatches:['#f4ead1','#e0c08a','#c9682f','#4a2f1c']},
+  {id:'professional',  name:'Professional',  desc:'Crisp navy and white — a schedule polished enough to hand to a manager.', swatches:['#f5f7fa','#d7dee6','#2b4c7e','#1c2b3a']},
+];
+const THEME_ICON = {minimalist:'', colorful:'✦ ', coquette:'🎀 ', cute:'✨ ', aesthetic:'· ', 'dark-academia':'🕯 ', retro:'✺ ', professional:''};
+
+const LAYOUTS = [
+  {id:'grid',    name:'Weekly Grid',    desc:'A time-blocked calendar, Mon–Sat.'},
+  {id:'agenda',  name:'Agenda List',    desc:'Chronological list, grouped by day.'},
+  {id:'compact', name:'Compact Table',  desc:'A tidy spreadsheet-style table.'},
+];
+
+const PRESET_COLORS = ['#5c7360','#d67899','#3b82f6','#e07a3f','#8a6fd4','#2b9e8c','#c94f4f','#5a5a5a'];
+
+/* ============================= STATE ============================= */
+let state = {
+  subjects: [],
+  theme: 'minimalist',
+  layout: 'grid',
+  accent: '#5c7360',
+  accentHsl: hexToHsl('#5c7360'),
+  colorOverrides: {},        // code -> hex (whole-subject override)
+  sessionColorOverrides: {}  // "code__sessionIdx__day" -> hex (single-block override)
+};
+
+/* ============================= STEP NAV ============================= */
+function goToStep(n){
+  for(let i=1;i<=3;i++){
+    document.getElementById('panel-'+i).classList.toggle('hidden', i!==n);
+    const chip = document.querySelector('.step-chip[data-step="'+i+'"]');
+    chip.classList.toggle('active', i===n);
+    chip.classList.toggle('done', i<n);
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================= STEP 1: INPUT ============================= */
+const sample = `GE 4120\tELECTIVE 3\t* 1:30P-3:00P F410 MW *\t3/3
+IS 3149\tTECHNOPRENEURSHIP 1\t* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F *\t3/5
+IT 3145\tIT ELECTIVE 3\t* 6:00P-8:30P F612 TTh *\t3/5
+IT 3146\tINFORMATION ASSURANCE AND SECURITY 1\t* 1:30P-3:00P F610 TTh * 1:30P-3:30P F610 F *\t3/5
+IT 3147\tNETWORKING 1\t* 6:00P-8:30P F609 MW *\t3/5
+IT 3148\tIT ELECTIVE 2\t* 10:30A-1:00P F610 MW *\t3/5
+IT 3150\tSYSTEM INTEGRATION AND ARCHITECTURE 1\t* 3:00P-4:30P F612 TTh * 5:00P-7:30P F612 F *\t3/5`;
+
+document.getElementById('sampleBtn').addEventListener('click', ()=>{
+  document.getElementById('rawInput').value = sample;
+});
+document.getElementById('fileInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{ document.getElementById('rawInput').value = reader.result; };
+  reader.readAsText(file);
+});
+
+// Screenshot OCR (experimental)
+let tesseractLoading = null;
+function loadTesseract(){
+  if(window.Tesseract) return Promise.resolve();
+  if(tesseractLoading) return tesseractLoading;
+  tesseractLoading = new Promise((resolve,reject)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js';
+    s.onload = ()=>resolve();
+    s.onerror = ()=>reject(new Error('OCR engine failed to load'));
+    document.head.appendChild(s);
+  });
+  return tesseractLoading;
+}
+document.getElementById('imageInput').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const status = document.getElementById('ocrStatus');
+  status.classList.add('show');
+  status.textContent = 'Loading OCR engine…';
+  try{
+    await loadTesseract();
+    status.textContent = 'Reading text from the image — this can take a moment…';
+    const url = URL.createObjectURL(file);
+    const result = await window.Tesseract.recognize(url, 'eng');
+    const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
+    if(text){
+      document.getElementById('rawInput').value = text;
+      status.textContent = 'Text extracted — please review it above before parsing (image OCR can misread rows).';
+      showToast('Text extracted from image — please review it.');
+    } else {
+      status.textContent = 'Could not read any text — try pasting the schedule manually instead.';
+    }
+  } catch(err){
+    status.textContent = 'OCR unavailable right now — please paste the schedule text manually instead.';
+  }
+});
+
+document.getElementById('parseBtn').addEventListener('click', ()=>{
+  const text = document.getElementById('rawInput').value;
+  const subjects = parseScheduleText(text);
+  const warn = document.getElementById('parseWarning');
+  if(subjects.length===0){
+    warn.textContent = "Couldn't find any subjects in that text. Make sure each line has a subject code, and a schedule wrapped in asterisks, e.g. * 1:30P-3:00P F410 MW *.";
+    warn.classList.remove('hidden');
+    return;
+  }
+  warn.classList.add('hidden');
+  state.subjects = subjects;
+  state.colorOverrides = {};
+  state.sessionColorOverrides = {};
+  renderPreview(subjects);
+  goToStep(2);
+});
+
+/* ============================= STEP 2: REVIEW ============================= */
+function renderPreview(subjects){
+  document.getElementById('reviewCount').textContent = `Found ${subjects.length} subject${subjects.length===1?'':'s'}. Check the sessions look right, then continue.`;
+  const table = document.getElementById('previewTable');
+  let html = `<tr><th>Code</th><th>Title</th><th>Sessions</th><th>Units</th></tr>`;
+  subjects.forEach(s=>{
+    const sess = s.sessions.length
+      ? s.sessions.map(ses=>`<span class="sess-line">${ses.days.join('/')} · ${formatTime(ses.start)}–${formatTime(ses.end)} · ${ses.room||'TBA'}</span>`).join('')
+      : `<span class="sess-line">No schedule found (TBA)</span>`;
+    html += `<tr><td class="code-pill">${s.code}</td><td>${s.title}</td><td>${sess}</td><td>${s.units||'—'}</td></tr>`;
+  });
+  table.innerHTML = html;
+}
+document.getElementById('backTo1').addEventListener('click', ()=>goToStep(1));
+document.getElementById('toStep3').addEventListener('click', ()=>{
+  goToStep(3);
+  renderOutput();
+});
+
+/* ============================= STEP 3: STYLE GRID ============================= */
+function renderStyleGrid(){
+  const grid = document.getElementById('styleGrid');
+  grid.innerHTML = '';
+  THEMES.forEach(t=>{
+    const card = document.createElement('div');
+    card.className = 'style-card' + (state.theme===t.id ? ' selected':'');
+    card.innerHTML = `<div class="swatch-row">${t.swatches.map(c=>`<span class="swatch" style="background:${c}"></span>`).join('')}</div>
+      <div class="style-name">${t.name}</div><div class="style-desc">${t.desc}</div>`;
+    card.addEventListener('click', ()=>{
+      state.theme = t.id;
+      document.body.setAttribute('data-theme', t.id);
+      renderStyleGrid();
+      renderOutput();
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ============================= STEP 3: LAYOUT ROW ============================= */
+function renderLayoutRow(){
+  const row = document.getElementById('layoutRow');
+  row.innerHTML = '';
+  LAYOUTS.forEach(l=>{
+    const chip = document.createElement('div');
+    chip.className = 'layout-chip' + (state.layout===l.id ? ' selected':'');
+    chip.textContent = l.name;
+    chip.title = l.desc;
+    chip.addEventListener('click', ()=>{
+      state.layout = l.id;
+      renderLayoutRow();
+      renderOutput();
+    });
+    row.appendChild(chip);
+  });
+}
+
+/* ============================= STEP 3: COLOR WHEEL ============================= */
+const wheelCanvas = document.getElementById('colorWheel');
+const wheelCursor = document.getElementById('wheelCursor');
+const lightnessSlider = document.getElementById('lightnessSlider');
+const colorPicker = document.getElementById('colorPicker');
+const hexReadout = document.getElementById('hexReadout');
+
+function drawColorWheel(lightness){
+  const ctx = wheelCanvas.getContext('2d');
+  const w = wheelCanvas.width, h = wheelCanvas.height;
+  const cx = w/2, cy = h/2, radius = w/2;
+  const img = ctx.createImageData(w,h);
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const dx = x-cx, dy = y-cy;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      const idx = (y*w+x)*4;
+      if(dist<=radius){
+        let angle = Math.atan2(dy,dx)*180/Math.PI;
+        angle = (angle+360)%360;
+        const sat = Math.min(dist/radius,1)*100;
+        const [r,g,b] = hslToRgb(angle, sat, lightness);
+        img.data[idx]=r; img.data[idx+1]=g; img.data[idx+2]=b; img.data[idx+3]=255;
+      } else {
+        img.data[idx+3]=0;
+      }
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+
+function placeCursorFromHsl(){
+  const w = wheelCanvas.width, radius = w/2;
+  const rad = state.accentHsl.h * Math.PI/180;
+  const dist = (state.accentHsl.s/100) * radius;
+  const x = radius + dist*Math.cos(rad);
+  const y = radius + dist*Math.sin(rad);
+  wheelCursor.style.left = x+'px';
+  wheelCursor.style.top = y+'px';
+}
+
+function setAccent(hex, opts){
+  opts = opts || {};
+  state.accent = hex;
+  if(!opts.keepHsl) state.accentHsl = hexToHsl(hex);
+  colorPicker.value = hex;
+  hexReadout.textContent = hex;
+  if(!opts.skipSliderSync) lightnessSlider.value = Math.round(state.accentHsl.l);
+  drawColorWheel(state.accentHsl.l);
+  placeCursorFromHsl();
+  renderPresets();
+  renderOutput();
+}
+
+let wheelDragging = false;
+function wheelPick(clientX, clientY){
+  const rect = wheelCanvas.getBoundingClientRect();
+  const scaleX = wheelCanvas.width/rect.width, scaleY = wheelCanvas.height/rect.height;
+  const x = (clientX-rect.left)*scaleX, y = (clientY-rect.top)*scaleY;
+  const radius = wheelCanvas.width/2;
+  const dx = x-radius, dy = y-radius;
+  let dist = Math.sqrt(dx*dx+dy*dy);
+  dist = Math.min(dist, radius);
+  let angle = Math.atan2(dy,dx)*180/Math.PI;
+  angle = (angle+360)%360;
+  const sat = (dist/radius)*100;
+  const l = parseFloat(lightnessSlider.value);
+  state.accentHsl = {h:angle, s:sat, l:l};
+  const hex = hslToHex(angle, sat, l);
+  setAccent(hex, {keepHsl:true, skipSliderSync:true});
+}
+wheelCanvas.addEventListener('pointerdown', (e)=>{ wheelDragging = true; wheelPick(e.clientX, e.clientY); });
+window.addEventListener('pointermove', (e)=>{ if(wheelDragging) wheelPick(e.clientX, e.clientY); });
+window.addEventListener('pointerup', ()=>{ wheelDragging = false; });
+
+lightnessSlider.addEventListener('input', ()=>{
+  const l = parseFloat(lightnessSlider.value);
+  state.accentHsl.l = l;
+  const hex = hslToHex(state.accentHsl.h, state.accentHsl.s, l);
+  setAccent(hex, {keepHsl:true, skipSliderSync:true});
+});
+
+colorPicker.addEventListener('input', (e)=>{
+  setAccent(e.target.value);
+});
+
+function renderPresets(){
+  const wrap = document.getElementById('presetSwatches');
+  wrap.innerHTML='';
+  PRESET_COLORS.forEach(c=>{
+    const s = document.createElement('div');
+    s.className = 'preset-swatch' + (state.accent.toLowerCase()===c.toLowerCase() ? ' selected':'');
+    s.style.background = c;
+    s.addEventListener('click', ()=> setAccent(c));
+    wrap.appendChild(s);
+  });
+}
+
+document.getElementById('backTo2').addEventListener('click', ()=>goToStep(2));
+document.getElementById('startOverBtn').addEventListener('click', ()=>{
+  state = { subjects: [], theme:'minimalist', layout:'grid', accent:'#5c7360', accentHsl:hexToHsl('#5c7360'), colorOverrides:{}, sessionColorOverrides:{} };
+  document.body.setAttribute('data-theme','minimalist');
+  document.getElementById('rawInput').value='';
+  document.getElementById('parseWarning').classList.add('hidden');
+  document.getElementById('ocrStatus').classList.remove('show');
+  renderStyleGrid(); renderLayoutRow();
+  drawColorWheel(state.accentHsl.l); placeCursorFromHsl(); renderPresets();
+  goToStep(1);
+});
+document.getElementById('resetColorsBtn').addEventListener('click', ()=>{
+  state.colorOverrides = {};
+  state.sessionColorOverrides = {};
+  renderOutput();
+  showToast('All custom colors reset — back to the generated palette.');
+});
+
+/* ============================= PER-BLOCK COLOR PICKER ============================= */
+const blockPicker = document.getElementById('blockColorPicker');
+let activeBlockKey = null;
+
+function blockKey(code, sessionIdx, day){
+  return code + '__' + sessionIdx + '__' + day;
+}
+function resolveBlockColor(code, sessionIdx, day, colorMap){
+  const key = blockKey(code, sessionIdx, day);
+  if(state.sessionColorOverrides[key]) return state.sessionColorOverrides[key];
+  if(state.colorOverrides[code]) return state.colorOverrides[code];
+  return colorMap[code];
+}
+function openBlockPicker(key, currentHex, clientX, clientY){
+  activeBlockKey = key;
+  blockPicker.style.left = Math.max(0,clientX)+'px';
+  blockPicker.style.top = Math.max(0,clientY)+'px';
+  blockPicker.value = currentHex && currentHex.length===7 ? currentHex : '#5c7360';
+  blockPicker.click();
+}
+blockPicker.addEventListener('input', ()=>{
+  if(!activeBlockKey) return;
+  state.sessionColorOverrides[activeBlockKey] = blockPicker.value;
+  renderOutput();
+});
+blockPicker.addEventListener('change', ()=>{
+  if(activeBlockKey) showToast('That block now has its own color — click it again to change or reset below.');
+});
+
+/* ============================= STEP 3: OUTPUT RENDER ============================= */
+const DAY_ORDER = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const TODAY_KEY = DAY_ORDER[[6,0,1,2,3,4,5][new Date().getDay()]];
+
+function buildColorMap(subjects){
+  const palette = makePalette(state.accent, Math.max(subjects.length,1), state.theme);
+  const colorMap = {}; let colorIdx = 0;
+  subjects.forEach(sub=>{
+    if(!(sub.code in colorMap)){
+      colorMap[sub.code] = palette[colorIdx % palette.length];
+      colorIdx++;
+    }
+  });
+  return colorMap;
+}
+
+function renderOutput(){
+  const subjects = state.subjects;
+  document.getElementById('scheduleGrid').parentElement.classList.toggle('hidden', state.layout!=='grid');
+  document.getElementById('agendaOutput').classList.toggle('hidden', state.layout!=='agenda');
+  document.getElementById('compactTable').classList.toggle('hidden', state.layout!=='compact');
+
+  if(!subjects.length){
+    document.getElementById('scheduleGrid').innerHTML = '<div class="cal-empty">Nothing to preview yet.</div>';
+    document.getElementById('legend').innerHTML = '';
+    return;
+  }
+
+  const colorMap = buildColorMap(subjects);
+
+  if(state.layout==='grid') renderWeeklyGrid(subjects, colorMap);
+  else if(state.layout==='agenda') renderAgendaList(subjects, colorMap);
+  else renderCompactTable(subjects, colorMap);
+
+  renderLegend(subjects, colorMap);
+}
+
+function renderWeeklyGrid(subjects, colorMap){
+  let usedDays = new Set(); let minTime = 24*60, maxTime = 0;
+  subjects.forEach(s=>s.sessions.forEach(ses=>{
+    ses.days.forEach(d=>usedDays.add(d));
+    if(ses.start<minTime) minTime = ses.start;
+    if(ses.end>maxTime) maxTime = ses.end;
+  }));
+  if(usedDays.size===0){ ['Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>usedDays.add(d)); }
+  if(minTime===24*60){ minTime=7*60; maxTime=21*60; }
+  minTime = Math.max(0, Math.floor(minTime/60)*60);
+  maxTime = Math.ceil(maxTime/60)*60;
+  if(maxTime<=minTime) maxTime = minTime+60;
+  const days = DAY_ORDER.filter(d=>usedDays.has(d));
+
+  const icon = THEME_ICON[state.theme] || '';
+  const container = document.getElementById('scheduleGrid');
+  container.innerHTML = '';
+  container.style.position = 'relative';
+  const totalSlots = (maxTime-minTime)/30;
+  container.style.gridTemplateColumns = `56px repeat(${days.length}, minmax(90px,1fr))`;
+  container.style.gridTemplateRows = `44px repeat(${totalSlots}, 22px)`;
+
+  const corner = document.createElement('div');
+  corner.className='grid-corner'; corner.style.gridColumn='1'; corner.style.gridRow='1';
+  container.appendChild(corner);
+
+  days.forEach((d,i)=>{
+    const el = document.createElement('div');
+    el.className = 'day-header' + (d===TODAY_KEY ? ' today':'');
+    el.textContent = d;
+    el.style.gridColumn = i+2; el.style.gridRow = 1;
+    container.appendChild(el);
+  });
+
+  for(let t=minTime; t<maxTime; t+=60){
+    const slotIdx = (t-minTime)/30;
+    const el = document.createElement('div');
+    el.className='time-label';
+    el.textContent = formatHour(t);
+    el.style.gridColumn = 1;
+    el.style.gridRow = `${2+slotIdx} / span 2`;
+    container.appendChild(el);
+  }
+
+  days.forEach((d,i)=>{
+    for(let s=0;s<totalSlots;s++){
+      const cell = document.createElement('div');
+      cell.className = 'grid-cell' + (s%2===0 ? ' hour-line':'');
+      cell.style.gridColumn = i+2; cell.style.gridRow = 2+s;
+      container.appendChild(cell);
+    }
+  });
+
+  subjects.forEach(sub=>{
+    sub.sessions.forEach((ses, sessionIdx)=>{
+      if(ses.start==null || ses.end==null) return;
+      ses.days.forEach(d=>{
+        const dayIdx = days.indexOf(d);
+        if(dayIdx===-1) return;
+        const startSlot = Math.round((ses.start-minTime)/30);
+        const endSlot = Math.max(startSlot+1, Math.round((ses.end-minTime)/30));
+        const key = blockKey(sub.code, sessionIdx, d);
+        const bg = resolveBlockColor(sub.code, sessionIdx, d, colorMap);
+        const block = document.createElement('div');
+        block.className='subject-block';
+        block.style.gridColumn = dayIdx+2;
+        block.style.gridRow = `${2+startSlot} / ${2+endSlot}`;
+        block.style.background = bg;
+        block.style.color = textColorFor(bg);
+        block.title = 'Click to give just this block its own color';
+        block.innerHTML = `<div class="sb-code">${icon}${sub.code}</div><div class="sb-title">${sub.title}</div><div class="sb-meta">${ses.room||'TBA'} · ${formatTime(ses.start)}–${formatTime(ses.end)}</div>`;
+        block.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          openBlockPicker(key, bg, e.clientX, e.clientY);
+        });
+        container.appendChild(block);
+      });
+    });
+  });
+
+  if(days.includes(TODAY_KEY)){
+    const now = new Date();
+    const nowMins = now.getHours()*60+now.getMinutes();
+    if(nowMins>=minTime && nowMins<=maxTime){
+      const offset = 44 + ((nowMins-minTime)/30)*22;
+      const line = document.createElement('div');
+      line.className='now-line'; line.style.top = offset+'px';
+      container.appendChild(line);
+      const dot = document.createElement('div');
+      dot.className='now-dot'; dot.style.top = offset+'px';
+      container.appendChild(dot);
+    }
+  }
+}
+
+function renderAgendaList(subjects, colorMap){
+  const wrap = document.getElementById('agendaOutput');
+  wrap.innerHTML = '';
+  const icon = THEME_ICON[state.theme] || '';
+  const byDay = {};
+  subjects.forEach(sub=>{
+    sub.sessions.forEach((ses, sessionIdx)=>{
+      ses.days.forEach(d=>{
+        if(!byDay[d]) byDay[d] = [];
+        byDay[d].push({sub, ses, sessionIdx});
+      });
+    });
+  });
+  const days = DAY_ORDER.filter(d=>byDay[d]);
+  if(!days.length){ wrap.innerHTML = '<div class="cal-empty">No scheduled sessions to list.</div>'; return; }
+  days.forEach(d=>{
+    const dayBlock = document.createElement('div');
+    dayBlock.className = 'agenda-day';
+    const items = byDay[d].sort((a,b)=>a.ses.start-b.ses.start);
+    dayBlock.innerHTML = `<div class="agenda-day-title">${d}${d===TODAY_KEY ? ' · Today':''}</div>`;
+    items.forEach(({sub,ses,sessionIdx})=>{
+      const key = blockKey(sub.code, sessionIdx, d);
+      const bg = resolveBlockColor(sub.code, sessionIdx, d, colorMap);
+      const item = document.createElement('div');
+      item.className = 'agenda-item';
+      item.style.background = bg;
+      item.style.borderLeftColor = textColorFor(bg)==='#ffffff' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.35)';
+      item.style.color = textColorFor(bg);
+      item.title = 'Click to give just this session its own color';
+      item.innerHTML = `<span class="agenda-time">${formatTimeFull(ses.start)}–${formatTimeFull(ses.end)}</span>
+        <span class="agenda-info"><span class="agenda-code">${icon}${sub.code}</span> — <span class="agenda-title">${sub.title}</span><br/><span class="agenda-room">${ses.room||'TBA'}</span></span>`;
+      item.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openBlockPicker(key, bg, e.clientX, e.clientY);
+      });
+      dayBlock.appendChild(item);
+    });
+    wrap.appendChild(dayBlock);
+  });
+}
+
+function renderCompactTable(subjects, colorMap){
+  const table = document.getElementById('compactTable');
+  const icon = THEME_ICON[state.theme] || '';
+  table.innerHTML = '';
+  const headRow = document.createElement('tr');
+  headRow.innerHTML = `<th>Code</th><th>Title</th><th>Days</th><th>Time</th><th>Room</th><th>Units</th>`;
+  table.appendChild(headRow);
+
+  subjects.forEach(sub=>{
+    if(!sub.sessions.length){
+      const bg = state.colorOverrides[sub.code] || colorMap[sub.code];
+      const tr = document.createElement('tr');
+      tr.style.background = bg+'22';
+      tr.innerHTML = `<td style="border-left-color:${bg};">${icon}${sub.code}</td><td>${sub.title}</td><td colspan="3">TBA</td><td>${sub.units||'—'}</td>`;
+      tr.querySelector('td').style.cursor='pointer';
+      tr.querySelector('td').title = 'Click to color this row';
+      tr.querySelector('td').addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, e.clientX, e.clientY);
+      });
+      table.appendChild(tr);
+      return;
+    }
+    sub.sessions.forEach((ses, sessionIdx)=>{
+      ses.days.forEach((d, dIdx)=>{
+        const key = blockKey(sub.code, sessionIdx, d);
+        const bg = resolveBlockColor(sub.code, sessionIdx, d, colorMap);
+        const tr = document.createElement('tr');
+        tr.style.background = bg+'22';
+        const showLabel = sessionIdx===0 && dIdx===0;
+        tr.innerHTML = `
+          <td style="border-left-color:${bg};">${showLabel ? icon+sub.code : ''}</td>
+          <td>${showLabel ? sub.title : ''}</td>
+          <td>${d}</td>
+          <td>${formatTime(ses.start)}–${formatTime(ses.end)}</td>
+          <td>${ses.room||'TBA'}</td>
+          <td>${showLabel ? (sub.units||'—') : ''}</td>`;
+        const firstCell = tr.querySelector('td');
+        firstCell.style.cursor='pointer';
+        firstCell.title = 'Click to give just this row its own color';
+        firstCell.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          openBlockPicker(key, bg, e.clientX, e.clientY);
+        });
+        table.appendChild(tr);
+      });
+    });
+  });
+}
+
+function renderLegend(subjects, colorMap){
+  const legend = document.getElementById('legend');
+  legend.innerHTML='';
+  const seen = new Set();
+  subjects.forEach(s=>{
+    if(seen.has(s.code)) return; seen.add(s.code);
+    const bg = state.colorOverrides[s.code] || colorMap[s.code];
+    const item = document.createElement('div');
+    item.className='legend-item';
+    item.innerHTML = `<span class="legend-swatch" style="background:${bg}"></span> <strong>${s.code}</strong>&nbsp;<span class="legend-title">${s.title}</span>`;
+    const picker = document.createElement('input');
+    picker.type = 'color';
+    picker.value = bg.length===7 ? bg : '#5c7360';
+    picker.title = `Set the default color for every ${s.code} block`;
+    picker.addEventListener('input', (e)=>{
+      state.colorOverrides[s.code] = e.target.value;
+      renderOutput();
+    });
+    item.appendChild(picker);
+    legend.appendChild(item);
+  });
+  const hint = document.createElement('div');
+  hint.className = 'legend-hint';
+  hint.textContent = 'Tip: the dot here sets the whole subject\'s color. To recolor just one specific session (like a single Friday block), click that block directly in the preview above.';
+  legend.appendChild(hint);
+}
+
+/* ============================= DOWNLOAD ============================= */
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const btn = document.getElementById('downloadBtn');
+  const target = document.getElementById('exportArea');
+  const originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Preparing image…';
+  const bg = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
+  html2canvas(target, {backgroundColor: bg, scale: 2, useCORS: true}).then(canvas=>{
+    const link = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10);
+    link.download = `my-schedule-${state.theme}-${stamp}.png`;
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToast('Downloaded! Check your downloads folder.');
+  }).catch(()=>{
+    showToast("Couldn't generate the image — try again, or try a different browser.");
+  }).finally(()=>{
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  });
+});
+
+/* ============================= INIT ============================= */
+renderStyleGrid();
+renderLayoutRow();
+drawColorWheel(state.accentHsl.l);
+placeCursorFromHsl();
+renderPresets();
+</script>
+</body>
+</html>
