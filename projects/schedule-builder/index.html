@@ -265,6 +265,73 @@
   footer.credit{ text-align:center; color:var(--muted); font-size:.72rem; margin-top:2.5rem; }
   footer.credit a{ color:var(--accent); }
 
+  /* in-app-browser notice */
+  .iab-banner{
+    display:none; align-items:flex-start; gap:.6rem; background:#fff6dc; border:1px solid #f0dca0;
+    color:#6b5615; font-size:.78rem; line-height:1.5; padding:.8rem 1rem; border-radius:calc(var(--radius) - 2px);
+    margin-bottom:1.2rem;
+  }
+  .iab-banner.show{ display:flex; }
+  .iab-banner button{
+    background:none; border:none; color:#6b5615; text-decoration:underline; font-size:.78rem;
+    cursor:pointer; padding:0; flex-shrink:0; font-weight:600;
+  }
+
+  /* mobile image preview / save sheet */
+  .img-preview-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,10,10,0.92); z-index:300;
+    flex-direction:column; align-items:center; justify-content:center; padding:5vh 4vw; gap:1rem;
+  }
+  .img-preview-overlay.active{ display:flex; }
+  .img-preview-overlay img{ max-width:100%; max-height:72vh; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
+  .img-preview-note{ color:#f4f4f4; font-size:.85rem; text-align:center; max-width:40ch; }
+  .img-preview-close{
+    background:#fff; color:#111; border:none; padding:.65rem 1.4rem; border-radius:999px;
+    font-family:var(--font-body); font-weight:600; font-size:.82rem; cursor:pointer;
+  }
+
+  /* ── custom block color picker (identical on mobile & desktop) ── */
+  .block-picker-overlay{
+    display:none; position:fixed; inset:0; background:rgba(20,20,20,0.55); z-index:250;
+    align-items:center; justify-content:center; padding:5vw;
+  }
+  .block-picker-overlay.active{ display:flex; }
+  .block-picker-panel{
+    background:#ffffff; color:#20232b; width:100%; max-width:300px; border-radius:16px;
+    padding:1.2rem 1.2rem 1.4rem; box-shadow:0 20px 50px rgba(0,0,0,0.3); font-family:var(--font-body);
+  }
+  .bp-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; }
+  .bp-header span{ font-size:.82rem; font-weight:700; }
+  .bp-close{ background:none; border:none; font-size:1.2rem; line-height:1; cursor:pointer; color:#767676; padding:.2rem; }
+  #bpSquare{ width:100%; height:140px; border-radius:10px; cursor:crosshair; display:block; touch-action:none; }
+  .bp-hue-slider{
+    width:100%; margin-top:.7rem; -webkit-appearance:none; height:14px; border-radius:999px;
+    background:linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+    touch-action:none;
+  }
+  .bp-hue-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:#fff;
+    border:2px solid #333; box-shadow:0 1px 4px rgba(0,0,0,0.3); cursor:pointer;
+  }
+  .bp-hue-slider::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background:#fff; border:2px solid #333; cursor:pointer;
+  }
+  .bp-row{ display:flex; align-items:center; gap:.6rem; margin-top:.9rem; }
+  .bp-swatch{ width:32px; height:32px; border-radius:50%; border:2px solid #eee; flex-shrink:0; }
+  .bp-row input[type="text"]{
+    flex:1; border:1px solid #e4e4e4; border-radius:8px; padding:.5rem .6rem; font-size:.82rem;
+    font-family:'Space Grotesk',monospace; color:#20232b; text-transform:uppercase;
+  }
+  .bp-eyedrop{
+    background:#f2f2f2; border:1px solid #e4e4e4; border-radius:8px; width:36px; height:36px;
+    font-size:1rem; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .bp-eyedrop:hover{ background:#e9e9e9; }
+  .bp-presets{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
+  .bp-presets .preset-swatch{ width:24px; height:24px; }
+  .bp-actions{ display:flex; gap:.6rem; margin-top:1.1rem; }
+  .bp-actions .btn{ flex:1; text-align:center; padding:.6rem .8rem; font-size:.78rem; }
+
   @media(max-width:640px){
     .panel{padding:1.3rem;}
     .color-panel{flex-direction:column;}
@@ -275,13 +342,14 @@
   }
   @media(max-width:480px){
     body{ padding:2.5vh 4vw 5vh; }
-    .schedule-grid{ min-width:460px; }
-    .day-header{ font-size:.64rem; }
-    .time-label{ font-size:.58rem; }
-    .subject-block{ font-size:.6rem; padding:3px 4px; }
-    .sb-code{ font-size:.64rem; }
-    .sb-title{ font-size:.56rem; }
-    .sb-meta{ font-size:.52rem; }
+    .schedule-grid{ min-width:0; width:100%; }
+    .grid-wrap{ overflow-x:visible; }
+    .day-header{ font-size:.6rem; }
+    .time-label{ font-size:.54rem; padding-right:.25rem; }
+    .subject-block{ font-size:.58rem; padding:2px 3px; margin:2px 2px; }
+    .sb-code{ font-size:.6rem; }
+    .sb-title{ font-size:.52rem; }
+    .sb-meta{ font-size:.48rem; }
     .color-wheel-wrap{ width:150px; height:150px; }
     .lightness-row{ width:150px; }
   }
@@ -293,6 +361,9 @@
   <div class="app-head">
     <div class="app-title">Schedule Builder</div>
     <p class="app-sub">Paste your enrollment schedule (or upload it), then style, color, and lay it out exactly how you like — with a live preview the whole time.</p>
+    <div class="iab-banner" id="iabBanner">
+      <span>Heads up — you're viewing this inside an in-app browser, which sometimes blocks downloads from actually saving anywhere. For the most reliable experience (especially downloading your schedule image), open this page in Chrome or Safari instead.</span>
+    </div>
     <div class="steps" id="stepsBar">
       <span class="step-chip active" data-step="1">1 · Input</span>
       <span class="step-chip" data-step="2">2 · Review</span>
@@ -357,7 +428,7 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
           <div class="presets" id="presetSwatches"></div>
           <span class="hex-readout" id="hexReadout">#5c7360</span>
         </div>
-        <p class="section-p" style="margin-top:.9rem;">This is your base color — every block is generated from it. Want one exact block a totally different color (say, all pink except one Friday session in blue)? Click directly on that block in the preview below.</p>
+        <p class="section-p" style="margin-top:.9rem;">This is your base color — every block is generated from it. Want one exact block a totally different color (say, all pink except one Friday session in blue)? Tap directly on that block in the preview below.</p>
       </div>
     </div>
 
@@ -367,12 +438,12 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
         <div class="grid-wrap"><div class="schedule-grid" id="scheduleGrid"></div></div>
         <div class="agenda-wrap hidden" id="agendaOutput"></div>
         <div style="overflow-x:auto;"><table class="compact hidden" id="compactTable"></table></div>
-        <div class="legend" id="legend"></div>
       </div>
+      <div class="legend" id="legend"></div>
     </div>
 
     <div class="result-actions">
-      <button class="btn" id="downloadBtn">Download as Image</button>
+      <button class="btn" id="downloadBtn">Download Schedule</button>
       <button class="btn ghost" id="resetColorsBtn">Reset Custom Colors</button>
       <button class="btn secondary" id="backTo2">← Review</button>
       <button class="btn ghost" id="startOverBtn">Start Over</button>
@@ -383,7 +454,35 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
 </div>
 
 <div class="toast" id="toast"></div>
-<input type="color" id="blockColorPicker" style="position:fixed; opacity:0; width:1px; height:1px; pointer-events:none; left:-999px; top:-999px;">
+
+<!-- mobile save-image fallback -->
+<div class="img-preview-overlay" id="imgPreviewOverlay">
+  <img id="imgPreviewImg" alt="Your schedule"/>
+  <div class="img-preview-note">Press and hold the image above, then choose "Save image" / "Add to Photos" to save it to your gallery.</div>
+  <button class="img-preview-close" id="imgPreviewClose">Done</button>
+</div>
+
+<!-- custom per-block color picker -->
+<div class="block-picker-overlay" id="blockPickerOverlay">
+  <div class="block-picker-panel">
+    <div class="bp-header">
+      <span id="bpBlockLabel">Color for this block</span>
+      <button class="bp-close" id="bpClose" aria-label="Close">&times;</button>
+    </div>
+    <canvas id="bpSquare" width="256" height="140"></canvas>
+    <input type="range" id="bpHue" class="bp-hue-slider" min="0" max="360" value="150"/>
+    <div class="bp-row">
+      <div class="bp-swatch" id="bpSwatchPreview"></div>
+      <input type="text" id="bpHexInput" maxlength="7" spellcheck="false"/>
+      <button class="bp-eyedrop" id="bpEyedrop" title="Pick a color from your screen">💧</button>
+    </div>
+    <div class="bp-presets" id="bpPresets"></div>
+    <div class="bp-actions">
+      <button class="btn ghost" id="bpReset">Reset</button>
+      <button class="btn" id="bpDone">Done</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ============================= TOAST ============================= */
@@ -392,8 +491,17 @@ function showToast(msg){
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(()=>t.classList.remove('show'), 2600);
+  showToast._t = setTimeout(()=>t.classList.remove('show'), 3200);
 }
+
+/* ============================= IN-APP BROWSER DETECTION ============================= */
+(function(){
+  const ua = navigator.userAgent || '';
+  const isInApp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|MessengerLiteForiOS|; wv\)/i.test(ua);
+  if(isInApp){
+    document.getElementById('iabBanner').classList.add('show');
+  }
+})();
 
 /* ============================= PARSING ============================= */
 function parseTime(str){
@@ -557,11 +665,18 @@ function hslToHex(h,s,l){
   const toHex=v=>v.toString(16).padStart(2,'0');
   return '#'+toHex(r)+toHex(g)+toHex(b);
 }
+function hexToRgbStr(hex){
+  hex = hex.replace('#','');
+  if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16);
+  return `rgb(${r},${g},${b})`;
+}
 function textColorFor(hex){
   const {l} = hexToHsl(hex);
   return l < 55 ? '#ffffff' : '#20232b';
 }
 function clamp(v,min,max){ return Math.min(Math.max(v,min),max); }
+function isValidHex(hex){ return /^#[0-9a-fA-F]{6}$/.test(hex); }
 
 function makePalette(accentHex, count, theme){
   const {h,s,l} = hexToHsl(accentHex);
@@ -854,9 +969,25 @@ document.getElementById('resetColorsBtn').addEventListener('click', ()=>{
   showToast('All custom colors reset — back to the generated palette.');
 });
 
-/* ============================= PER-BLOCK COLOR PICKER ============================= */
-const blockPicker = document.getElementById('blockColorPicker');
+/* ============================= CUSTOM PER-BLOCK COLOR PICKER ============================= */
+/* Same HTML/CSS/JS component on every device, so it looks & behaves identically on
+   mobile and desktop — including a working eyedropper wherever the browser supports it. */
+const bpOverlay = document.getElementById('blockPickerOverlay');
+const bpSquare = document.getElementById('bpSquare');
+const bpHue = document.getElementById('bpHue');
+const bpSwatchPreview = document.getElementById('bpSwatchPreview');
+const bpHexInput = document.getElementById('bpHexInput');
+const bpEyedrop = document.getElementById('bpEyedrop');
+const bpPresets = document.getElementById('bpPresets');
+const bpReset = document.getElementById('bpReset');
+const bpDone = document.getElementById('bpDone');
+const bpClose = document.getElementById('bpClose');
+const bpBlockLabel = document.getElementById('bpBlockLabel');
+
 let activeBlockKey = null;
+let bpState = { h:150, s:40, l:50 };
+
+if(!window.EyeDropper){ bpEyedrop.style.display = 'none'; }
 
 function blockKey(code, sessionIdx, day){
   return code + '__' + sessionIdx + '__' + day;
@@ -867,20 +998,115 @@ function resolveBlockColor(code, sessionIdx, day, colorMap){
   if(state.colorOverrides[code]) return state.colorOverrides[code];
   return colorMap[code];
 }
-function openBlockPicker(key, currentHex, clientX, clientY){
-  activeBlockKey = key;
-  blockPicker.style.left = Math.max(0,clientX)+'px';
-  blockPicker.style.top = Math.max(0,clientY)+'px';
-  blockPicker.value = currentHex && currentHex.length===7 ? currentHex : '#5c7360';
-  blockPicker.click();
+
+function drawBpSquare(){
+  const ctx = bpSquare.getContext('2d');
+  const w = bpSquare.width, h = bpSquare.height;
+  // horizontal = saturation (0-100), vertical = lightness (100 top -> 0 bottom)
+  const satGrad = ctx.createLinearGradient(0,0,w,0);
+  satGrad.addColorStop(0, hslToHex(bpState.h, 0, 50));
+  satGrad.addColorStop(1, hslToHex(bpState.h, 100, 50));
+  ctx.fillStyle = satGrad;
+  ctx.fillRect(0,0,w,h);
+  const lightGrad = ctx.createLinearGradient(0,0,0,h);
+  lightGrad.addColorStop(0, 'rgba(255,255,255,1)');
+  lightGrad.addColorStop(0.5, 'rgba(255,255,255,0)');
+  lightGrad.addColorStop(0.5, 'rgba(0,0,0,0)');
+  lightGrad.addColorStop(1, 'rgba(0,0,0,1)');
+  ctx.fillStyle = lightGrad;
+  ctx.fillRect(0,0,w,h);
 }
-blockPicker.addEventListener('input', ()=>{
-  if(!activeBlockKey) return;
-  state.sessionColorOverrides[activeBlockKey] = blockPicker.value;
-  renderOutput();
+
+function bpCurrentHex(){
+  return hslToHex(bpState.h, bpState.s, bpState.l);
+}
+
+function bpApplyLive(){
+  const hex = bpCurrentHex();
+  bpSwatchPreview.style.background = hex;
+  bpHexInput.value = hex;
+  if(activeBlockKey){
+    state.sessionColorOverrides[activeBlockKey] = hex;
+    renderOutput();
+  }
+}
+
+function bpSetFromHex(hex){
+  if(!isValidHex(hex)) return;
+  const hsl = hexToHsl(hex);
+  bpState = { h:hsl.h, s:hsl.s, l:hsl.l };
+  bpHue.value = Math.round(hsl.h);
+  drawBpSquare();
+  bpApplyLive();
+}
+
+let bpDragging = false;
+function bpSquarePick(clientX, clientY){
+  const rect = bpSquare.getBoundingClientRect();
+  const x = clamp(clientX - rect.left, 0, rect.width);
+  const y = clamp(clientY - rect.top, 0, rect.height);
+  bpState.s = (x / rect.width) * 100;
+  bpState.l = 100 - (y / rect.height) * 100;
+  bpApplyLive();
+}
+bpSquare.addEventListener('pointerdown', (e)=>{ bpDragging = true; bpSquarePick(e.clientX, e.clientY); });
+window.addEventListener('pointermove', (e)=>{ if(bpDragging) bpSquarePick(e.clientX, e.clientY); });
+window.addEventListener('pointerup', ()=>{ bpDragging = false; });
+
+bpHue.addEventListener('input', ()=>{
+  bpState.h = parseFloat(bpHue.value);
+  drawBpSquare();
+  bpApplyLive();
 });
-blockPicker.addEventListener('change', ()=>{
-  if(activeBlockKey) showToast('That block now has its own color — click it again to change or reset below.');
+
+bpHexInput.addEventListener('change', ()=>{
+  let v = bpHexInput.value.trim();
+  if(v && v[0] !== '#') v = '#' + v;
+  if(isValidHex(v)) bpSetFromHex(v);
+  else bpHexInput.value = bpCurrentHex();
+});
+
+bpEyedrop.addEventListener('click', async ()=>{
+  if(!window.EyeDropper) return;
+  try{
+    const ed = new EyeDropper();
+    const result = await ed.open();
+    if(result && result.sRGBHex) bpSetFromHex(result.sRGBHex);
+  }catch(err){ /* user cancelled the eyedropper — ignore */ }
+});
+
+function renderBpPresets(){
+  bpPresets.innerHTML = '';
+  PRESET_COLORS.forEach(c=>{
+    const s = document.createElement('div');
+    s.className = 'preset-swatch';
+    s.style.background = c;
+    s.addEventListener('click', ()=> bpSetFromHex(c));
+    bpPresets.appendChild(s);
+  });
+}
+renderBpPresets();
+
+function openBlockPicker(key, currentHex, label){
+  activeBlockKey = key;
+  bpBlockLabel.textContent = label || 'Color for this block';
+  bpSetFromHex(isValidHex(currentHex) ? currentHex : '#5c7360');
+  bpOverlay.classList.add('active');
+}
+function closeBlockPicker(){
+  bpOverlay.classList.remove('active');
+  activeBlockKey = null;
+}
+bpClose.addEventListener('click', closeBlockPicker);
+bpDone.addEventListener('click', closeBlockPicker);
+bpOverlay.addEventListener('click', (e)=>{ if(e.target === bpOverlay) closeBlockPicker(); });
+bpReset.addEventListener('click', ()=>{
+  if(activeBlockKey){
+    delete state.sessionColorOverrides[activeBlockKey];
+    renderOutput();
+  }
+  closeBlockPicker();
+  showToast('Block color reset to the generated palette.');
 });
 
 /* ============================= STEP 3: OUTPUT RENDER ============================= */
@@ -964,9 +1190,12 @@ function renderWeeklyGrid(subjects, colorMap){
   container.style.position = 'relative';
   const totalSlots = (maxTime-minTime)/30;
   const isNarrow = window.innerWidth <= 480;
-  const timeColWidth = isNarrow ? 42 : 56;
-  const minColWidth = isNarrow ? 62 : 90;
-  container.style.gridTemplateColumns = `${timeColWidth}px repeat(${days.length}, minmax(${minColWidth}px,1fr))`;
+  const timeColWidth = isNarrow ? 30 : 56;
+  // On narrow screens, drop the enforced per-column minimum entirely so columns compress
+  // to fit the actual viewport — no horizontal swiping needed.
+  container.style.gridTemplateColumns = isNarrow
+    ? `${timeColWidth}px repeat(${days.length}, 1fr)`
+    : `${timeColWidth}px repeat(${days.length}, minmax(90px,1fr))`;
   container.style.gridTemplateRows = `44px repeat(${totalSlots}, 30px)`;
 
   const corner = document.createElement('div');
@@ -976,7 +1205,7 @@ function renderWeeklyGrid(subjects, colorMap){
   days.forEach((d,i)=>{
     const el = document.createElement('div');
     el.className = 'day-header' + (d===TODAY_KEY ? ' today':'');
-    el.textContent = d;
+    el.textContent = isNarrow ? d.slice(0,1) : d;
     el.style.gridColumn = i+2; el.style.gridRow = 1;
     container.appendChild(el);
   });
@@ -1019,11 +1248,11 @@ function renderWeeklyGrid(subjects, colorMap){
         block.style.gridRow = `${2+startSlot} / ${2+endSlot}`;
         block.style.background = bg;
         block.style.color = textColorFor(bg);
-        block.title = 'Click to give just this block its own color';
+        block.title = 'Tap to give just this block its own color';
         block.innerHTML = `<div class="sb-code">${icon}${sub.code}</div><div class="sb-title">${sub.title}</div><div class="sb-meta">${ses.room||'TBA'} · ${formatTime(ses.start)}–${formatTime(ses.end)}</div>`;
         block.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, e.clientX, e.clientY);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
         });
         container.appendChild(block);
         createdBlocks.push(block);
@@ -1078,12 +1307,12 @@ function renderAgendaList(subjects, colorMap){
       item.style.background = bg;
       item.style.borderLeftColor = textColorFor(bg)==='#ffffff' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.35)';
       item.style.color = textColorFor(bg);
-      item.title = 'Click to give just this session its own color';
+      item.title = 'Tap to give just this session its own color';
       item.innerHTML = `<span class="agenda-time">${formatTimeFull(ses.start)}–${formatTimeFull(ses.end)}</span>
         <span class="agenda-info"><span class="agenda-code">${icon}${sub.code}</span> — <span class="agenda-title">${sub.title}</span><br/><span class="agenda-room">${ses.room||'TBA'}</span></span>`;
       item.addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(key, bg, e.clientX, e.clientY);
+        openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
       });
       dayBlock.appendChild(item);
     });
@@ -1106,10 +1335,10 @@ function renderCompactTable(subjects, colorMap){
       tr.style.background = bg+'22';
       tr.innerHTML = `<td style="border-left-color:${bg};">${icon}${sub.code}</td><td>${sub.title}</td><td colspan="3">TBA</td><td>${sub.units||'—'}</td>`;
       tr.querySelector('td').style.cursor='pointer';
-      tr.querySelector('td').title = 'Click to color this row';
+      tr.querySelector('td').title = 'Tap to color this row';
       tr.querySelector('td').addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, e.clientX, e.clientY);
+        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, `${sub.code} · TBA`);
       });
       table.appendChild(tr);
       return;
@@ -1130,10 +1359,10 @@ function renderCompactTable(subjects, colorMap){
           <td>${showLabel ? (sub.units||'—') : ''}</td>`;
         const firstCell = tr.querySelector('td');
         firstCell.style.cursor='pointer';
-        firstCell.title = 'Click to give just this row its own color';
+        firstCell.title = 'Tap to give just this row its own color';
         firstCell.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, e.clientX, e.clientY);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
         });
         table.appendChild(tr);
       });
@@ -1164,13 +1393,57 @@ function renderLegend(subjects, colorMap){
   });
   const hint = document.createElement('div');
   hint.className = 'legend-hint';
-  hint.textContent = 'Tip: the dot here sets the whole subject\'s color. To recolor just one specific session (like a single Friday block), click that block directly in the preview above.';
+  hint.textContent = 'Tip: the dot here sets the whole subject\'s color. To recolor just one specific session (like a single Friday block), tap that block directly in the preview above.';
   legend.appendChild(hint);
 }
 
 /* ============================= DOWNLOAD ============================= */
+function openImagePreview(dataUrl){
+  document.getElementById('imgPreviewImg').src = dataUrl;
+  document.getElementById('imgPreviewOverlay').classList.add('active');
+}
+document.getElementById('imgPreviewClose').addEventListener('click', ()=>{
+  document.getElementById('imgPreviewOverlay').classList.remove('active');
+});
+
+async function deliverImage(canvas, filename){
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  canvas.toBlob(async (blob)=>{
+    if(!blob){ showToast("Couldn't generate the image — please try again."); return; }
+
+    if(isMobile && navigator.share){
+      try{
+        const file = new File([blob], filename, {type:'image/png'});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({ files:[file], title:'My Schedule' });
+          showToast('Choose "Save Image" in the share menu to add it to your gallery.');
+          return;
+        }
+      }catch(err){
+        if(err && err.name === 'AbortError') return; // user cancelled the share sheet — do nothing
+        // otherwise fall through to the long-press fallback below
+      }
+    }
+
+    if(isMobile){
+      openImagePreview(canvas.toDataURL('image/png'));
+      return;
+    }
+
+    // Desktop: normal browser download
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToast('Downloaded! Check your downloads folder.');
+  }, 'image/png');
+}
+
 document.getElementById('downloadBtn').addEventListener('click', ()=>{
   const btn = document.getElementById('downloadBtn');
+  // Only capture the schedule itself — not the legend/tips below it.
   const target = document.getElementById('exportArea');
   const gridWrap = target.querySelector('.grid-wrap');
   const scheduleGridEl = document.getElementById('scheduleGrid');
@@ -1206,14 +1479,8 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
     windowWidth: fullWidth,
     windowHeight: fullHeight
   }).then(canvas=>{
-    const link = document.createElement('a');
     const stamp = new Date().toISOString().slice(0,10);
-    link.download = `my-schedule-${state.theme}-${stamp}.png`;
-    link.href = canvas.toDataURL('image/png');
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    showToast('Downloaded! Check your downloads folder.');
+    return deliverImage(canvas, `my-schedule-${state.theme}-${stamp}.png`);
   }).catch(()=>{
     showToast("Couldn't generate the image — try again, or try a different browser.");
   }).finally(()=>{
