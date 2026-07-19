@@ -1582,17 +1582,28 @@ body.dark-mode .gallery {
     font-size: 0.9rem;
   }
 
-  /* Search bar (home page) drops to its own full-width row */
+  /* Search bar (home page) drops to its own full-width row, contained
+     so the input + button never run wider than the screen */
   .search-bar {
     order: 2;
     margin-left: 0 !important;    /* was -500px on desktop */
     flex: 1 1 100%;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 4px;
     justify-content: center;
   }
 
   .search-bar input {
-    width: 70%;
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;                  /* allow it to actually shrink inside flex */
+  }
+
+  .search-bar button {
+    flex-shrink: 0;                /* keep the search icon fully visible */
+    padding: 10px 16px;
   }
 
   .header-controls {
@@ -1611,6 +1622,32 @@ body.dark-mode .gallery {
   .btn-call {
     padding: 8px 10px;
   }
+
+  /* The toggle inherited a thick border + full padding from an earlier
+     desktop-only rule for this same class - shrink it so it doesn't
+     dominate the header row on phones */
+  .dark-mode-toggle {
+    padding: 5px 8px;
+    border-width: 1px;
+    gap: 6px;
+  }
+  .toggle-track {
+    width: 42px;
+    height: 22px;
+  }
+  .toggle-thumb {
+    width: 18px;
+    height: 18px;
+  }
+  body.dark-mode .toggle-thumb {
+    left: calc(100% - 20px);
+  }
+
+  /* Prevent the desktop "push to far right" offset from shoving the
+     profile icon partly off-screen once controls wrap on mobile */
+  .profile-user {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1618,7 +1655,7 @@ body.dark-mode .gallery {
     display: none;                /* icon-only dark mode switch on small phones */
   }
   .dark-mode-toggle {
-    padding: 8px;
+    padding: 6px;
   }
   .nav {
     gap: 0.6rem 0.9rem;
