@@ -106,6 +106,12 @@
 
     .nav-links a:hover { color: #ffffff; }
 
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -797,8 +803,11 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
 
+      nav { padding-right: 4vw; }
+      .nav-controls { gap: 0.9rem; }
+
       .hero {
-        padding-top: 5rem;
+        padding-top: 7rem;
         gap: 2rem;
       }
 
@@ -823,16 +832,16 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">Bea Christina Cale</a>
-  <div style="display:flex; align-items:center; gap:2.5rem;">
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
-      <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-    </button>
+  <div class="nav-controls">
     <ul class="nav-links">
       <li><a href="#education">Education</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+      <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -853,6 +862,7 @@
     <p class="hero-desc">3rd Year BS Information Technology student at Ateneo de Davao University — passionate about building thoughtful digital experiences.</p>
     <div class="hero-cta-row">
       <a href="#projects" class="hero-cta">View My Work</a>
+      <a href="Bea_Christina_Cale_Resume.pdf" target="_blank" rel="noopener" class="hero-cta hero-cta-outline">View Resume</a>
       <a href="Bea_Christina_Cale_Resume.pdf" download class="hero-cta hero-cta-outline">Download Resume</a>
     </div>
   </div>
