@@ -921,10 +921,11 @@
       <p class="project-desc">A visually-driven image board web application inspired by Pinterest, featuring a masonry grid layout, pinning functionality, and a clean responsive UI.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
-    <div class="project-card reveal">
-      <span class="project-tag">Major Subject</span>
-      <div class="project-name">IT Major Sub-Projects</div>
-      <p class="project-desc">A series of hands-on sub-projects across major IT subjects covering logic design, data structures, and systems analysis.</p>
+    <div class="project-card clickable reveal" onclick="openEvidence('nmap-visualizer')">
+      <span class="project-tag">Web Development · Data Viz</span>
+      <div class="project-name">Nmap Visualizer &amp; Log Analyzer</div>
+      <p class="project-desc">A frontend dashboard that turns raw Nmap scan output into an interactive executive dashboard — a force-directed network map, risk-scored host table, and live filtering, built with React, Recharts, and vis.js.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card reveal">
       <span class="project-tag">Web Development · AI</span>
@@ -1197,6 +1198,25 @@
           <img src="marketing-threshold-3.png" alt="Supplier Form screen"/>
           <div class="evidence-caption">Supplier Form</div>
         </div>
+      </div>
+    </div>
+
+    <div id="evidence-nmap-visualizer" class="evidence-panel">
+      <span class="evidence-tag">Web Development · Data Viz</span>
+      <div class="evidence-title">Nmap Visualizer &amp; Log Analyzer</div>
+      <p class="evidence-desc">A frontend dashboard built to take raw, complex network scan data and make it actually readable. Drop in an Nmap XML (<code>-oX</code>) or JSON scan log and it's parsed entirely client-side — no backend — into an interactive executive dashboard: a force-directed network map (vis.js) clustering hosts by risk level, Recharts breakdowns of top open ports and risk distribution, live search/filter/sort across the host table, and a detail drawer with full port and service data per host. Built in React, with a <code>react-window</code>-virtualized table and memoized filtering/sorting so large scans stay smooth instead of re-rendering the whole page on every keystroke. No sample data on hand? Use the "Load sample scan" button inside the demo to populate it with a synthetic ~40-host subnet scan. Try it live below, or open it full-screen.</p>
+      <div class="evidence-demo-bar">
+        <a href="projects/nmap-visualizer/index.html" target="_blank" class="demo-btn">Open Full Demo ↗</a>
+        <a href="https://github.com/beealat/beacale.portfolio/tree/main/projects/nmap-visualizer" target="_blank" class="code-btn">View Code on GitHub ↗</a>
+        <span class="evidence-demo-note">Frontend-only demo — parsing happens in your browser, nothing is uploaded or saved.</span>
+      </div>
+      <div class="evidence-demo-wrap">
+        <iframe src="projects/nmap-visualizer/index.html" title="Nmap Visualizer live demo" loading="lazy"></iframe>
+      </div>
+      <p class="evidence-desc" style="margin-bottom:0.9rem;">Screenshots — dashboard view and host detail drawer:</p>
+      <div class="evidence-gallery">
+        <div><img src="assets/nmap-visualizer-screenshots/nmap-dashboard-1.png" alt="Nmap Visualizer dashboard with sample scan loaded"/></div>
+        <div><img src="assets/nmap-visualizer-screenshots/nmap-dashboard-2.png" alt="Nmap Visualizer host detail drawer open"/></div>
       </div>
     </div>
 
