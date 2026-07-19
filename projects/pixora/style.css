@@ -1615,12 +1615,28 @@ body.dark-mode .gallery {
     width: 100%;
   }
 
-  /* Keep the call button compact on mobile */
+  /* Keep the call button compact and edge-safe on mobile */
   .btn-call span {
     display: none;
   }
   .btn-call {
-    padding: 8px 10px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .profile-img,
+  .profile-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header-controls {
+    padding-right: 6px;             /* keep the last icon off the very edge */
   }
 
   /* The toggle inherited a thick border + full padding from an earlier
@@ -1783,17 +1799,20 @@ body.dark-mode .gallery {
   }
 }
 
-/* ---------- Floating buttons: keep them from crowding on small screens ---------- */
-@media (max-width: 480px) {
+/* ---------- Floating buttons: smaller, off the edge, not overlapping ---------- */
+@media (max-width: 600px) {
   .fab-btn {
-    bottom: 24px;
-    right: 12px;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    bottom: 20px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
   }
   .scroll-up-btn {
-    bottom: 84px;
-    right: 12px;
+    bottom: 74px;               /* clear gap above the fab button */
+    right: 20px;
+    width: 26px;
+    height: 26px;
+    font-size: 0.95rem;
   }
 }
