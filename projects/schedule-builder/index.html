@@ -255,6 +255,12 @@
 
   .result-actions{ display:flex; gap:.7rem; flex-wrap:wrap; margin-top:1.4rem; align-items:center; }
 
+  .wallpaper-toggle{
+    display:flex; align-items:center; gap:.5rem; margin-top:.9rem; font-size:.78rem; color:var(--muted);
+    cursor:pointer; user-select:none;
+  }
+  .wallpaper-toggle input{ accent-color:var(--accent); width:15px; height:15px; cursor:pointer; flex-shrink:0; }
+
   .scroll-hint{ display:none; font-size:.7rem; color:var(--muted); margin-top:.5rem; text-align:center; }
 
   .toast{
@@ -453,6 +459,10 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
       <button class="btn secondary" id="backTo2">← Review</button>
       <button class="btn ghost" id="startOverBtn">Start Over</button>
     </div>
+    <label class="wallpaper-toggle" for="wallpaperMode">
+      <input type="checkbox" id="wallpaperMode" checked />
+      Add extra space top &amp; bottom so the download fits a phone lock screen
+    </label>
   </div>
 
   <footer class="credit">Built by Bea Christina Cale · a frontend-only demo, nothing you enter is saved</footer>
@@ -1549,6 +1559,26 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   const prevTargetWidth = target.style.width;
   target.style.width = (target.scrollWidth + 8) + 'px';
   restoreFns.push(()=>{ target.style.width = prevTargetWidth; });
+
+  // Optionally stretch the canvas into a tall, phone-wallpaper shape by adding
+  // extra breathing room above and below the schedule (not left/right — the
+  // width, and therefore the columns, stay exactly as designed).
+  const wallpaperMode = document.getElementById('wallpaperMode').checked;
+  if(wallpaperMode){
+    const targetRatio = 9/19.5; // typical phone screen, width/height
+    const currentWidth = target.scrollWidth;
+    const currentHeight = target.scrollHeight;
+    if(currentWidth / currentHeight > targetRatio){
+      const desiredHeight = currentWidth / targetRatio;
+      const extra = Math.min(desiredHeight - currentHeight, currentHeight * 2.5); // sane cap
+      const prevPaddingTop = target.style.paddingTop;
+      const prevPaddingBottom = target.style.paddingBottom;
+      const basePadding = parseFloat(getComputedStyle(target).paddingTop) || 0;
+      target.style.paddingTop = (basePadding + extra/2) + 'px';
+      target.style.paddingBottom = (basePadding + extra/2) + 'px';
+      restoreFns.push(()=>{ target.style.paddingTop = prevPaddingTop; target.style.paddingBottom = prevPaddingBottom; });
+    }
+  }
 
   const bg = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
   // Add a small buffer on top of measured scroll size — browsers can under-report
