@@ -292,53 +292,53 @@
 
   /* ── custom block color picker (identical on mobile & desktop) ── */
   .block-picker-overlay{
-    display:none; position:fixed; inset:0; background:rgba(20,20,20,0.55); z-index:250;
-    align-items:center; justify-content:center; padding:5vw;
+    display:none; position:fixed; inset:0; background:transparent; z-index:250;
   }
-  .block-picker-overlay.active{ display:flex; }
+  .block-picker-overlay.active{ display:block; }
   .block-picker-panel{
-    background:#ffffff; color:#20232b; width:100%; max-width:300px; border-radius:16px;
-    padding:1.2rem 1.2rem 1.4rem; box-shadow:0 20px 50px rgba(0,0,0,0.3); font-family:var(--font-body);
+    position:fixed; background:#ffffff; color:#20232b; width:210px; border-radius:12px;
+    padding:.8rem .8rem 1rem; box-shadow:0 10px 28px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.05);
+    font-family:var(--font-body);
   }
-  .bp-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; }
-  .bp-header span{ font-size:.82rem; font-weight:700; }
-  .bp-close{ background:none; border:none; font-size:1.2rem; line-height:1; cursor:pointer; color:#767676; padding:.2rem; }
-  #bpSquare{ width:100%; height:140px; border-radius:10px; cursor:crosshair; display:block; touch-action:none; }
+  .bp-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; gap:.4rem; }
+  .bp-header span{ font-size:.68rem; font-weight:700; line-height:1.3; }
+  .bp-close{ background:none; border:none; font-size:1rem; line-height:1; cursor:pointer; color:#767676; padding:.1rem; flex-shrink:0; }
+  #bpSquare{ width:100%; height:80px; border-radius:8px; cursor:crosshair; display:block; touch-action:none; }
   .bp-hue-slider{
-    width:100%; margin-top:.7rem; -webkit-appearance:none; height:14px; border-radius:999px;
+    width:100%; margin-top:.5rem; -webkit-appearance:none; height:10px; border-radius:999px;
     background:linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
     touch-action:none;
   }
   .bp-hue-slider::-webkit-slider-thumb{
-    -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:#fff;
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:#fff;
     border:2px solid #333; box-shadow:0 1px 4px rgba(0,0,0,0.3); cursor:pointer;
   }
   .bp-hue-slider::-moz-range-thumb{
-    width:20px; height:20px; border-radius:50%; background:#fff; border:2px solid #333; cursor:pointer;
+    width:16px; height:16px; border-radius:50%; background:#fff; border:2px solid #333; cursor:pointer;
   }
-  .bp-row{ display:flex; align-items:center; gap:.6rem; margin-top:.9rem; }
-  .bp-swatch{ width:32px; height:32px; border-radius:50%; border:2px solid #eee; flex-shrink:0; }
+  .bp-row{ display:flex; align-items:center; gap:.4rem; margin-top:.5rem; }
+  .bp-swatch{ width:24px; height:24px; border-radius:50%; border:2px solid #eee; flex-shrink:0; }
   .bp-row input[type="text"]{
-    flex:1; border:1px solid #e4e4e4; border-radius:8px; padding:.5rem .6rem; font-size:.82rem;
+    flex:1; min-width:0; border:1px solid #e4e4e4; border-radius:6px; padding:.35rem .45rem; font-size:.72rem;
     font-family:'Space Grotesk',monospace; color:#20232b; text-transform:uppercase;
   }
   .bp-eyedrop{
-    background:#f2f2f2; border:1px solid #e4e4e4; border-radius:8px; width:36px; height:36px;
-    font-size:1rem; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:#f2f2f2; border:1px solid #e4e4e4; border-radius:6px; width:28px; height:28px;
+    font-size:.85rem; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
   }
   .bp-eyedrop:hover{ background:#e9e9e9; }
-  .bp-presets{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
-  .bp-presets .preset-swatch{ width:24px; height:24px; }
-  .bp-label-section{ margin-top:1rem; padding-top:.9rem; border-top:1px solid #eee; }
-  .bp-label-title{ font-size:.7rem; color:#767676; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:.5rem; }
-  .bp-label-row{ display:flex; gap:.5rem; }
+  .bp-presets{ display:flex; gap:.35rem; flex-wrap:wrap; margin-top:.5rem; }
+  .bp-presets .preset-swatch{ width:18px; height:18px; }
+  .bp-label-section{ margin-top:.6rem; padding-top:.6rem; border-top:1px solid #eee; }
+  .bp-label-title{ font-size:.6rem; color:#767676; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:.35rem; }
+  .bp-label-row{ display:flex; flex-direction:column; gap:.4rem; }
   .bp-label-row input[type="text"]{
-    flex:1; border:1px solid #e4e4e4; border-radius:8px; padding:.5rem .6rem; font-size:.8rem;
+    width:100%; border:1px solid #e4e4e4; border-radius:6px; padding:.4rem .5rem; font-size:.72rem;
     font-family:var(--font-body); color:#20232b;
   }
-  .bp-initials-btn{ padding:.5rem .7rem; font-size:.72rem; white-space:nowrap; }
-  .bp-actions{ display:flex; gap:.6rem; margin-top:1.1rem; }
-  .bp-actions .btn{ flex:1; text-align:center; padding:.6rem .8rem; font-size:.78rem; }
+  .bp-initials-btn{ padding:.35rem .6rem; font-size:.64rem; white-space:nowrap; align-self:flex-start; }
+  .bp-actions{ display:flex; gap:.4rem; margin-top:.7rem; }
+  .bp-actions .btn{ flex:1; text-align:center; padding:.4rem .5rem; font-size:.68rem; }
 
   @media(max-width:640px){
     .panel{padding:1.3rem;}
@@ -1124,8 +1124,23 @@ function renderBpPresets(){
 renderBpPresets();
 
 let activeBlockDefaultTitle = '';
+const bpPanel = document.querySelector('.block-picker-panel');
 
-function openBlockPicker(key, currentHex, label, defaultTitle){
+function positionBpPanel(clientX, clientY){
+  requestAnimationFrame(()=>{
+    const pw = bpPanel.offsetWidth;
+    const ph = bpPanel.offsetHeight;
+    const margin = 10;
+    let left = (clientX != null) ? clientX + 14 : (window.innerWidth - pw) / 2;
+    let top = (clientY != null) ? clientY - ph / 2 : (window.innerHeight - ph) / 2;
+    left = Math.min(Math.max(margin, left), window.innerWidth - pw - margin);
+    top = Math.min(Math.max(margin, top), window.innerHeight - ph - margin);
+    bpPanel.style.left = left + 'px';
+    bpPanel.style.top = top + 'px';
+  });
+}
+
+function openBlockPicker(key, currentHex, label, defaultTitle, clientX, clientY){
   activeBlockKey = key;
   activeBlockDefaultTitle = defaultTitle || '';
   bpBlockLabel.textContent = label || 'Color for this block';
@@ -1133,6 +1148,7 @@ function openBlockPicker(key, currentHex, label, defaultTitle){
   bpLabelInput.value = state.sessionLabelOverrides[key] || '';
   bpLabelInput.placeholder = activeBlockDefaultTitle || 'Full title';
   bpOverlay.classList.add('active');
+  positionBpPanel(clientX, clientY);
 }
 function closeBlockPicker(){
   bpOverlay.classList.remove('active');
@@ -1258,6 +1274,10 @@ function renderWeeklyGrid(subjects, colorMap, opts){
     ? `${timeColWidth}px repeat(${days.length}, 1fr)`
     : `${timeColWidth}px repeat(${days.length}, minmax(90px,1fr))`;
   container.style.gridTemplateRows = `44px repeat(${totalSlots}, 30px)`;
+  // Give the right edge (last day column's border) a little breathing room so it never
+  // gets clipped when the image is captured/downloaded.
+  container.style.paddingRight = opts.forceWide ? '14px' : '';
+  container.style.boxSizing = 'border-box';
 
   const corner = document.createElement('div');
   corner.className='grid-corner'; corner.style.gridColumn='1'; corner.style.gridRow='1';
@@ -1314,7 +1334,7 @@ function renderWeeklyGrid(subjects, colorMap, opts){
         block.innerHTML = `<div class="sb-code">${icon}${sub.code}</div><div class="sb-title">${escapeHtml(displayLabel)}</div><div class="sb-meta">${ses.room||'TBA'} · ${formatTime(ses.start)}–${formatTime(ses.end)}</div>`;
         block.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title, e.clientX, e.clientY);
         });
         container.appendChild(block);
         createdBlocks.push(block);
@@ -1375,7 +1395,7 @@ function renderAgendaList(subjects, colorMap){
         <span class="agenda-info"><span class="agenda-code">${icon}${sub.code}</span> — <span class="agenda-title">${escapeHtml(agendaLabel)}</span><br/><span class="agenda-room">${ses.room||'TBA'}</span></span>`;
       item.addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
+        openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title, e.clientX, e.clientY);
       });
       dayBlock.appendChild(item);
     });
@@ -1401,7 +1421,7 @@ function renderCompactTable(subjects, colorMap){
       tr.querySelector('td').title = 'Tap to color this row';
       tr.querySelector('td').addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, `${sub.code} · TBA`, sub.title);
+        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, `${sub.code} · TBA`, sub.title, e.clientX, e.clientY);
       });
       table.appendChild(tr);
       return;
@@ -1425,7 +1445,7 @@ function renderCompactTable(subjects, colorMap){
         firstCell.title = 'Tap to give just this row its own color';
         firstCell.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title, e.clientX, e.clientY);
         });
         table.appendChild(tr);
       });
