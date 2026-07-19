@@ -180,7 +180,7 @@
   .live-preview-wrap{ margin-top:1.6rem; }
   #exportArea{ background:var(--surface); border-radius:var(--radius); padding:1.2rem; }
 
-  .grid-wrap{ overflow-x:auto; border-radius:var(--radius); }
+  .grid-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:var(--radius); }
   .schedule-grid{
     display:grid; position:relative; background:var(--surface);
     border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; min-width:640px;
@@ -254,6 +254,8 @@
   .cal-empty{ text-align:center; padding:2.5rem 1rem; color:var(--muted); font-style:italic; font-size:.85rem; }
 
   .result-actions{ display:flex; gap:.7rem; flex-wrap:wrap; margin-top:1.4rem; align-items:center; }
+
+  .scroll-hint{ display:none; font-size:.7rem; color:var(--muted); margin-top:.5rem; text-align:center; }
 
   .toast{
     position:fixed; bottom:1.4rem; left:50%; transform:translateX(-50%) translateY(20px);
@@ -350,14 +352,8 @@
   }
   @media(max-width:480px){
     body{ padding:2.5vh 4vw 5vh; }
-    .schedule-grid{ min-width:0; width:100%; }
-    .grid-wrap{ overflow-x:visible; }
-    .day-header{ font-size:.6rem; }
-    .time-label{ font-size:.54rem; padding-right:.25rem; }
-    .subject-block{ font-size:.58rem; padding:2px 3px; margin:2px 2px; }
-    .sb-code{ font-size:.6rem; }
-    .sb-title{ font-size:.52rem; }
-    .sb-meta{ font-size:.48rem; }
+    #exportArea{ padding:.9rem; }
+    .scroll-hint{ display:block; }
     .color-wheel-wrap{ width:150px; height:150px; }
     .lightness-row{ width:150px; }
   }
@@ -447,6 +443,7 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
         <div class="agenda-wrap hidden" id="agendaOutput"></div>
         <div style="overflow-x:auto;"><table class="compact hidden" id="compactTable"></table></div>
       </div>
+      <div class="scroll-hint" id="scrollHint">← swipe to see the full week →</div>
       <div class="legend" id="legend"></div>
     </div>
 
@@ -1185,6 +1182,14 @@ bpInitialsBtn.addEventListener('click', ()=>{
 /* ============================= STEP 3: OUTPUT RENDER ============================= */
 const DAY_ORDER = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const TODAY_KEY = DAY_ORDER[[6,0,1,2,3,4,5][new Date().getDay()]];
+// Fixed spacing used everywhere — live preview (mobile & desktop) and the downloaded
+// image all render at these same comfortable proportions. Narrow screens get a
+// horizontally-scrollable grid (see .grid-wrap{overflow-x:auto}) instead of squeezed columns.
+const GRID_TIME_COL_WIDTH = 56;
+const GRID_DAY_COL_MIN = 108;
+const GRID_RIGHT_PAD = 22; // extra breathing room so the last column's border is never clipped
+
+document.getElementById('scrollHint').style.display = '';
 
 function buildColorMap(subjects){
   const palette = makePalette(state.accent, Math.max(subjects.length,1), state.theme);
@@ -1203,6 +1208,7 @@ function renderOutput(){
   document.getElementById('scheduleGrid').parentElement.classList.toggle('hidden', state.layout!=='grid');
   document.getElementById('agendaOutput').classList.toggle('hidden', state.layout!=='agenda');
   document.getElementById('compactTable').classList.toggle('hidden', state.layout!=='compact');
+  document.getElementById('scrollHint').classList.toggle('hidden', state.layout!=='grid');
 
   if(!subjects.length){
     document.getElementById('scheduleGrid').innerHTML = '<div class="cal-empty">Nothing to preview yet.</div>';
@@ -1243,8 +1249,7 @@ function fitBlockContent(block){
   }
 }
 
-function renderWeeklyGrid(subjects, colorMap, opts){
-  opts = opts || {};
+function renderWeeklyGrid(subjects, colorMap){
   let usedDays = new Set(); let minTime = 24*60, maxTime = 0;
   subjects.forEach(s=>s.sessions.forEach(ses=>{
     ses.days.forEach(d=>usedDays.add(d));
@@ -1263,20 +1268,15 @@ function renderWeeklyGrid(subjects, colorMap, opts){
   container.innerHTML = '';
   container.style.position = 'relative';
   const totalSlots = (maxTime-minTime)/30;
-  // forceWide is used only when preparing the downloadable image: always render at
-  // comfortable desktop spacing so the exported picture never looks squeezed,
-  // regardless of what device requested the download.
-  const isNarrow = opts.forceWide ? false : (window.innerWidth <= 480);
-  const timeColWidth = isNarrow ? 30 : 56;
-  // On narrow screens, drop the enforced per-column minimum entirely so columns compress
-  // to fit the actual viewport — no horizontal swiping needed.
-  container.style.gridTemplateColumns = isNarrow
-    ? `${timeColWidth}px repeat(${days.length}, 1fr)`
-    : `${timeColWidth}px repeat(${days.length}, minmax(90px,1fr))`;
+  // Same fixed, comfortable spacing on every device — the grid-wrap scrolls
+  // horizontally on narrow screens instead of squeezing columns down.
+  const timeColWidth = GRID_TIME_COL_WIDTH;
+  container.style.gridTemplateColumns = `${timeColWidth}px repeat(${days.length}, minmax(${GRID_DAY_COL_MIN}px,1fr))`;
   container.style.gridTemplateRows = `44px repeat(${totalSlots}, 30px)`;
-  // Give the right edge (last day column's border) a little breathing room so it never
-  // gets clipped when the image is captured/downloaded.
-  container.style.paddingRight = opts.forceWide ? '14px' : '';
+  // Extra right padding + a right border on the last day column so the outer edge
+  // of the grid is never visually clipped, whether on screen or in the exported image.
+  container.style.paddingRight = GRID_RIGHT_PAD + 'px';
+  container.style.borderRight = '1px solid var(--border)';
   container.style.boxSizing = 'border-box';
 
   const corner = document.createElement('div');
@@ -1286,7 +1286,7 @@ function renderWeeklyGrid(subjects, colorMap, opts){
   days.forEach((d,i)=>{
     const el = document.createElement('div');
     el.className = 'day-header' + (d===TODAY_KEY ? ' today':'');
-    el.textContent = isNarrow ? d.slice(0,1) : d;
+    el.textContent = d.toUpperCase();
     el.style.gridColumn = i+2; el.style.gridRow = 1;
     container.appendChild(el);
   });
@@ -1534,34 +1534,28 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   btn.disabled = true;
   btn.textContent = 'Preparing image…';
 
-  // Re-render the weekly grid at full desktop spacing just for the capture, so the
-  // downloaded image always looks spacious and readable — never squeezed to phone width.
-  const wasGridLayout = state.layout === 'grid';
-  if(wasGridLayout && state.subjects.length){
-    const colorMap = buildColorMap(state.subjects);
-    renderWeeklyGrid(state.subjects, colorMap, {forceWide:true});
-  }
-
   // Temporarily un-clip anything that scrolls (the weekly grid on narrow screens)
-  // so the exported image contains the FULL schedule, not just the visible slice.
+  // so the exported image contains the FULL schedule, not just the visible slice —
+  // and add a little extra buffer width so the last column's border is never cropped.
   const restoreFns = [];
   if(gridWrap){
     const prevOverflow = gridWrap.style.overflow;
     const prevWidth = gridWrap.style.width;
-    const fullWidth = scheduleGridEl.scrollWidth;
+    const fullWidth = scheduleGridEl.scrollWidth + 4;
     gridWrap.style.overflow = 'visible';
     gridWrap.style.width = fullWidth + 'px';
     restoreFns.push(()=>{ gridWrap.style.overflow = prevOverflow; gridWrap.style.width = prevWidth; });
   }
   const prevTargetWidth = target.style.width;
-  target.style.width = target.scrollWidth + 'px';
+  target.style.width = (target.scrollWidth + 8) + 'px';
   restoreFns.push(()=>{ target.style.width = prevTargetWidth; });
-  // Put the live preview back to its normal (device-appropriate) rendering once we're done.
-  restoreFns.push(()=>{ if(wasGridLayout) renderOutput(); });
 
   const bg = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
-  const fullWidth = target.scrollWidth;
-  const fullHeight = target.scrollHeight;
+  // Add a small buffer on top of measured scroll size — browsers can under-report
+  // scrollWidth by a pixel or two when content overflows a padded box, which is
+  // exactly what was clipping the right-hand border in the exported image.
+  const fullWidth = target.scrollWidth + 10;
+  const fullHeight = target.scrollHeight + 4;
 
   html2canvas(target, {
     backgroundColor: bg,
