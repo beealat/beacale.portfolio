@@ -1552,24 +1552,28 @@ body.dark-mode .gallery {
 /* ---------- Header / Logo / Search / Nav / Controls ---------- */
 @media (max-width: 900px) {
   header {
-    padding: 12px 16px !important; /* was 15px 60px - too wide for phones */
+    padding: 10px 14px !important; /* was 15px 60px - too wide for phones */
   }
 
   .header .container,
   .header-container {
     flex-wrap: wrap;              /* let rows drop instead of overflowing */
-    row-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    row-gap: 8px;
+    column-gap: 8px;
   }
 
   .logo {
     margin-left: 0;               /* remove desktop negative offset */
+    order: 0;
   }
 
-  /* Nav becomes a full-width, centered, wrapping row under the logo */
+  /* Nav drops to its own full-width row under everything else */
   .nav {
     position: static;             /* was absolute + centered, breaks on mobile */
     transform: none;
-    order: 3;
+    order: 5;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -1582,96 +1586,89 @@ body.dark-mode .gallery {
     font-size: 0.9rem;
   }
 
-  /* Search bar (home page) drops to its own full-width row, contained
-     so the input + button never run wider than the screen */
+  /* header-controls is just a wrapper div on desktop; on mobile we
+     "unwrap" it so the toggle / call button / profile become their own
+     flex items and can sit on either side of the search bar */
+  .header-controls {
+    display: contents;
+  }
+
+  .dark-mode-toggle {
+    order: 1;
+    padding: 4px 7px;
+    border-width: 1px;
+    gap: 4px;
+  }
+  .toggle-track {
+    width: 34px;
+    height: 19px;
+  }
+  .toggle-thumb {
+    width: 15px;
+    height: 15px;
+  }
+  body.dark-mode .toggle-thumb {
+    left: calc(100% - 17px);
+  }
+  .toggle-label {
+    display: none;                /* icon-only toggle, saves room for the search bar */
+  }
+
+  /* Compact search bar, sized to sit between the toggle and call icon
+     on the same row instead of taking its own full-width row */
   .search-bar {
     order: 2;
     margin-left: 0 !important;    /* was -500px on desktop */
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    padding: 0 4px;
-    justify-content: center;
+    flex: 0 1 auto;
+    width: auto;
   }
 
   .search-bar input {
-    width: auto;
-    flex: 1 1 auto;
-    min-width: 0;                  /* allow it to actually shrink inside flex */
+    width: 34vw;
+    max-width: 130px;
+    min-width: 70px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .search-bar input::placeholder {
+    font-size: 0.7rem;
   }
 
   .search-bar button {
-    flex-shrink: 0;                /* keep the search icon fully visible */
-    padding: 10px 16px;
-  }
-
-  .header-controls {
-    order: 1;
-    margin-left: 0;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
+    padding: 6px 10px;
+    flex-shrink: 0;
   }
 
   /* Keep the call button compact and edge-safe on mobile */
-  .btn-call span {
-    display: none;
-  }
   .btn-call {
-    width: 34px;
-    height: 34px;
+    order: 3;
+    width: 30px;
+    height: 30px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
   }
+  .btn-call span {
+    display: none;
+  }
 
+  .profile-user {
+    order: 4;
+    margin-left: 0;
+  }
   .profile-img,
   .profile-icon {
-    width: 32px;
-    height: 32px;
-  }
-
-  .header-controls {
-    padding-right: 6px;             /* keep the last icon off the very edge */
-  }
-
-  /* The toggle inherited a thick border + full padding from an earlier
-     desktop-only rule for this same class - shrink it so it doesn't
-     dominate the header row on phones */
-  .dark-mode-toggle {
-    padding: 5px 8px;
-    border-width: 1px;
-    gap: 6px;
-  }
-  .toggle-track {
-    width: 42px;
-    height: 22px;
-  }
-  .toggle-thumb {
-    width: 18px;
-    height: 18px;
-  }
-  body.dark-mode .toggle-thumb {
-    left: calc(100% - 20px);
-  }
-
-  /* Prevent the desktop "push to far right" offset from shoving the
-     profile icon partly off-screen once controls wrap on mobile */
-  .profile-user {
-    margin-left: 0;
+    width: 28px;
+    height: 28px;
   }
 }
 
 @media (max-width: 480px) {
-  .toggle-label {
-    display: none;                /* icon-only dark mode switch on small phones */
-  }
   .dark-mode-toggle {
-    padding: 6px;
+    padding: 4px;
   }
   .nav {
     gap: 0.6rem 0.9rem;
@@ -1680,7 +1677,9 @@ body.dark-mode .gallery {
     font-size: 0.82rem;
   }
   .search-bar input {
-    width: 60%;
+    width: 26vw;
+    max-width: 90px;
+    min-width: 55px;
   }
 }
 
