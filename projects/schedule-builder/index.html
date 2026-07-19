@@ -180,7 +180,7 @@
   .live-preview-wrap{ margin-top:1.6rem; }
   #exportArea{ background:var(--surface); border-radius:var(--radius); padding:1.2rem; }
 
-  .grid-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:var(--radius); }
+  .grid-wrap{ overflow:hidden; border-radius:var(--radius); margin:0 auto; }
   .schedule-grid{
     display:grid; position:relative; background:var(--surface);
     border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; min-width:640px;
@@ -261,7 +261,6 @@
   }
   .wallpaper-toggle input{ accent-color:var(--accent); width:15px; height:15px; cursor:pointer; flex-shrink:0; }
 
-  .scroll-hint{ display:none; font-size:.7rem; color:var(--muted); margin-top:.5rem; text-align:center; }
 
   .toast{
     position:fixed; bottom:1.4rem; left:50%; transform:translateX(-50%) translateY(20px);
@@ -359,7 +358,6 @@
   @media(max-width:480px){
     body{ padding:2.5vh 4vw 5vh; }
     #exportArea{ padding:.9rem; }
-    .scroll-hint{ display:block; }
     .color-wheel-wrap{ width:150px; height:150px; }
     .lightness-row{ width:150px; }
   }
@@ -449,7 +447,6 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
         <div class="agenda-wrap hidden" id="agendaOutput"></div>
         <div style="overflow-x:auto;"><table class="compact hidden" id="compactTable"></table></div>
       </div>
-      <div class="scroll-hint" id="scrollHint">← swipe to see the full week →</div>
       <div class="legend" id="legend"></div>
     </div>
 
@@ -1192,14 +1189,13 @@ bpInitialsBtn.addEventListener('click', ()=>{
 /* ============================= STEP 3: OUTPUT RENDER ============================= */
 const DAY_ORDER = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const TODAY_KEY = DAY_ORDER[[6,0,1,2,3,4,5][new Date().getDay()]];
-// Fixed spacing used everywhere — live preview (mobile & desktop) and the downloaded
-// image all render at these same comfortable proportions. Narrow screens get a
-// horizontally-scrollable grid (see .grid-wrap{overflow-x:auto}) instead of squeezed columns.
+// Fixed spacing used everywhere — the grid is always built at these same comfortable
+// proportions (matching the download), then uniformly scaled down to fit narrow
+// screens via fitScheduleGridToContainer() so nothing needs to scroll or squeeze.
 const GRID_TIME_COL_WIDTH = 56;
 const GRID_DAY_COL_MIN = 108;
 const GRID_RIGHT_PAD = 22; // extra breathing room so the last column's border is never clipped
 
-document.getElementById('scrollHint').style.display = '';
 
 function buildColorMap(subjects){
   const palette = makePalette(state.accent, Math.max(subjects.length,1), state.theme);
@@ -1218,7 +1214,6 @@ function renderOutput(){
   document.getElementById('scheduleGrid').parentElement.classList.toggle('hidden', state.layout!=='grid');
   document.getElementById('agendaOutput').classList.toggle('hidden', state.layout!=='agenda');
   document.getElementById('compactTable').classList.toggle('hidden', state.layout!=='compact');
-  document.getElementById('scrollHint').classList.toggle('hidden', state.layout!=='grid');
 
   if(!subjects.length){
     document.getElementById('scheduleGrid').innerHTML = '<div class="cal-empty">Nothing to preview yet.</div>';
@@ -1234,6 +1229,35 @@ function renderOutput(){
 
   renderLegend(subjects, colorMap);
 }
+
+// Scales the whole weekly grid down uniformly (never up) so it always fits inside
+// its panel width — the same proportions as the full-size download, just shrunk to
+// fit, so nobody has to scroll or swipe sideways to see the rest of the week.
+function fitScheduleGridToContainer(){
+  if(state.layout !== 'grid') return;
+  const grid = document.getElementById('scheduleGrid');
+  const wrap = grid && grid.parentElement;
+  if(!grid || !wrap) return;
+  grid.style.transform = 'none';
+  wrap.style.width = '';
+  wrap.style.height = '';
+  const naturalWidth = grid.scrollWidth;
+  const naturalHeight = grid.scrollHeight;
+  const containerWidth = wrap.parentElement ? wrap.parentElement.clientWidth : wrap.clientWidth;
+  if(!naturalWidth || !containerWidth) return;
+  const scale = Math.min(1, containerWidth / naturalWidth);
+  if(scale < 0.999){
+    grid.style.transformOrigin = 'top left';
+    grid.style.transform = `scale(${scale})`;
+    wrap.style.width = Math.ceil(naturalWidth*scale) + 'px';
+    wrap.style.height = Math.ceil(naturalHeight*scale) + 'px';
+  }
+}
+let fitGridResizeTimer = null;
+window.addEventListener('resize', ()=>{
+  clearTimeout(fitGridResizeTimer);
+  fitGridResizeTimer = setTimeout(fitScheduleGridToContainer, 120);
+});
 
 function fitBlockContent(block){
   const titleEl = block.querySelector('.sb-title');
@@ -1277,9 +1301,13 @@ function renderWeeklyGrid(subjects, colorMap){
   const container = document.getElementById('scheduleGrid');
   container.innerHTML = '';
   container.style.position = 'relative';
+  container.style.transform = 'none';
+  container.style.transformOrigin = 'top left';
+  const gridWrapEl = container.parentElement;
+  if(gridWrapEl){ gridWrapEl.style.height = ''; gridWrapEl.style.width = ''; }
   const totalSlots = (maxTime-minTime)/30;
-  // Same fixed, comfortable spacing on every device — the grid-wrap scrolls
-  // horizontally on narrow screens instead of squeezing columns down.
+  // Same fixed, comfortable spacing on every device — narrow screens get the whole
+  // grid scaled down to fit (see fitScheduleGridToContainer), not squeezed columns.
   const timeColWidth = GRID_TIME_COL_WIDTH;
   container.style.gridTemplateColumns = `${timeColWidth}px repeat(${days.length}, minmax(${GRID_DAY_COL_MIN}px,1fr))`;
   container.style.gridTemplateRows = `44px repeat(${totalSlots}, 30px)`;
@@ -1351,9 +1379,12 @@ function renderWeeklyGrid(subjects, colorMap){
       });
     });
   });
-  // After layout, shrink any title that doesn't fully fit instead of cutting it off.
+  // After layout, shrink any title that doesn't fully fit instead of cutting it off,
+  // then scale the whole grid down (uniformly, same proportions as the download) so
+  // it always fits its container width — no horizontal scrolling needed on mobile.
   requestAnimationFrame(()=>{
     createdBlocks.forEach(block=>fitBlockContent(block));
+    requestAnimationFrame(()=>fitScheduleGridToContainer());
   });
 
   if(days.includes(TODAY_KEY)){
@@ -1549,12 +1580,18 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   // and add a little extra buffer width so the last column's border is never cropped.
   const restoreFns = [];
   if(gridWrap){
+    // The live preview may be scaled down to fit the panel (see fitScheduleGridToContainer) —
+    // undo that for the capture so the download is always full, natural size, then restore it.
     const prevOverflow = gridWrap.style.overflow;
-    const prevWidth = gridWrap.style.width;
-    const fullWidth = scheduleGridEl.scrollWidth + 4;
+    scheduleGridEl.style.transform = 'none';
     gridWrap.style.overflow = 'visible';
-    gridWrap.style.width = fullWidth + 'px';
-    restoreFns.push(()=>{ gridWrap.style.overflow = prevOverflow; gridWrap.style.width = prevWidth; });
+    const fullGridWidth = scheduleGridEl.scrollWidth + 4;
+    gridWrap.style.width = fullGridWidth + 'px';
+    gridWrap.style.height = '';
+    restoreFns.push(()=>{
+      gridWrap.style.overflow = prevOverflow;
+      fitScheduleGridToContainer(); // reapply the mobile fit-to-width scale
+    });
   }
   const prevTargetWidth = target.style.width;
   target.style.width = (target.scrollWidth + 8) + 'px';
