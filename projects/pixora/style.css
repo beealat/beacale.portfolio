@@ -1541,3 +1541,222 @@ body.dark-mode .gallery {
   object-fit: cover; /* Crop to fit */
   transition: transform 0.3s; /* Smooth zoom */
 }
+/* ======================================================================
+   MOBILE RESPONSIVE FIXES
+   Added so the site (header/nav/search, hero, categories, gallery,
+   interactive/upload panel, footer, sidebar, floating buttons) works
+   properly on phones and small tablets. These rules are appended last
+   so they win the cascade at matching screen widths.
+   ====================================================================== */
+
+/* ---------- Header / Logo / Search / Nav / Controls ---------- */
+@media (max-width: 900px) {
+  header {
+    padding: 12px 16px !important; /* was 15px 60px - too wide for phones */
+  }
+
+  .header .container,
+  .header-container {
+    flex-wrap: wrap;              /* let rows drop instead of overflowing */
+    row-gap: 10px;
+  }
+
+  .logo {
+    margin-left: 0;               /* remove desktop negative offset */
+  }
+
+  /* Nav becomes a full-width, centered, wrapping row under the logo */
+  .nav {
+    position: static;             /* was absolute + centered, breaks on mobile */
+    transform: none;
+    order: 3;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem 1.2rem;
+    padding: 6px 0 2px;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+  }
+
+  /* Search bar (home page) drops to its own full-width row */
+  .search-bar {
+    order: 2;
+    margin-left: 0 !important;    /* was -500px on desktop */
+    flex: 1 1 100%;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-bar input {
+    width: 70%;
+  }
+
+  .header-controls {
+    order: 1;
+    margin-left: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Keep the call button compact on mobile */
+  .btn-call span {
+    display: none;
+  }
+  .btn-call {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toggle-label {
+    display: none;                /* icon-only dark mode switch on small phones */
+  }
+  .dark-mode-toggle {
+    padding: 8px;
+  }
+  .nav {
+    gap: 0.6rem 0.9rem;
+  }
+  .nav-link {
+    font-size: 0.82rem;
+  }
+  .search-bar input {
+    width: 60%;
+  }
+}
+
+/* ---------- Hero ---------- */
+@media (max-width: 600px) {
+  .hero {
+    height: 45vh;
+    padding: 0 16px;
+  }
+  .overlay {
+    padding: 22px;
+  }
+  .overlay h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ---------- Categories ---------- */
+@media (max-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 20px;
+  }
+}
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+  }
+}
+
+/* ---------- Gallery / Interactive / Post-photos sections ---------- */
+@media (max-width: 768px) {
+  .gallery,
+  .interactive,
+  .post-photos {
+    padding: 30px 20px 40px;
+  }
+
+  .controls input {
+    width: 65%;
+  }
+
+  #galleryList {
+    width: 92%;
+  }
+
+  .post-box {
+    width: 90%;
+    padding: 24px;
+  }
+
+  .post-input,
+  .post-file {
+    width: 92%;
+  }
+
+  /* This button used a desktop-only translateX(215%) hack to sit far right;
+     on mobile that pushes it off-screen entirely, so reset to a normal
+     centered block button. */
+  .show-more-btn {
+    position: static;
+    left: auto;
+    transform: none;
+    display: block;
+    margin: 24px auto 0;
+  }
+  .show-more-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery h2,
+  .categories h2,
+  .post-photos h2 {
+    font-size: 1.5rem;
+  }
+  .photo {
+    max-width: 100%;
+  }
+  .controls input {
+    width: 100%;
+  }
+  .controls {
+    flex-direction: column;
+  }
+  .post-box {
+    padding: 18px;
+  }
+}
+
+/* ---------- Footer ---------- */
+@media (max-width: 768px) {
+  footer {
+    padding: 36px 24px;
+  }
+  .footer-grid {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+}
+
+/* ---------- Save Sidebar (slide-out panel) ---------- */
+@media (max-width: 600px) {
+  .save-sidebar {
+    width: 88vw;
+    right: -100vw;
+  }
+  .save-sidebar.active {
+    right: 0;
+  }
+  .recently-added-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Floating buttons: keep them from crowding on small screens ---------- */
+@media (max-width: 480px) {
+  .fab-btn {
+    bottom: 24px;
+    right: 12px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  .scroll-up-btn {
+    bottom: 84px;
+    right: 12px;
+  }
+}
