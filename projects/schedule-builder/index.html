@@ -329,6 +329,14 @@
   .bp-eyedrop:hover{ background:#e9e9e9; }
   .bp-presets{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
   .bp-presets .preset-swatch{ width:24px; height:24px; }
+  .bp-label-section{ margin-top:1rem; padding-top:.9rem; border-top:1px solid #eee; }
+  .bp-label-title{ font-size:.7rem; color:#767676; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:.5rem; }
+  .bp-label-row{ display:flex; gap:.5rem; }
+  .bp-label-row input[type="text"]{
+    flex:1; border:1px solid #e4e4e4; border-radius:8px; padding:.5rem .6rem; font-size:.8rem;
+    font-family:var(--font-body); color:#20232b;
+  }
+  .bp-initials-btn{ padding:.5rem .7rem; font-size:.72rem; white-space:nowrap; }
   .bp-actions{ display:flex; gap:.6rem; margin-top:1.1rem; }
   .bp-actions .btn{ flex:1; text-align:center; padding:.6rem .8rem; font-size:.78rem; }
 
@@ -477,6 +485,13 @@ IS 3149&#9;TECHNOPRENEURSHIP 1&#9;* 10:30A-12:00P F612 TTh * 3:30P-5:30P F612 F 
       <button class="bp-eyedrop" id="bpEyedrop" title="Pick a color from your screen">💧</button>
     </div>
     <div class="bp-presets" id="bpPresets"></div>
+    <div class="bp-label-section">
+      <label class="bp-label-title">Text shown in this block</label>
+      <div class="bp-label-row">
+        <input type="text" id="bpLabelInput" maxlength="60" placeholder="Full title"/>
+        <button class="btn ghost bp-initials-btn" id="bpInitialsBtn">Use Initials</button>
+      </div>
+    </div>
     <div class="bp-actions">
       <button class="btn ghost" id="bpReset">Reset</button>
       <button class="btn" id="bpDone">Done</button>
@@ -747,7 +762,8 @@ let state = {
   accent: '#5c7360',
   accentHsl: hexToHsl('#5c7360'),
   colorOverrides: {},        // code -> hex (whole-subject override)
-  sessionColorOverrides: {}  // "code__sessionIdx__day" -> hex (single-block override)
+  sessionColorOverrides: {}, // "code__sessionIdx__day" -> hex (single-block override)
+  sessionLabelOverrides: {}  // "code__sessionIdx__day" -> custom text shown in that block
 };
 
 /* ============================= STEP NAV ============================= */
@@ -794,6 +810,7 @@ document.getElementById('parseBtn').addEventListener('click', ()=>{
   state.subjects = subjects;
   state.colorOverrides = {};
   state.sessionColorOverrides = {};
+  state.sessionLabelOverrides = {};
   renderPreview(subjects);
   goToStep(2);
 });
@@ -954,7 +971,7 @@ function renderPresets(){
 
 document.getElementById('backTo2').addEventListener('click', ()=>goToStep(2));
 document.getElementById('startOverBtn').addEventListener('click', ()=>{
-  state = { subjects: [], theme:'minimalist', layout:'grid', accent:'#5c7360', accentHsl:hexToHsl('#5c7360'), colorOverrides:{}, sessionColorOverrides:{} };
+  state = { subjects: [], theme:'minimalist', layout:'grid', accent:'#5c7360', accentHsl:hexToHsl('#5c7360'), colorOverrides:{}, sessionColorOverrides:{}, sessionLabelOverrides:{} };
   document.body.setAttribute('data-theme','minimalist');
   document.getElementById('rawInput').value='';
   document.getElementById('parseWarning').classList.add('hidden');
@@ -983,6 +1000,8 @@ const bpReset = document.getElementById('bpReset');
 const bpDone = document.getElementById('bpDone');
 const bpClose = document.getElementById('bpClose');
 const bpBlockLabel = document.getElementById('bpBlockLabel');
+const bpLabelInput = document.getElementById('bpLabelInput');
+const bpInitialsBtn = document.getElementById('bpInitialsBtn');
 
 let activeBlockKey = null;
 let bpState = { h:150, s:40, l:50 };
@@ -997,6 +1016,23 @@ function resolveBlockColor(code, sessionIdx, day, colorMap){
   if(state.sessionColorOverrides[key]) return state.sessionColorOverrides[key];
   if(state.colorOverrides[code]) return state.colorOverrides[code];
   return colorMap[code];
+}
+function resolveBlockLabel(code, sessionIdx, day, defaultTitle){
+  const key = blockKey(code, sessionIdx, day);
+  const custom = state.sessionLabelOverrides[key];
+  return (custom !== undefined && custom !== null && custom !== '') ? custom : defaultTitle;
+}
+function computeInitials(title){
+  return title
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 8);
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
 function drawBpSquare(){
@@ -1087,10 +1123,15 @@ function renderBpPresets(){
 }
 renderBpPresets();
 
-function openBlockPicker(key, currentHex, label){
+let activeBlockDefaultTitle = '';
+
+function openBlockPicker(key, currentHex, label, defaultTitle){
   activeBlockKey = key;
+  activeBlockDefaultTitle = defaultTitle || '';
   bpBlockLabel.textContent = label || 'Color for this block';
   bpSetFromHex(isValidHex(currentHex) ? currentHex : '#5c7360');
+  bpLabelInput.value = state.sessionLabelOverrides[key] || '';
+  bpLabelInput.placeholder = activeBlockDefaultTitle || 'Full title';
   bpOverlay.classList.add('active');
 }
 function closeBlockPicker(){
@@ -1103,10 +1144,26 @@ bpOverlay.addEventListener('click', (e)=>{ if(e.target === bpOverlay) closeBlock
 bpReset.addEventListener('click', ()=>{
   if(activeBlockKey){
     delete state.sessionColorOverrides[activeBlockKey];
+    delete state.sessionLabelOverrides[activeBlockKey];
+    bpLabelInput.value = '';
     renderOutput();
   }
   closeBlockPicker();
-  showToast('Block color reset to the generated palette.');
+  showToast('Block reset to the default color and title.');
+});
+bpLabelInput.addEventListener('input', ()=>{
+  if(!activeBlockKey) return;
+  const v = bpLabelInput.value.trim();
+  if(v) state.sessionLabelOverrides[activeBlockKey] = v;
+  else delete state.sessionLabelOverrides[activeBlockKey];
+  renderOutput();
+});
+bpInitialsBtn.addEventListener('click', ()=>{
+  if(!activeBlockKey) return;
+  const initials = computeInitials(activeBlockDefaultTitle);
+  bpLabelInput.value = initials;
+  state.sessionLabelOverrides[activeBlockKey] = initials;
+  renderOutput();
 });
 
 /* ============================= STEP 3: OUTPUT RENDER ============================= */
@@ -1170,7 +1227,8 @@ function fitBlockContent(block){
   }
 }
 
-function renderWeeklyGrid(subjects, colorMap){
+function renderWeeklyGrid(subjects, colorMap, opts){
+  opts = opts || {};
   let usedDays = new Set(); let minTime = 24*60, maxTime = 0;
   subjects.forEach(s=>s.sessions.forEach(ses=>{
     ses.days.forEach(d=>usedDays.add(d));
@@ -1189,7 +1247,10 @@ function renderWeeklyGrid(subjects, colorMap){
   container.innerHTML = '';
   container.style.position = 'relative';
   const totalSlots = (maxTime-minTime)/30;
-  const isNarrow = window.innerWidth <= 480;
+  // forceWide is used only when preparing the downloadable image: always render at
+  // comfortable desktop spacing so the exported picture never looks squeezed,
+  // regardless of what device requested the download.
+  const isNarrow = opts.forceWide ? false : (window.innerWidth <= 480);
   const timeColWidth = isNarrow ? 30 : 56;
   // On narrow screens, drop the enforced per-column minimum entirely so columns compress
   // to fit the actual viewport — no horizontal swiping needed.
@@ -1248,11 +1309,12 @@ function renderWeeklyGrid(subjects, colorMap){
         block.style.gridRow = `${2+startSlot} / ${2+endSlot}`;
         block.style.background = bg;
         block.style.color = textColorFor(bg);
-        block.title = 'Tap to give just this block its own color';
-        block.innerHTML = `<div class="sb-code">${icon}${sub.code}</div><div class="sb-title">${sub.title}</div><div class="sb-meta">${ses.room||'TBA'} · ${formatTime(ses.start)}–${formatTime(ses.end)}</div>`;
+        block.title = 'Tap to give just this block its own color or text';
+        const displayLabel = resolveBlockLabel(sub.code, sessionIdx, d, sub.title);
+        block.innerHTML = `<div class="sb-code">${icon}${sub.code}</div><div class="sb-title">${escapeHtml(displayLabel)}</div><div class="sb-meta">${ses.room||'TBA'} · ${formatTime(ses.start)}–${formatTime(ses.end)}</div>`;
         block.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
         });
         container.appendChild(block);
         createdBlocks.push(block);
@@ -1307,12 +1369,13 @@ function renderAgendaList(subjects, colorMap){
       item.style.background = bg;
       item.style.borderLeftColor = textColorFor(bg)==='#ffffff' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.35)';
       item.style.color = textColorFor(bg);
-      item.title = 'Tap to give just this session its own color';
+      item.title = 'Tap to give just this session its own color or text';
+      const agendaLabel = resolveBlockLabel(sub.code, sessionIdx, d, sub.title);
       item.innerHTML = `<span class="agenda-time">${formatTimeFull(ses.start)}–${formatTimeFull(ses.end)}</span>
-        <span class="agenda-info"><span class="agenda-code">${icon}${sub.code}</span> — <span class="agenda-title">${sub.title}</span><br/><span class="agenda-room">${ses.room||'TBA'}</span></span>`;
+        <span class="agenda-info"><span class="agenda-code">${icon}${sub.code}</span> — <span class="agenda-title">${escapeHtml(agendaLabel)}</span><br/><span class="agenda-room">${ses.room||'TBA'}</span></span>`;
       item.addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
+        openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
       });
       dayBlock.appendChild(item);
     });
@@ -1338,7 +1401,7 @@ function renderCompactTable(subjects, colorMap){
       tr.querySelector('td').title = 'Tap to color this row';
       tr.querySelector('td').addEventListener('click', (e)=>{
         e.stopPropagation();
-        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, `${sub.code} · TBA`);
+        openBlockPicker(blockKey(sub.code,0,'TBA'), bg, `${sub.code} · TBA`, sub.title);
       });
       table.appendChild(tr);
       return;
@@ -1362,7 +1425,7 @@ function renderCompactTable(subjects, colorMap){
         firstCell.title = 'Tap to give just this row its own color';
         firstCell.addEventListener('click', (e)=>{
           e.stopPropagation();
-          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`);
+          openBlockPicker(key, bg, `${sub.code} · ${d} ${formatTime(ses.start)}–${formatTime(ses.end)}`, sub.title);
         });
         table.appendChild(tr);
       });
@@ -1451,6 +1514,14 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   btn.disabled = true;
   btn.textContent = 'Preparing image…';
 
+  // Re-render the weekly grid at full desktop spacing just for the capture, so the
+  // downloaded image always looks spacious and readable — never squeezed to phone width.
+  const wasGridLayout = state.layout === 'grid';
+  if(wasGridLayout && state.subjects.length){
+    const colorMap = buildColorMap(state.subjects);
+    renderWeeklyGrid(state.subjects, colorMap, {forceWide:true});
+  }
+
   // Temporarily un-clip anything that scrolls (the weekly grid on narrow screens)
   // so the exported image contains the FULL schedule, not just the visible slice.
   const restoreFns = [];
@@ -1465,6 +1536,8 @@ document.getElementById('downloadBtn').addEventListener('click', ()=>{
   const prevTargetWidth = target.style.width;
   target.style.width = target.scrollWidth + 'px';
   restoreFns.push(()=>{ target.style.width = prevTargetWidth; });
+  // Put the live preview back to its normal (device-appropriate) rendering once we're done.
+  restoreFns.push(()=>{ if(wasGridLayout) renderOutput(); });
 
   const bg = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
   const fullWidth = target.scrollWidth;
