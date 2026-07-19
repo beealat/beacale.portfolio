@@ -1561,12 +1561,23 @@ body.dark-mode .gallery {
     justify-content: center;
     align-items: center;
     row-gap: 8px;
-    column-gap: 8px;
+    column-gap: 5px;
   }
 
   .logo {
     margin-left: 0;               /* remove desktop negative offset */
     order: 0;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .logo-img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
   }
 
   /* Nav drops to its own full-width row under everything else */
@@ -1624,19 +1635,19 @@ body.dark-mode .gallery {
   }
 
   .search-bar input {
-    width: 34vw;
-    max-width: 130px;
-    min-width: 70px;
-    padding: 6px 10px;
-    font-size: 0.75rem;
+    width: 28vw;
+    max-width: 100px;
+    min-width: 55px;
+    padding: 6px 9px;
+    font-size: 0.72rem;
   }
 
   .search-bar input::placeholder {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
   }
 
   .search-bar button {
-    padding: 6px 10px;
+    padding: 6px 9px;
     flex-shrink: 0;
   }
 
