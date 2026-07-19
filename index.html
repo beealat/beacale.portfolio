@@ -907,16 +907,16 @@
   <h2 class="section-title reveal">Projects</h2>
 
   <div class="projects-grid">
-    <div class="project-card clickable reveal" onclick="openEvidence('portfolio-site')">
-      <span class="project-tag">Web Development</span>
-      <div class="project-name">Personal Portfolio Website</div>
-      <p class="project-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills.</p>
+    <div class="project-card clickable reveal" onclick="openEvidence('schedule-builder')">
+      <span class="project-tag">Web Development · Tool</span>
+      <div class="project-name">Schedule Builder</div>
+      <p class="project-desc">A tool that turns pasted or screenshotted class schedules into a clean, accurate weekly calendar — with minimalist, colorful, coquette, and cute style options and a custom color picker.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
-    <div class="project-card clickable reveal" onclick="openEvidence('marketing-threshold')">
-      <span class="project-tag">GUI Application</span>
-      <div class="project-name">Marketing Threshold System</div>
-      <p class="project-desc">A Java-based desktop GUI application built in Apache NetBeans for analyzing and managing marketing threshold data with visual reporting.</p>
+    <div class="project-card clickable reveal" onclick="openEvidence('nmap-visualizer')">
+      <span class="project-tag">Web Development · Data Viz</span>
+      <div class="project-name">Nmap Visualizer &amp; Log Analyzer</div>
+      <p class="project-desc">A frontend dashboard that turns raw Nmap scan output into an interactive executive dashboard — a force-directed network map, risk-scored host table, and live filtering, built with React, Recharts, and vis.js.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card clickable reveal" onclick="openEvidence('addu-nation')">
@@ -931,16 +931,17 @@
       <p class="project-desc">A visually-driven image board web application inspired by Pinterest, featuring a masonry grid layout, pinning functionality, and a clean responsive UI.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
-    <div class="project-card clickable reveal" onclick="openEvidence('nmap-visualizer')">
-      <span class="project-tag">Web Development · Data Viz</span>
-      <div class="project-name">Nmap Visualizer &amp; Log Analyzer</div>
-      <p class="project-desc">A frontend dashboard that turns raw Nmap scan output into an interactive executive dashboard — a force-directed network map, risk-scored host table, and live filtering, built with React, Recharts, and vis.js.</p>
+    <div class="project-card clickable reveal" onclick="openEvidence('marketing-threshold')">
+      <span class="project-tag">GUI Application</span>
+      <div class="project-name">Marketing Threshold System</div>
+      <p class="project-desc">A Java-based desktop GUI application built in Apache NetBeans for analyzing and managing marketing threshold data with visual reporting.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
-    <div class="project-card reveal">
+    <div class="project-card clickable reveal" onclick="openEvidence('student-enrollment')">
       <span class="project-tag">Web Development · AI</span>
       <div class="project-name">Student Enrollment System</div>
-      <p class="project-desc">A full-stack web enrollment system with AI functionality built using HTML, CSS, JavaScript, and Python — featuring smart recommendations and automated student data processing.</p>
+      <p class="project-desc">A full-stack web enrollment system with AI functionality built using HTML, CSS, JavaScript, and Python — with a hybrid SQL + MongoDB database, featuring smart recommendations and automated student data processing.</p>
+      <span class="project-link">View Project Evidence →</span>
     </div>
     <div class="project-card clickable reveal" onclick="openEvidence('pomotask')">
       <span class="project-tag">Productivity App</span>
@@ -948,10 +949,10 @@
       <p class="project-desc">A Pomodoro-based time management app with task tracking, focus timer, and break intervals to boost productivity and study habits.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
-    <div class="project-card clickable reveal" onclick="openEvidence('schedule-builder')">
-      <span class="project-tag">Web Development · Tool</span>
-      <div class="project-name">Schedule Builder</div>
-      <p class="project-desc">A tool that turns pasted or screenshotted class schedules into a clean, accurate weekly calendar — with minimalist, colorful, coquette, and cute style options and a custom color picker.</p>
+    <div class="project-card clickable reveal" onclick="openEvidence('portfolio-site')">
+      <span class="project-tag">Web Development</span>
+      <div class="project-name">Personal Portfolio Website</div>
+      <p class="project-desc">A responsive personal portfolio site built with HTML, CSS, and JavaScript, showcasing academic work and technical skills.</p>
       <span class="project-link">View Project Evidence →</span>
     </div>
   </div>
@@ -1227,6 +1228,17 @@
       <div class="evidence-gallery">
         <div><img src="assets/nmap-visualizer-screenshots/nmap-dashboard-1.png" alt="Nmap Visualizer dashboard with sample scan loaded"/></div>
         <div><img src="assets/nmap-visualizer-screenshots/nmap-dashboard-2.png" alt="Nmap Visualizer host detail drawer open"/></div>
+      </div>
+    </div>
+
+    <div id="evidence-student-enrollment" class="evidence-panel">
+      <span class="evidence-tag">Web Development · AI</span>
+      <div class="evidence-title">Student Enrollment System</div>
+      <p class="evidence-desc">A full-stack enrollment system built with an HTML/CSS/JavaScript frontend and a Python backend, backed by a hybrid database setup — an SQL database for structured records like student profiles, course offerings, and enrollment transactions, and MongoDB for more flexible, document-based data such as grade encoding and evaluation results. On top of the standard enroll/view/manage workflow, it includes an AI-assisted recommendation feature that processes student data (like completed courses and standing) to suggest suitable subjects or sections automatically, instead of requiring manual advising for every case.</p>
+      <p class="evidence-desc">Unlike the browser-based projects above, this one isn't something that can just run off a static file — it depends on a Python backend and a live database connection, so there's no way to embed a working version directly on this site. Rather than show static screenshots that only capture one screen at a time (and wouldn't really demonstrate how the backend, database, and AI logic connect), the full project — Python files, database schema, and frontend — is packaged as a ZIP so anyone interested can download it, look through the actual code, and run it locally themselves.</p>
+      <div class="evidence-demo-bar">
+        <a href="projects/student-enrollment-system.zip" download class="code-btn">Download Project (.zip) ↓</a>
+        <span class="evidence-demo-note">Requires Python and a local database setup to run — see the included README for setup steps.</span>
       </div>
     </div>
 
