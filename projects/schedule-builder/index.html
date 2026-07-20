@@ -298,7 +298,7 @@
     .live-preview-wrap{ margin-top:1.6rem; }
     #exportArea{ background:var(--surface); border-radius:var(--radius); padding:1.2rem; }
 
-    .grid-wrap{ overflow:hidden; border-radius:var(--radius); margin:0 auto; }
+    .grid-wrap{ overflow-x:auto; overflow-y:hidden; border-radius:var(--radius); margin:0 auto; -webkit-overflow-scrolling:touch; }
     .schedule-grid{
       display:grid; position:relative; background:var(--surface);
       border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; min-width:640px;
@@ -461,7 +461,7 @@
       .agenda-item{ flex-wrap:wrap; }
       .agenda-time{ min-width:auto; }
       .result-actions .btn{ flex:1 1 auto; text-align:center; }
-      .live-preview-wrap{
+      #exportArea{
         margin-left:-1.3rem;
         margin-right:-1.3rem;
       }
@@ -1338,12 +1338,13 @@ function fitScheduleGridToContainer(){
   const naturalWidth = grid.scrollWidth;
   const containerWidth = wrap.parentElement ? wrap.parentElement.clientWidth : wrap.clientWidth;
   if(!naturalWidth || !containerWidth) return;
-  const scale = Math.min(1, containerWidth / naturalWidth);
-  if(scale < 0.999){
+  // small safety buffer so rounding never leaves a sliver of the last column clipped
+  const scale = Math.min(1, (containerWidth - 2) / naturalWidth);
+  if(scale < 1){
     grid.style.transformOrigin = 'top left';
     grid.style.transform = `scale(${scale})`;
-    wrap.style.width = Math.ceil(naturalWidth*scale) + 'px';
-    wrap.style.height = Math.ceil(grid.scrollHeight*scale) + 'px';
+    wrap.style.width = Math.floor(naturalWidth*scale) + 'px';
+    wrap.style.height = Math.floor(grid.scrollHeight*scale) + 'px';
   }
 }
 let fitGridResizeTimer = null;
@@ -1351,6 +1352,10 @@ window.addEventListener('resize', ()=>{
   clearTimeout(fitGridResizeTimer);
   fitGridResizeTimer = setTimeout(fitScheduleGridToContainer, 120);
 });
+window.addEventListener('load', fitScheduleGridToContainer);
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(fitScheduleGridToContainer);
+}
 
 function fitBlockContent(block){
   const titleEl = block.querySelector('.sb-title');
