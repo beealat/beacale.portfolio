@@ -1420,6 +1420,11 @@ body.dark-mode .scroll-up-btn:hover {
     order: 2;
     flex: 0 1 auto;
     width: auto;
+    min-width: 0;    /* override the desktop 200px floor — the compact
+                         input below has its own min-width, so the wrapper
+                         doesn't need one and shouldn't push later items
+                         (call button, avatar) onto a second row */
+    max-width: none; /* override the desktop 360px cap, irrelevant here */
   }
 
   .search-bar input {
@@ -1479,6 +1484,36 @@ body.dark-mode .scroll-up-btn:hover {
     width: 26vw;
     max-width: 90px;
     min-width: 55px;
+  }
+}
+
+/* Very narrow phones (iPhone SE 1st-gen / 320px class) — the row above
+   is tight enough that it can still wrap by a few px, so shave a bit
+   more off each piece here rather than let the avatar drop to row 2. */
+@media (max-width: 340px) {
+  .header .container,
+  .header-container {
+    column-gap: 3px;
+  }
+  .logo-text {
+    font-size: 0.95rem;
+  }
+  .search-bar input {
+    min-width: 42px;
+    padding: 6px 6px;
+  }
+  .search-bar button {
+    padding: 6px 6px;
+  }
+  .btn-call {
+    width: 26px;
+    height: 26px;
+  }
+  .profile-user,
+  .profile-img,
+  .profile-icon {
+    width: 24px;
+    height: 24px;
   }
 }
 
