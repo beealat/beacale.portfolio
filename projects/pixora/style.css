@@ -63,6 +63,7 @@ body.dark-mode header {
   display: flex; /* Flexbox for horizontal layout */
   align-items: center; /* Vertically center items */
   justify-content: space-between; /* Space items evenly */
+  gap: 1.25rem; /* Guaranteed minimum breathing room between groups */
   width: 100%; /* Full width */
 }
 
@@ -71,6 +72,7 @@ body.dark-mode header {
   display: flex; /* Flexbox for logo layout */
   align-items: center; /* Center logo vertically */
   gap: 8px; /* Space between logo image and text */
+  flex-shrink: 0; /* Keep logo at full size even when the row gets tight */
   /* FIX: removed "margin-left: -35px" — it was a manual offset hack that
      fought the flex container's own justify-content: space-between spacing
      and dragged the logo out of its natural position. */
@@ -97,11 +99,18 @@ body.dark-mode .logo-text {
 
 /* MAIN NAVIGATION */
 .nav {
-  position: absolute; /* Absolute positioning */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Precise centering */
+  /* FIX: this used to be position:absolute; left:50%; transform:translateX(-50%),
+     which pulled the nav out of the flex flow entirely and forced it to sit at
+     the dead-center of the whole header, regardless of what else was there.
+     That's what caused it to collide with the search bar once the search bar's
+     old negative margin (which had been shoving it out of the way) was removed.
+     Nav now flows normally alongside logo / search-bar / header-controls, and
+     the container's justify-content: space-between + gap keeps everything
+     evenly spaced without anything overlapping. */
   display: flex; /* Flexbox for nav items */
-  gap: 2rem; /* Space between nav items */
+  align-items: center;
+  flex-shrink: 0; /* Don't let nav links get squeezed by the search bar */
+  gap: 1.5rem; /* Space between nav items */
 }
 
 .nav-link {
@@ -1019,6 +1028,7 @@ body.dark-mode .empty-message {
   display: flex; /* Flexbox layout */
   align-items: center; /* Center vertically */
   gap: 15px; /* Space between controls */
+  flex-shrink: 0; /* Keep toggle/phone/profile from getting squeezed */
 }
 
 /* Header dark mode toggle */
@@ -1170,7 +1180,9 @@ body.dark-mode .profile-img:hover {
 .search-bar {
   display: flex; /* Flexbox layout */
   align-items: center; /* Center vertically */
-  flex: 0 1 400px; /* Flexible width with basis */
+  flex: 1 1 260px; /* Flexible: can grow/shrink, starts around 260px instead of a rigid 400px */
+  min-width: 0; /* Allow it to actually shrink below content size when the row is tight */
+  max-width: 360px; /* Don't let it balloon and crowd the nav on wide screens */
   /* FIX: removed "margin-left: -500px" — that was a hardcoded hack meant
      to yank the search bar left until it sat next to the logo at one
      specific screen width. It fought the header's own
