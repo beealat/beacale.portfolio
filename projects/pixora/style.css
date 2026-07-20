@@ -1181,7 +1181,7 @@ body.dark-mode .profile-img:hover {
   display: flex; /* Flexbox layout */
   align-items: center; /* Center vertically */
   flex: 1 1 260px; /* Flexible: can grow/shrink, starts around 260px instead of a rigid 400px */
-  min-width: 0; /* Allow it to actually shrink below content size when the row is tight */
+  min-width: 200px; /* Floor so it shrinks gracefully instead of collapsing to 0 and letting its children overflow on top of neighbors */
   max-width: 360px; /* Don't let it balloon and crowd the nav on wide screens */
   /* FIX: removed "margin-left: -500px" — that was a hardcoded hack meant
      to yank the search bar left until it sat next to the logo at one
@@ -1340,7 +1340,7 @@ body.dark-mode .scroll-up-btn:hover {
    ====================================================================== */
 
 /* ---------- Header / Logo / Search / Nav / Controls ---------- */
-@media (max-width: 900px) {
+@media (max-width: 1350px) {
   header {
     padding: 10px 14px !important; /* was 15px 60px - too wide for phones */
   }
