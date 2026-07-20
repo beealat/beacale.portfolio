@@ -328,9 +328,6 @@
     .sb-meta{ font-size:.58rem; opacity:.8; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .subject-block.block-tiny .sb-meta{ display:none; }
     .subject-block.block-small .sb-meta{ display:none; }
-    .now-line{ position:absolute; left:0; right:0; height:2px; background:var(--accent); z-index:5; pointer-events:none; }
-    .now-dot{ position:absolute; width:8px; height:8px; border-radius:50%; background:var(--accent); left:54px; transform:translate(-50%,-50%); z-index:6; }
-
     .agenda-wrap{ display:flex; flex-direction:column; gap:1.1rem; }
     .agenda-day-title{
       font-family:var(--font-display); font-weight:700; font-size:.95rem; margin-bottom:.5rem;
@@ -1476,20 +1473,6 @@ function renderWeeklyGrid(subjects, colorMap){
     createdBlocks.forEach(block=>fitBlockContent(block));
     requestAnimationFrame(()=>fitScheduleGridToContainer());
   });
-
-  if(days.includes(TODAY_KEY)){
-    const now = new Date();
-    const nowMins = now.getHours()*60+now.getMinutes();
-    if(nowMins>=minTime && nowMins<=maxTime){
-      const offset = 44 + ((nowMins-minTime)/30)*30;
-      const line = document.createElement('div');
-      line.className='now-line'; line.style.top = offset+'px';
-      container.appendChild(line);
-      const dot = document.createElement('div');
-      dot.className='now-dot'; dot.style.top = offset+'px'; dot.style.left = (timeColWidth-2)+'px';
-      container.appendChild(dot);
-    }
-  }
 }
 
 function renderAgendaList(subjects, colorMap){
