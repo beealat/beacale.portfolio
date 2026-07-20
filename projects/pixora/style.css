@@ -15,7 +15,7 @@
   --white: #ffffff;            /* Pure white */
   --text-dark: #2a2338;        /* Dark text color for light mode */
   --text-light: #f9f8fc;       /* Light text color for dark backgrounds */
-  
+
   /* Dark mode color variables */
   --dark-bg: #121212;          /* Dark background color */
   --dark-card: #1e1e1e;        /* Dark card/container background */
@@ -32,7 +32,6 @@ html {
 body {
   background-color: var(--light-bg); /* Use light background variable */
   color: var(--text-dark);           /* Use dark text color for light mode */
-  /* Remove transition for immediate change - prevents delay in theme switching */
 }
 
 /* DARK MODE CLASS - Applied to body when dark mode is active */
@@ -51,7 +50,6 @@ header {
   top: 0; /* Position at very top */
   left: 0; /* Align to left edge */
   z-index: 100; /* High z-index to stay above other content */
-  /* Remove transition for immediate theme changes */
 }
 
 /* Dark mode header styles */
@@ -65,6 +63,7 @@ body.dark-mode header {
   display: flex; /* Flexbox for horizontal layout */
   align-items: center; /* Vertically center items */
   justify-content: space-between; /* Space items evenly */
+  gap: 1.25rem; /* Guaranteed minimum breathing room between groups */
   width: 100%; /* Full width */
 }
 
@@ -73,7 +72,10 @@ body.dark-mode header {
   display: flex; /* Flexbox for logo layout */
   align-items: center; /* Center logo vertically */
   gap: 8px; /* Space between logo image and text */
-  margin-left: -35px; /* Negative margin for positioning */
+  flex-shrink: 0; /* Keep logo at full size even when the row gets tight */
+  /* FIX: removed "margin-left: -35px" — it was a manual offset hack that
+     fought the flex container's own justify-content: space-between spacing
+     and dragged the logo out of its natural position. */
 }
 
 .logo-img {
@@ -88,7 +90,6 @@ body.dark-mode header {
   font-size: 1.6rem; /* Large font size */
   font-weight: 700; /* Bold weight */
   color: var(--main-purple); /* Main brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode logo text */
@@ -98,11 +99,18 @@ body.dark-mode .logo-text {
 
 /* MAIN NAVIGATION */
 .nav {
-  position: absolute; /* Absolute positioning */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Precise centering */
+  /* FIX: this used to be position:absolute; left:50%; transform:translateX(-50%),
+     which pulled the nav out of the flex flow entirely and forced it to sit at
+     the dead-center of the whole header, regardless of what else was there.
+     That's what caused it to collide with the search bar once the search bar's
+     old negative margin (which had been shoving it out of the way) was removed.
+     Nav now flows normally alongside logo / search-bar / header-controls, and
+     the container's justify-content: space-between + gap keeps everything
+     evenly spaced without anything overlapping. */
   display: flex; /* Flexbox for nav items */
-  gap: 2rem; /* Space between nav items */
+  align-items: center;
+  flex-shrink: 0; /* Don't let nav links get squeezed by the search bar */
+  gap: 1.5rem; /* Space between nav items */
 }
 
 .nav-link {
@@ -148,7 +156,6 @@ body.dark-mode .nav-link {
   font-weight: 500; /* Medium weight */
   margin-left: auto; /* Push to right side */
   border: 2px solid crimson; /* Crimson border */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode call button */
@@ -173,7 +180,7 @@ header {
 
 /* HERO SECTION */
 .hero {
-  background: 
+  background:
     linear-gradient(rgba(29,11,52,0.6), rgba(142, 64, 83, 0.6)), /* Overlay gradient */
     url('https://i.pinimg.com/736x/16/87/98/1687986cba1bc3ea1dd6f1af03a00e96.jpg') center/cover no-repeat; /* Background image */
   height: 50vh; /* Reduced viewport height */
@@ -237,7 +244,6 @@ header {
     rgba(255,255,255,0.05) 40px, /* Transparent stripe */
     rgba(255,255,255,0.05) 80px /* Transparent stripe end */
   );
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode categories background */
@@ -255,7 +261,6 @@ body.dark-mode .categories {
   margin-bottom: 30px; /* Space below heading */
   font-size: 2rem; /* Large font size */
   color: var(--main-purple); /* Brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode categories heading */
@@ -278,7 +283,6 @@ body.dark-mode .categories h2 {
   background-color: var(--white); /* White background */
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0 2px 10px rgba(29,11,52,0.15); /* Subtle shadow */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode category items */
@@ -300,7 +304,6 @@ body.dark-mode .category-item {
   padding-top: 10px; /* Space above heading */
   font-size: 1.1rem; /* Medium font size */
   color: var(--main-purple); /* Brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode category headings */
@@ -312,7 +315,6 @@ body.dark-mode .category-item h3 {
   padding: 0 15px 15px; /* Padding: top, sides, bottom */
   font-size: 0.9rem; /* Smaller text */
   color: var(--text-dark); /* Dark text color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode category text */
@@ -338,7 +340,6 @@ body.dark-mode .category-item:hover {
   text-align: center; /* Center align content */
   padding: 40px 80px 60px 80px; /* Top, right, bottom, left padding */
   background-color: var(--white); /* White background */
-  /* Remove transition for immediate theme change */
   overflow: hidden; /* Prevent unwanted scrolling */
   position: relative; /* For positioning context */
 }
@@ -353,7 +354,6 @@ body.dark-mode .gallery {
   margin-top: 0px; /* No top margin */
   margin-bottom: 40px; /* Space below heading */
   color: var(--main-purple); /* Brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode gallery heading */
@@ -416,7 +416,6 @@ body.dark-mode .gallery h2 {
   text-align: center; /* Center content */
   padding: 40px 80px 60px 80px; /* Section padding */
   background-color: var(--light-bg); /* Light background */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode interactive section */
@@ -426,7 +425,6 @@ body.dark-mode .interactive {
 
 .interactive h2 {
   margin-bottom: 20px; /* Space below heading */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode interactive heading */
@@ -449,7 +447,6 @@ body.dark-mode .interactive h2 {
   width: 40%; /* 40% of container width */
   border: 1px solid crimson; /* Crimson border */
   border-radius: 8px; /* Rounded corners */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode input */
@@ -491,7 +488,6 @@ body.dark-mode .controls input {
   align-items: center; /* Center vertically */
   gap: 10px; /* Space between elements */
   box-shadow: 0 2px 8px rgba(29,11,52,0.1); /* Subtle shadow */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode list items */
@@ -525,7 +521,6 @@ body.dark-mode #galleryList li:hover {
   text-align: left; /* Left align text */
   font-weight: 500; /* Medium weight */
   color: var(--main-purple); /* Brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode list text */
@@ -553,7 +548,6 @@ body.dark-mode #galleryList li span {
   text-align: center; /* Center content */
   padding: 40px 80px 60px 80px; /* Section padding */
   background-color: var(--white); /* White background */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode post section */
@@ -565,7 +559,6 @@ body.dark-mode .post-photos {
   font-size: 25px; /* Fixed font size */
   margin-bottom: 30px; /* Space below heading */
   color: var(--main-purple); /* Brand color */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode post heading */
@@ -581,7 +574,6 @@ body.dark-mode .post-photos h2 {
   width: 60%; /* 60% of container width */
   margin: 0 auto; /* Center horizontally */
   box-shadow: 0 2px 10px rgba(29,11,52,0.15); /* Subtle shadow */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode post box */
@@ -594,7 +586,6 @@ body.dark-mode .post-box {
 .post-box p {
   margin-bottom: 20px; /* Space below paragraph */
   color: var(--text-dark); /* Dark text */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode post text */
@@ -610,7 +601,6 @@ body.dark-mode .post-box p {
   padding: 10px; /* Internal padding */
   border-radius: 8px; /* Rounded corners */
   border: 1px solid crimson; /* Crimson border */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode form inputs */
@@ -672,7 +662,6 @@ footer {
   padding: 50px 80px; /* Section padding */
   margin-top: 60px; /* Space above footer */
   border-top: 2px solid crimson; /* Top border */
-  /* Remove transition for immediate theme change */
 }
 
 /* Dark mode footer */
@@ -727,15 +716,12 @@ footer button:hover {
   border-radius: 25px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor */
   transition: all 0.3s ease; /* Smooth transitions */
-  position: relative; /* For positioning */
-  left: 215%; /* Position far right */
-  transform: translateX(215%); /* Adjust positioning */
   margin-top: 30px; /* Space above */
 }
 
 .show-more-btn:hover {
   background-color: rgba(29,11,52,0.7); /* Transparent purple on hover */
-  transform: translateX(215%) translateY(-2px); /* Lift effect */
+  transform: translateY(-2px); /* Lift effect */
 }
 
 /* FLOATING ACTION BUTTON (FAB) */
@@ -757,6 +743,7 @@ footer button:hover {
   display: flex; /* Flexbox for centering */
   align-items: center; /* Center vertically */
   justify-content: center; /* Center horizontally */
+  margin-right: -10px; /* Position adjustment */
 }
 
 .fab-btn:hover {
@@ -1033,107 +1020,31 @@ body.dark-mode .empty-message {
 
 /* DARK MODE TOGGLE SWITCH */
 .dark-mode-toggle-container {
-  position: fixed; /* Fixed positioning */
-  bottom: 110px; /* Position from bottom */
-  left: 15px; /* Position from left */
-  z-index: 1001; /* High z-index */
+  display: none; /* Hidden — superseded by header toggle below */
 }
 
+/* HEADER CONTROLS */
+.header-controls {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center vertically */
+  gap: 15px; /* Space between controls */
+  flex-shrink: 0; /* Keep toggle/phone/profile from getting squeezed */
+}
+
+/* Header dark mode toggle */
 .dark-mode-toggle {
   display: flex; /* Flexbox layout */
   align-items: center; /* Center vertically */
-  gap: 12px; /* Space between elements */
-  background: var(--white); /* White background */
-  padding: 12px 16px; /* Internal spacing */
-  border-radius: 30px; /* Rounded corners */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow */
+  gap: 8px; /* Smaller gap */
   cursor: pointer; /* Pointer cursor */
+  padding: 8px 12px; /* Button-like padding */
+  border-radius: 20px; /* Rounded corners */
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
   transition: all 0.3s ease; /* Smooth transitions */
-  border: 2px solid var(--main-purple); /* Purple border */
-}
-
-body.dark-mode .dark-mode-toggle {
-  background: var(--dark-card); /* Dark background */
-  border-color: var(--accent-orange); /* Accent border */
 }
 
 .dark-mode-toggle:hover {
-  transform: translateY(-2px); /* Lift effect */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
-}
-
-/* Toggle track (background) */
-.toggle-track {
-  position: relative; /* For thumb positioning */
-  width: 60px; /* Fixed width */
-  height: 30px; /* Fixed height */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient */
-  border-radius: 30px; /* Rounded */
-  transition: all 0.3s ease; /* Smooth transitions */
-  overflow: hidden; /* Contain thumb */
-}
-
-body.dark-mode .toggle-track {
-  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Orange gradient */
-}
-
-/* Toggle thumb (slider) */
-.toggle-thumb {
-  position: absolute; /* Position within track */
-  top: 3px; /* Position from top */
-  left: 3px; /* Start position (light mode) */
-  width: 24px; /* Fixed width */
-  height: 24px; /* Fixed height */
-  background: var(--white); /* White background */
-  border-radius: 50%; /* Circular */
-  transition: all 0.3s ease; /* Smooth movement */
-  display: flex; /* Flexbox for icons */
-  align-items: center; /* Center icons */
-  justify-content: center; /* Center icons */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow */
-}
-
-body.dark-mode .toggle-thumb {
-  left: calc(100% - 27px); /* End position (dark mode) */
-  background: var(--dark-card); /* Dark background */
-}
-
-/* Toggle icons */
-.toggle-thumb .light-icon,
-.toggle-thumb .dark-icon {
-  font-size: 12px; /* Small icons */
-  transition: all 0.3s ease; /* Smooth transitions */
-}
-
-.toggle-thumb .light-icon {
-  color: #ffd700; /* Yellow sun */
-  opacity: 1; /* Visible in light mode */
-}
-
-.toggle-thumb .dark-icon {
-  color: #1d0b34; /* Dark moon */
-  opacity: 0; /* Hidden in light mode */
-}
-
-body.dark-mode .toggle-thumb .light-icon {
-  opacity: 0; /* Hidden in dark mode */
-}
-
-body.dark-mode .toggle-thumb .dark-icon {
-  opacity: 1; /* Visible in dark mode */
-}
-
-/* Toggle label */
-.toggle-label {
-  font-weight: 600; /* Semi-bold */
-  font-size: 14px; /* Small text */
-  color: var(--main-purple); /* Brand color */
-  transition: color 0.3s ease; /* Color transition */
-  white-space: nowrap; /* Prevent wrapping */
-}
-
-body.dark-mode .toggle-label {
-  color: var(--dark-text); /* Light text */
+  background: rgba(255, 255, 255, 0.3); /* More opaque on hover */
 }
 
 /* Pulse animation for attention */
@@ -1153,34 +1064,11 @@ body.dark-mode .toggle-label {
   animation: pulse-glow 3s ease-in-out infinite; /* Continuous pulse */
 }
 
-/* HEADER CONTROLS */
-.header-controls {
-  display: flex; /* Flexbox layout */
-  align-items: center; /* Center vertically */
-  gap: 15px; /* Space between controls */
-}
-
-/* Header dark mode toggle */
-.dark-mode-toggle {
-  display: flex; /* Flexbox layout */
-  align-items: center; /* Center vertically */
-  gap: 8px; /* Smaller gap */
-  cursor: pointer; /* Pointer cursor */
-  padding: 8px 12px; /* Button-like padding */
-  border-radius: 20px; /* Rounded corners */
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
-  transition: all 0.3s ease; /* Smooth transitions */
-}
-
-.dark-mode-toggle:hover {
-  background: rgba(255, 255, 255, 0.3); /* More opaque on hover */
-}
-
-/* Smaller toggle for header */
+/* Header toggle track (background) */
 .toggle-track {
   position: relative; /* For thumb positioning */
-  width: 50px; /* Smaller width */
-  height: 24px; /* Smaller height */
+  width: 50px; /* Width */
+  height: 24px; /* Height */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient */
   border-radius: 30px; /* Rounded */
   transition: all 0.3s ease; /* Smooth transitions */
@@ -1191,13 +1079,13 @@ body.dark-mode .toggle-track {
   background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Orange gradient */
 }
 
-/* Smaller thumb for header */
+/* Header toggle thumb (slider) */
 .toggle-thumb {
   position: absolute; /* Position within track */
-  top: 2px; /* Adjusted position */
-  left: 2px; /* Start position */
-  width: 20px; /* Smaller width */
-  height: 20px; /* Smaller height */
+  top: 2px; /* Position from top */
+  left: 2px; /* Start position (light mode) */
+  width: 20px; /* Width */
+  height: 20px; /* Height */
   background: var(--white); /* White background */
   border-radius: 50%; /* Circular */
   transition: all 0.3s ease; /* Smooth movement */
@@ -1208,14 +1096,14 @@ body.dark-mode .toggle-track {
 }
 
 body.dark-mode .toggle-thumb {
-  left: calc(100% - 22px); /* End position */
+  left: calc(100% - 22px); /* End position (dark mode) */
   background: var(--dark-card); /* Dark background */
 }
 
-/* Smaller icons for header */
+/* Toggle icons */
 .toggle-thumb .light-icon,
 .toggle-thumb .dark-icon {
-  font-size: 10px; /* Smaller icons */
+  font-size: 10px; /* Icon size */
   transition: all 0.3s ease; /* Smooth transitions */
 }
 
@@ -1250,59 +1138,7 @@ body.dark-mode .toggle-label {
   color: var(--dark-text); /* Light text */
 }
 
-/* Hide old toggle container */
-.dark-mode-toggle-container {
-  display: none; /* Completely hide */
-}
-
-/* SIDEBAR POSITIONING FIX */
-.save-sidebar {
-  position: fixed; /* Fixed positioning */
-  top: 0; /* Align to top */
-  right: -400px; /* Start off-screen */
-  width: 350px; /* Fixed width */
-  height: 100%; /* Full height */
-  background-color: var(--white); /* White background */
-  box-shadow: -4px 0 12px rgba(0,0,0,0.2); /* Left shadow */
-  padding: 20px; /* Internal spacing */
-  transition: right 0.3s ease; /* Slide animation */
-  z-index: 1000; /* High z-index */
-  overflow-y: auto; /* Scroll if needed */
-}
-
-.save-sidebar.active {
-  right: 0; /* Slide into view */
-}
-
-/* FAB BUTTON POSITIONING */
-.fab-btn {
-  position: fixed; /* Fixed positioning */
-  bottom: 40px; /* Position from bottom */
-  right: 15px; /* Position from right */
-  background-color: var(--accent-orange); /* Accent background */
-  color: var(--white); /* White text */
-  border: none; /* No border */
-  border-radius: 50%; /* Circular */
-  width: 55px; /* Fixed width */
-  height: 55px; /* Fixed height */
-  font-size: 24px; /* Large icon */
-  cursor: pointer; /* Pointer cursor */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Shadow */
-  z-index: 1001; /* High z-index */
-  transition: all 0.3s ease; /* Smooth transitions */
-  display: flex; /* Flexbox for centering */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
-  margin-right: -10px; /* Position adjustment */
-}
-
-.fab-btn:hover {
-  background-color: crimson; /* Darker red on hover */
-  transform: scale(1.1); /* Scale up */
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3); /* Enhanced shadow */
-}
-
-/* Hide floating text artifacts */
+/* Hide old floating text artifacts */
 body::before {
   display: none !important; /* Force hide */
 }
@@ -1313,7 +1149,6 @@ body::before {
   width: 40px; /* Fixed width */
   height: 40px; /* Fixed height */
   border-radius: 50%; /* Circular */
-  margin-right: -20px; /* Position adjustment */
   cursor: pointer; /* Pointer cursor */
   transition: transform 0.3s ease; /* Smooth scale */
 }
@@ -1345,8 +1180,16 @@ body.dark-mode .profile-img:hover {
 .search-bar {
   display: flex; /* Flexbox layout */
   align-items: center; /* Center vertically */
-  margin-left: -500px; /* Position adjustment */
-  flex: 0 1 400px; /* Flexible width with basis */
+  flex: 1 1 260px; /* Flexible: can grow/shrink, starts around 260px instead of a rigid 400px */
+  min-width: 200px; /* Floor so it shrinks gracefully instead of collapsing to 0 and letting its children overflow on top of neighbors */
+  max-width: 360px; /* Don't let it balloon and crowd the nav on wide screens */
+  /* FIX: removed "margin-left: -500px" — that was a hardcoded hack meant
+     to yank the search bar left until it sat next to the logo at one
+     specific screen width. It fought the header's own
+     justify-content: space-between spacing and dragged the bar on top
+     of the logo at every other width (including this 1440px demo frame).
+     The flex container already spaces .logo / .search-bar /
+     .header-controls evenly on its own — no manual offset needed. */
 }
 
 .search-bar input {
@@ -1482,64 +1325,11 @@ body.dark-mode .scroll-up-btn:hover {
   box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5); /* Enhanced shadow */
 }
 
-/* GALLERY FIXES */
-.gallery {
-  text-align: center; /* Center content */
-  padding: 40px 80px 60px 80px; /* Section padding */
-  background-color: var(--white); /* White background */
-  overflow: hidden; /* Prevent scrollbars */
-  position: relative; /* Positioning context */
-}
-
-body.dark-mode .gallery {
-  background-color: var(--dark-card); /* Dark background */
-}
-
 /* Show More Button Container */
 .show-more-container {
   text-align: center; /* Center button */
   margin-top: 20px; /* Space above */
   width: 100%; /* Full width */
-}
-
-/* Fixed Show More Button */
-.show-more-btn {
-  display: inline-block; /* Inline block */
-  background-color: crimson; /* Crimson background */
-  color: var(--white); /* White text */
-  border: none; /* No border */
-  padding: 12px 30px; /* Button padding */
-  font-size: 1rem; /* Standard text */
-  border-radius: 25px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor */
-  transition: all 0.3s ease; /* Smooth transitions */
-  margin: 0 auto; /* Center horizontally */
-  position: static; /* Normal flow */
-  transform: none; /* No transform */
-  left: auto; /* No positioning */
-}
-
-.show-more-btn:hover {
-  background-color: var(--main-purple); /* Purple on hover */
-  transform: translateY(-2px); /* Lift effect */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
-}
-
-/* Ensure consistent photo sizing */
-.photo {
-  position: relative; /* For caption positioning */
-  overflow: hidden; /* Hide overflow */
-  border-radius: 10px; /* Rounded corners */
-  width: 100%; /* Full width of grid cell */
-  max-width: 300px; /* Maximum width */
-  height: 200px; /* Fixed height */
-}
-
-.photo img {
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  object-fit: cover; /* Crop to fit */
-  transition: transform 0.3s; /* Smooth zoom */
 }
 /* ======================================================================
    MOBILE RESPONSIVE FIXES
@@ -1550,7 +1340,7 @@ body.dark-mode .gallery {
    ====================================================================== */
 
 /* ---------- Header / Logo / Search / Nav / Controls ---------- */
-@media (max-width: 900px) {
+@media (max-width: 1350px) {
   header {
     padding: 10px 14px !important; /* was 15px 60px - too wide for phones */
   }
@@ -1561,11 +1351,10 @@ body.dark-mode .gallery {
     justify-content: center;
     align-items: center;
     row-gap: 8px;
-    column-gap: 5px;
+    column-gap: 3px;
   }
 
   .logo {
-    margin-left: 0;               /* remove desktop negative offset */
     order: 0;
     gap: 5px;
     flex-shrink: 0;
@@ -1625,13 +1414,17 @@ body.dark-mode .gallery {
     display: none;                /* icon-only toggle, saves room for the search bar */
   }
 
-  /* Compact search bar, sized to sit between the toggle and call icon
-     on the same row instead of taking its own full-width row */
+  /* Search bar sits inline on the same row as toggle/call/avatar —
+     matching the original design. min-width: 0 here (instead of the
+     desktop 200px floor) is what lets it shrink down and share the row
+     instead of collapsing to 0 and letting its children spill over onto
+     the next item. */
   .search-bar {
     order: 2;
-    margin-left: 0 !important;    /* was -500px on desktop */
     flex: 0 1 auto;
     width: auto;
+    min-width: 0;
+    max-width: none;
   }
 
   .search-bar input {
@@ -1687,10 +1480,75 @@ body.dark-mode .gallery {
   .nav-link {
     font-size: 0.82rem;
   }
+}
+
+/* SAFETY NET for narrow phones (≤500px): the inline search-bar-next-to-
+   icons layout above has essentially zero margin to spare in this range
+   — the search bar scales with vw faster than the available space does,
+   so it can wrap by a few px at some widths within 320-480 even after
+   tuning gaps (verified: fails around 350-360px specifically, not a
+   clean "always past X px" cutoff). Rather than keep chasing that
+   moving target, drop the search bar to its own row only in this
+   narrow band, where there genuinely isn't reliable room for 5 items
+   on one line. Above 500px there's enough slack for the inline style
+   to hold reliably (verified clean from 500px through 1350px). */
+@media (max-width: 500px) {
+  .search-bar {
+    order: 4;
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 340px;
+    margin: 10px auto 0;
+  }
   .search-bar input {
-    width: 26vw;
-    max-width: 90px;
-    min-width: 55px;
+    flex: 1;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  .search-bar input::placeholder {
+    font-size: 0.8rem;
+  }
+  .search-bar button {
+    padding: 8px 14px;
+  }
+  .btn-call {
+    order: 2;
+  }
+  .profile-user {
+    order: 3;
+  }
+}
+
+/* Very narrow phones (iPhone SE 1st-gen / 320px class) — the row above
+   is tight enough that it can still wrap by a few px, so shave a bit
+   more off each piece here rather than let the avatar drop to row 2. */
+@media (max-width: 340px) {
+  .header .container,
+  .header-container {
+    column-gap: 3px;
+  }
+  .logo-text {
+    font-size: 0.95rem;
+  }
+  .search-bar input {
+    min-width: 42px;
+    padding: 6px 6px;
+  }
+  .search-bar button {
+    padding: 6px 6px;
+  }
+  .btn-call {
+    width: 26px;
+    height: 26px;
+  }
+  .profile-user,
+  .profile-img,
+  .profile-icon {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -1748,13 +1606,7 @@ body.dark-mode .gallery {
     width: 92%;
   }
 
-  /* This button used a desktop-only translateX(215%) hack to sit far right;
-     on mobile that pushes it off-screen entirely, so reset to a normal
-     centered block button. */
   .show-more-btn {
-    position: static;
-    left: auto;
-    transform: none;
     display: block;
     margin: 24px auto 0;
   }
