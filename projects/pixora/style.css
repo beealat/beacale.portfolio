@@ -1414,39 +1414,46 @@ body.dark-mode .scroll-up-btn:hover {
     display: none;                /* icon-only toggle, saves room for the search bar */
   }
 
-  /* Compact search bar, sized to sit between the toggle and call icon
-     on the same row instead of taking its own full-width row */
+  /* Search bar gets its OWN full-width row (order 4, between the icon row
+     and the nav row) instead of trying to fit on the same line as
+     logo/toggle/call/avatar. Packing 5 elements onto one line only works
+     if every device agrees on exact font/icon metrics — Android text-size
+     scaling, different fallback fonts, etc. can tip it over by a few px
+     and cause the avatar to wrap onto its own line. Giving search its own
+     row removes that fragile squeeze entirely: row 1 (logo/toggle/call/
+     avatar) is short and has huge margin on any real device, and this
+     also makes row 1 structurally identical to the About page's header,
+     which has no search bar. */
   .search-bar {
-    order: 2;
-    flex: 0 1 auto;
-    width: auto;
-    min-width: 0;    /* override the desktop 200px floor — the compact
-                         input below has its own min-width, so the wrapper
-                         doesn't need one and shouldn't push later items
-                         (call button, avatar) onto a second row */
-    max-width: none; /* override the desktop 360px cap, irrelevant here */
+    order: 4;
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 340px;
+    margin: 10px auto 0;
+    min-width: 0;
   }
 
   .search-bar input {
-    width: 28vw;
-    max-width: 100px;
-    min-width: 55px;
-    padding: 6px 9px;
-    font-size: 0.72rem;
+    flex: 1;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 8px 12px;
+    font-size: 0.85rem;
   }
 
   .search-bar input::placeholder {
-    font-size: 0.68rem;
+    font-size: 0.8rem;
   }
 
   .search-bar button {
-    padding: 6px 9px;
+    padding: 8px 14px;
     flex-shrink: 0;
   }
 
   /* Keep the call button compact and edge-safe on mobile */
   .btn-call {
-    order: 3;
+    order: 2;
     width: 30px;
     height: 30px;
     padding: 0;
@@ -1460,7 +1467,7 @@ body.dark-mode .scroll-up-btn:hover {
   }
 
   .profile-user {
-    order: 4;
+    order: 3;
     margin-left: 0;
   }
   .profile-img,
@@ -1479,11 +1486,6 @@ body.dark-mode .scroll-up-btn:hover {
   }
   .nav-link {
     font-size: 0.82rem;
-  }
-  .search-bar input {
-    width: 26vw;
-    max-width: 90px;
-    min-width: 55px;
   }
 }
 
