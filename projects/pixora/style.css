@@ -1428,19 +1428,19 @@ body.dark-mode .scroll-up-btn:hover {
   }
 
   .search-bar input {
-    width: 28vw;
-    max-width: 100px;
-    min-width: 55px;
-    padding: 6px 9px;
-    font-size: 0.72rem;
+    width: 20vw;
+    max-width: 80px;
+    min-width: 42px;
+    padding: 6px 7px;
+    font-size: 0.7rem;
   }
 
   .search-bar input::placeholder {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
   }
 
   .search-bar button {
-    padding: 6px 9px;
+    padding: 6px 7px;
     flex-shrink: 0;
   }
 
@@ -1479,46 +1479,6 @@ body.dark-mode .scroll-up-btn:hover {
   }
   .nav-link {
     font-size: 0.82rem;
-  }
-}
-
-/* SAFETY NET for narrow phones (≤500px): the inline search-bar-next-to-
-   icons layout above has essentially zero margin to spare in this range
-   — the search bar scales with vw faster than the available space does,
-   so it can wrap by a few px at some widths within 320-480 even after
-   tuning gaps (verified: fails around 350-360px specifically, not a
-   clean "always past X px" cutoff). Rather than keep chasing that
-   moving target, drop the search bar to its own row only in this
-   narrow band, where there genuinely isn't reliable room for 5 items
-   on one line. Above 500px there's enough slack for the inline style
-   to hold reliably (verified clean from 500px through 1350px). */
-@media (max-width: 500px) {
-  .search-bar {
-    order: 4;
-    flex-basis: 100%;
-    width: 100%;
-    max-width: 340px;
-    margin: 10px auto 0;
-  }
-  .search-bar input {
-    flex: 1;
-    width: auto;
-    max-width: none;
-    min-width: 0;
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-  .search-bar input::placeholder {
-    font-size: 0.8rem;
-  }
-  .search-bar button {
-    padding: 8px 14px;
-  }
-  .btn-call {
-    order: 2;
-  }
-  .profile-user {
-    order: 3;
   }
 }
 
