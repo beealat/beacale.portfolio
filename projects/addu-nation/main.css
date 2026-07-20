@@ -1,4 +1,3 @@
-
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --navy:#040354;
@@ -590,3 +589,95 @@ body{background:var(--gray-bg);display:flex;min-height:100vh;}
 .emp-section-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--txt4);text-transform:uppercase;margin-bottom:10px;}
 .add-badge-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px;border:1.5px dashed var(--border);border-radius:12px;font-size:13px;font-weight:600;color:var(--txt3);cursor:pointer;transition:.15s;margin-top:10px;}
 .add-badge-btn:hover{border-color:var(--blue);color:var(--blue);}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   The dashboard shell (sidebar + topbar + grids) had no mobile
+   rules at all. This turns the sidebar into a slide-out drawer
+   (toggled by a hamburger button added to the topbar) and makes
+   the grids/hero/quick-actions/login-card adapt to small screens.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Hamburger button: hidden on desktop, shown only on mobile */
+.tb-hamburger{display:none;width:36px;height:36px;border-radius:9px;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.tb-hamburger:active{background:var(--gray-bg);}
+
+/* Backdrop shown behind the drawer while it's open */
+.sb-backdrop{display:none;}
+
+@media (max-width:960px){
+  /* ---- Shell / Sidebar becomes an off-canvas drawer ---- */
+  .shell{flex-direction:column;}
+
+  .sb{
+    position:fixed;
+    top:0;left:0;
+    height:100vh;
+    width:250px;
+    min-width:250px;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    z-index:1000;
+    box-shadow:0 0 0 rgba(0,0,0,0);
+  }
+  .sb.mobile-open{
+    transform:translateX(0);
+    box-shadow:8px 0 32px rgba(0,0,0,.35);
+  }
+
+  .sb-backdrop{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(4,3,84,.45);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:999;
+  }
+  .sb-backdrop.on{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .main{width:100%;min-width:0;}
+
+  /* ---- Topbar: show hamburger, let search shrink/hide, tighten padding ---- */
+  .topbar{padding:10px 14px;gap:10px;}
+  .tb-hamburger{display:flex;}
+  .tb-title{font-size:15px;}
+  .tb-sub{font-size:10px;}
+  .tb-search{display:none;}
+  .role-sw .role-btn{padding:5px 9px;font-size:10px;}
+
+  /* ---- Page padding ---- */
+  .page{padding:16px 14px;}
+
+  /* ---- Grids collapse to a single column ---- */
+  .g2,.g3,.g4{grid-template-columns:1fr;gap:12px;}
+
+  /* ---- Hero: shrink, drop the decorative character to save space ---- */
+  .hero{min-height:0;padding:20px 18px;flex-direction:column;align-items:flex-start;}
+  .hero-txt{padding:36px 0 4px;}
+  .hero-name{font-size:24px;}
+  .hero-char{display:none;}
+
+  /* ---- Quick actions: horizontal scroll instead of squeezing 5-across ---- */
+  .qa-strip{overflow-x:auto;gap:2px;padding:14px 12px;-webkit-overflow-scrolling:touch;}
+  .qa-item{flex:0 0 auto;min-width:64px;}
+
+  /* ---- Login card: full-width with side margin instead of fixed 440px ---- */
+  .login-wrap{padding:20px;}
+  .login-card{width:100%;max-width:420px;}
+}
+
+@media (max-width:480px){
+  .sb{width:82vw;min-width:0;}
+  .hero-name{font-size:21px;}
+  .snap-card,.card{padding:14px;}
+  .role-sw{padding:2px;gap:2px;}
+  .role-sw .role-btn{padding:4px 7px;font-size:9.5px;}
+  .tb-ava{width:28px;height:28px;font-size:10px;}
+  .tb-ico-btn{width:30px;height:30px;}
+  .tb-right{gap:6px;}
+}
