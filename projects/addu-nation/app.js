@@ -1,9 +1,13 @@
-
 angular.module('adduApp',[]).controller('Main',['$scope','$timeout',function($s,$t){
   /* ─── STATE ─── */
   $s.in=false; $s.lf={role:'alumni'}; $s.role='alumni'; $s.pg='home';
   $s.dtab='urgent'; $s.qtab='all'; $s.ptype='rec'; $s.pfreq='15'; $s.pamt='50.00'; $s.ppay='card'; $s.ccat='com'; $s.q='';
   var chartsOk=false,pledgeOk=false;
+
+  /* ─── MOBILE NAV (off-canvas sidebar) ─── */
+  $s.navOpen=false;
+  $s.toggleNav=function(){$s.navOpen=!$s.navOpen;};
+  $s.closeNav=function(){$s.navOpen=false;};
 
   $s.titles={home:'Home',network:'Alumni Network',donate:'Donation Hub',career:'Career Opportunities',docs:'Academic Records',profile:'Profile',pledge:'Pledge & Automate',impact:'My Impact',campaign:'Create Campaign','proj-detail':'Project Details','ty-student':'Donation Complete','emg-detail':'Emergency Detail','ty-emg':'Donation Complete',queue:'Moderation Queue',review:'Reviewing of Charity',insights:'Donation Insights',messages:'Messages'};
   $s.subs={home:'Good day! Here\'s your daily overview.',network:'Discover and connect with peers.',donate:'Support University Initiatives.',career:'Discover and connect with peers.',docs:'Manage your credentials.',profile:'Your verified alumni profile.',pledge:'Tracking your generosity.',impact:'Tracking your generosity.',campaign:'Submit a new fundraising campaign.',queue:'Pending submissions for review.',insights:'Platform analytics overview.',messages:'Staff communications.'};
@@ -11,7 +15,7 @@ angular.module('adduApp',[]).controller('Main',['$scope','$timeout',function($s,
   $s.doLogin=function(){$s.role=$s.lf.role;$s.in=true;$s.pg='home';if($s.role=='admin')$t(initCharts,400);else $t(initPledge,400);};
   $s.logout=function(){$s.in=false;$s.lf={role:'alumni'};};
   $s.swRole=function(r){$s.role=r;$s.pg='home';if(r=='admin')$t(initCharts,400);else $t(initPledge,400);};
-  $s.go=function(p){$s.pg=p;if(p==='insights')$t(initCharts,350);if(p==='pledge')$t(initPledge,350);};
+  $s.go=function(p){$s.pg=p;$s.navOpen=false;if(p==='insights')$t(initCharts,350);if(p==='pledge')$t(initPledge,350);};
   $s.$watch('pg',function(n){if(n==='insights'&&$s.role==='admin')$t(initCharts,350);if(n==='pledge')$t(initPledge,350);});
   $s.fQ=function(){return $s.qtab==='all'?$s.d.queue:$s.d.queue.filter(function(q){return q.type===$s.qtab;});};
 
